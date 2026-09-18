@@ -112,7 +112,7 @@
         </div>
 
         <!-- Tombol Floating Action (Tambah Guru) -->
-        <div class="fixed bottom-6 right-4 sm:right-[calc(50%-13rem)] z-50">
+        <div class="fixed bottom-24 right-4 z-50 md:bottom-8 md:right-8 lg:right-12">
             <button class="w-14 h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full shadow-lg shadow-indigo-300 flex items-center justify-center transition-all hover:scale-105">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
             </button>
