@@ -16,13 +16,19 @@
 			<span class="text-[11px] font-medium">Kelas</span>
 		</a>
 
-		<a href="{{ route('siswa.materi') }}" class="flex h-full flex-col items-center justify-center gap-1 {{ request()->routeIs('siswa.materi') ? 'text-indigo-600' : 'text-slate-500' }} transition-colors hover:text-indigo-600 focus:text-indigo-600">
+		<details class="group relative flex h-full flex-col items-center justify-center {{ request()->routeIs('siswa.materi') || request()->routeIs('siswa.tugas') ? 'text-indigo-600' : 'text-slate-500' }}">
+			<summary class="list-none flex cursor-pointer flex-col items-center justify-center gap-1 transition-colors hover:text-indigo-600 focus:text-indigo-600">
 			<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 				<rect width="14" height="19" x="5" y="2.5" rx="2"/>
 				<path stroke-linecap="round" stroke-width="1.8" d="M9 18.5h6"/>
 			</svg>
 			<span class="text-[11px] font-medium">Materi</span>
-		</a>
+			</summary>
+			<div class="absolute bottom-[66px] right-0 w-40 rounded-2xl border border-slate-100 bg-white p-2 text-left shadow-xl shadow-indigo-100/50">
+				<a href="{{ route('siswa.tugas') }}#tugas" class="block rounded-xl px-3 py-2 text-[11px] font-semibold text-slate-600 hover:bg-indigo-50 hover:text-indigo-600">Tugas</a>
+				<a href="{{ route('siswa.tugas') }}#kuis" class="block rounded-xl px-3 py-2 text-[11px] font-semibold text-slate-600 hover:bg-indigo-50 hover:text-indigo-600">Kuis</a>
+			</div>
+		</details>
 
 		<a href="{{ route('siswa.profile') }}" class="flex h-full flex-col items-center justify-center gap-1 {{ request()->routeIs('siswa.profile*') ? 'text-indigo-600' : 'text-slate-500' }} transition-colors hover:text-indigo-600 focus:text-indigo-600">
 			<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">

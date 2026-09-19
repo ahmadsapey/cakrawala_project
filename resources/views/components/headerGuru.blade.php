@@ -21,13 +21,24 @@
 				</svg>
 				Kelas
 			</a>
-			<a href="{{ route('guru.bahan-ajar') }}" class="inline-flex items-center gap-2 rounded-xl {{ request()->routeIs('guru.bahan-ajar') ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500' }} px-4 py-2.5 text-sm font-medium transition-colors hover:bg-indigo-50 hover:text-indigo-600 focus:bg-indigo-50 focus:text-indigo-600">
+			<details class="group relative">
+				<summary class="list-none inline-flex cursor-pointer items-center gap-2 rounded-xl {{ request()->routeIs('guru.material.create') || request()->routeIs('guru.tugas.*') || request()->routeIs('guru.kuis.*') ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500' }} px-4 py-2.5 text-sm font-medium transition-colors hover:bg-indigo-50 hover:text-indigo-600">
 				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5v-16Z"/>
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 5.5v16M8 7h8m-8 4h8"/>
 				</svg>
 				Materi
-			</a>
+				<svg class="h-4 w-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6"/></svg>
+				</summary>
+				<div class="absolute right-0 mt-2 w-52 rounded-2xl border border-slate-100 bg-white p-2 shadow-xl shadow-indigo-100/50">
+					<a href="{{ route('guru.tugas.tambah') }}" class="flex items-center justify-between rounded-xl px-3 py-2.5 text-xs font-semibold text-slate-600 transition-colors hover:bg-indigo-50 hover:text-indigo-600">
+						<span>Tambah Tugas</span><span class="text-[10px] text-slate-400">Tugas</span>
+					</a>
+					<a href="{{ route('guru.kuis.tambah') }}" class="flex items-center justify-between rounded-xl px-3 py-2.5 text-xs font-semibold text-slate-600 transition-colors hover:bg-indigo-50 hover:text-indigo-600">
+						<span>Tambah Kuis</span><span class="text-[10px] text-slate-400">Kuis</span>
+					</a>
+				</div>
+			</details>
 			<details class="group relative">
 				<summary class="list-none inline-flex cursor-pointer items-center gap-2 rounded-xl {{ request()->routeIs('guru.koreksi.*') ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500' }} px-4 py-2.5 text-sm font-medium transition-colors hover:bg-indigo-50 hover:text-indigo-600">
 					<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">

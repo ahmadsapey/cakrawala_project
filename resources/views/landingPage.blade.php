@@ -98,73 +98,25 @@
                     </div>
                     
                     <div id="autoScrollHero" class="flex space-x-5 overflow-x-auto no-scrollbar pb-6 pt-2 snap-x snap-mandatory px-2 scroll-smooth-container">
-                        <!-- Card 1 -->
-                        <div class="neon-card min-w-[300px] sm:min-w-[300px] bg-white p-5 rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/50 snap-start flex-shrink-0">
-                            <div class="h-36 bg-slate-100 rounded-2xl mb-4 overflow-hidden">
-                                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=80" alt="Preview 1" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-[10px] uppercase font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md tracking-wider">INTERAKTIF</span>
-                            <h4 class="font-bold text-slate-900 text-base mt-2">Kelas Menuju Perguruan Tinggi</h4>
-                            <div class="flex items-center space-x-2 text-xs text-slate-500 mt-1.5">
-                               <span>⭐ 4.9</span>
-                               <span>• 12 Sesi Materi</span>
-                            </div>
-                            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                                <span class="text-slate-400">Publikasi Rp 75K/bln</span>
-                                <span class="w-5 h-5 rounded-full bg-blue-50 text-indigo-600 flex items-center justify-center font-bold text-xs">✓</span>
-                            </div>
-                        </div>
-
-                        <!-- Card 2 -->
-                        <div class="neon-card min-w-[280px] sm:min-w-[300px] bg-white p-5 rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/50 snap-start flex-shrink-0">
-                            <div class="h-36 bg-slate-100 rounded-2xl mb-4 overflow-hidden">
-                                <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=600&q=80" alt="Preview 2" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-[10px] uppercase font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md tracking-wider">WEBINAR</span>
-                            <h4 class="font-bold text-slate-900 text-base mt-2">Strategi Sosialisasi Calon Mahasiswa</h4>
-                            <div class="flex items-center space-x-2 text-xs text-slate-500 mt-1.5">
-                                <span>⭐ 4.8</span>
-                                <span>• Live Session</span>
-                            </div>
-                            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                                <span class="text-slate-400">Gratis Member</span>
-                                <span class="w-5 h-5 rounded-full bg-blue-50 text-indigo-600 flex items-center justify-center font-bold text-xs">✓</span>
-                            </div>
-                        </div>
-
-                        <!-- Card 3 -->
-                        <div class="neon-card min-w-[280px] sm:min-w-[300px] bg-white p-5 rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/50 snap-start flex-shrink-0">
-                            <div class="h-36 bg-slate-100 rounded-2xl mb-4 overflow-hidden">
-                                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80" alt="Preview 3" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-[10px] uppercase font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md tracking-wider">TRYOUT NASIONAL</span>
-                            <h4 class="font-bold text-slate-900 text-base mt-2">Simulasi Ujian SNBP & SNBT Akurat</h4>
-                            <div class="flex items-center space-x-2 text-xs text-slate-500 mt-1.5">
-                                <span>⭐ 5.0</span>
-                                <span>• Sistem IRT</span>
-                            </div>
-                            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                                <span class="text-slate-400">Mulai Rp 25K</span>
-                                <span class="w-5 h-5 rounded-full bg-blue-50 text-indigo-600 flex items-center justify-center font-bold text-xs">✓</span>
-                            </div>
-                        </div>
-
-                        <!-- Card 4 -->
-                        <div class="neon-card min-w-[280px] sm:min-w-[300px] bg-white p-5 rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/50 snap-start flex-shrink-0">
-                            <div class="h-36 bg-slate-100 rounded-2xl mb-4 overflow-hidden">
-                                <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=80" alt="Preview 4" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-[10px] uppercase font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md tracking-wider">KONSULTASI</span>
-                            <h4 class="font-bold text-slate-900 text-base mt-2">Bedah Kampus & Jurusan Impian</h4>
-                            <div class="flex items-center space-x-2 text-xs text-slate-500 mt-1.5">
-                                <span>⭐ 4.9</span>
-                                <span>• 1 on 1 Mentor</span>
-                            </div>
-                            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                                <span class="text-slate-400">Mulai Rp 50K</span>
-                                <span class="w-5 h-5 rounded-full bg-blue-50 text-indigo-600 flex items-center justify-center font-bold text-xs">✓</span>
-                            </div>
-                        </div>
+                        @foreach ($programs as $program)
+                            <article class="neon-card min-w-[300px] sm:min-w-[300px] bg-white p-5 rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/50 snap-start flex-shrink-0">
+                                @if ($program->image_url)
+                                    <div class="h-36 bg-slate-100 rounded-2xl mb-4 overflow-hidden">
+                                        <img src="{{ $program->image_url }}" alt="{{ $program->title }}" class="w-full h-full object-cover">
+                                    </div>
+                                @endif
+                                <span class="text-[10px] uppercase font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md tracking-wider">{{ $program->badge }}</span>
+                                <h4 class="font-bold text-slate-900 text-base mt-2">{{ $program->title }}</h4>
+                                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">{{ $program->description }}</p>
+                                <div class="flex items-center space-x-2 text-xs text-slate-500 mt-2">
+                                    <span>{{ $program->meta }}</span>
+                                </div>
+                                <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                                    <span class="text-slate-400">{{ $program->price }}{{ $program->price_suffix }}</span>
+                                    <span class="w-5 h-5 rounded-full bg-blue-50 text-indigo-600 flex items-center justify-center font-bold text-xs">✓</span>
+                                </div>
+                            </article>
+                        @endforeach
                     </div>
                 </div>
 
@@ -191,55 +143,30 @@
 
             <!-- Pricing Colossal Container: Bergulir Otomatis (Auto-Scroll) & Rapi Tanpa Memanjang ke Bawah -->
             <div id="autoScrollPricing" class="flex space-x-6 overflow-x-auto no-scrollbar pb-8 pt-2 snap-x snap-mandatory px-2 scroll-smooth-container max-w-6xl mx-auto">
-                
-                <!-- Pricing Card 1: Paket Belajar -->
-                <div class="neon-card min-w-[280px] sm:min-w-[300px] lg:min-w-[270px] bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 snap-start flex-shrink-0 flex flex-col justify-between">
-                    <div>
-                        <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                @foreach ($packages as $package)
+                    <article class="neon-card min-w-[280px] sm:min-w-[300px] lg:min-w-[270px] {{ $package->is_featured ? 'bg-indigo-600 text-white' : 'bg-white text-slate-900' }} rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 snap-start flex-shrink-0 flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] uppercase font-bold tracking-wider {{ $package->is_featured ? 'text-indigo-100 bg-white/10' : 'text-indigo-600 bg-indigo-50' }} px-2.5 py-1 rounded-md">{{ $package->badge }}</span>
+                            <h4 class="font-bold text-base mt-4">{{ $package->title }}</h4>
+                            <p class="{{ $package->is_featured ? 'text-indigo-100' : 'text-slate-500' }} text-xs leading-relaxed mt-2 mb-5">{{ $package->description }}</p>
+                            <div class="mb-5">
+                                <span class="text-[10px] {{ $package->is_featured ? 'text-indigo-200' : 'text-slate-400' }} block mb-0.5">Mulai dari</span>
+                                <span class="text-xl font-black">{{ $package->price }}<span class="text-xs font-normal {{ $package->is_featured ? 'text-indigo-200' : 'text-slate-500' }}">{{ $package->price_suffix }}</span></span>
+                            </div>
+                            <ul class="space-y-2.5 mb-6 text-xs {{ $package->is_featured ? 'text-indigo-100' : 'text-slate-600' }}">
+                                @foreach ($package->features ?? [] as $feature)
+                                    <li class="flex items-center space-x-2"><span class="{{ $package->is_featured ? 'text-white' : 'text-indigo-600' }} font-bold">✓</span><span>{{ $feature }}</span></li>
+                                @endforeach
+                            </ul>
                         </div>
-                        <h4 class="font-bold text-slate-900 text-base mb-1.5">Paket Belajar</h4>
-                        <p class="text-slate-500 text-xs leading-relaxed mb-5">Akses materi lengkap dan berkualitas untuk memperdalam konsep dasar.</p>
-                        <div class="mb-5">
-                            <span class="text-[10px] text-slate-400 block mb-0.5">Mulai dari</span>
-                            <span class="text-xl font-black text-indigo-600">Rp 149.000<span class="text-xs font-normal text-slate-500">/bln</span></span>
-                        </div>
-                        <ul class="space-y-2.5 mb-6 text-xs text-slate-600">
-                            <li class="flex items-center space-x-2"><span class="text-indigo-600 font-bold">✓</span><span>Materi sesuai kurikulum</span></li>
-                            <li class="flex items-center space-x-2"><span class="text-indigo-600 font-bold">✓</span><span>E-learning 24/7 jam</span></li>
-                        </ul>
-                    </div>
-                    <button class="w-full py-3 rounded-xl border border-slate-200 hover:border-indigo-600 text-slate-700 hover:text-indigo-600 font-medium text-xs transition-colors">
-                        Pilih Paket
-                    </button>
-                </div>
+                        <a href="{{ route('siswa.home') }}" class="w-full py-3 rounded-xl {{ $package->is_featured ? 'bg-white text-indigo-600 hover:bg-slate-50 font-bold' : 'border border-slate-200 hover:border-indigo-600 text-slate-700 hover:text-indigo-600 font-medium' }} text-xs text-center transition-colors">
+                            {{ $package->cta_label }}
+                        </a>
+                    </article>
+                @endforeach
 
-                <!-- Pricing Card 2: Bimbingan Intensif (Highlight) -->
-                <div class="neon-card min-w-[280px] sm:min-w-[300px] lg:min-w-[270px] bg-indigo-600 rounded-3xl p-6 text-white shadow-xl shadow-indigo-500/20 relative snap-start flex-shrink-0 flex flex-col justify-between">
-                    <div class="absolute -top-3 right-5 bg-indigo-500 text-white text-[9px] uppercase font-bold tracking-wider py-1 px-3 rounded-full border border-indigo-400">
-                        FAVORIT
-                    </div>
-                    <div>
-                        <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                        </div>
-                        <h4 class="font-bold text-white text-base mb-1.5">Bimbingan Intensif</h4>
-                        <p class="text-indigo-100 text-xs leading-relaxed mb-5">Pendampingan langsung tutor profesional untuk tembus PTN.</p>
-                        <div class="mb-5">
-                            <span class="text-[10px] text-indigo-200 block mb-0.5">Mulai dari</span>
-                            <span class="text-2xl font-black text-white">Rp 75.000<span class="text-xs font-normal text-indigo-200">/sesi</span></span>
-                        </div>
-                        <ul class="space-y-2.5 mb-6 text-xs text-indigo-100">
-                            <li class="flex items-center space-x-2"><span class="text-white font-bold">✓</span><span>Live class interaktif</span></li>
-                            <li class="flex items-center space-x-2"><span class="text-white font-bold">✓</span><span>Tanya jawab grup privat</span></li>
-                        </ul>
-                    </div>
-                    <button class="w-full py-3 rounded-xl bg-white text-indigo-600 hover:bg-slate-50 font-bold text-xs shadow transition-colors">
-                        Ikuti Bimbingan
-                    </button>
-                </div>
-
-                <!-- Pricing Card 3: Rasionalisasi SNBP -->
+                <!-- Pricing cards are managed from the admin landing page. -->
+                <!--
                 <div class="neon-card min-w-[280px] sm:min-w-[300px] lg:min-w-[270px] bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 snap-start flex-shrink-0 flex flex-col justify-between">
                     <div>
                         <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 mb-5">
@@ -304,6 +231,7 @@
                         Book Jadwal
                     </button>
                 </div>
+                -->
 
             </div>
         </div>

@@ -19,61 +19,61 @@
         }
     </script>
 </head>
-<body class="bg-[#F8FAFC] text-slate-800 font-sans antialiased selection:bg-indigo-500 selection:text-white pb-24">
+<body class="bg-slate-100 text-slate-800 font-sans antialiased selection:bg-indigo-500 selection:text-white pb-24">
 
     @include('components.hiderSiswa')
 
     <!-- Container Utama -->
-    <div class="mx-auto flex min-h-screen w-full max-w-md flex-col space-y-6 bg-[#F8FAFC] p-4 sm:p-6 md:max-w-7xl md:space-y-8 md:p-8 lg:px-12">
+    <div class="mx-auto flex min-h-screen w-full max-w-7xl flex-col space-y-6 bg-slate-100 p-4 sm:p-6 md:space-y-8 md:p-8 lg:px-12">
 
         <!-- Header Halaman -->
         <div class="pt-2">
-            <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Pengaturan & Keamanan</h1>
+            <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Pengaturan & Keamanan</h1>
         </div>
 
         <!-- Section: KEAMANAN AKUN -->
         <div class="space-y-3">
-            <h3 class="text-[10px] font-black uppercase tracking-wider text-slate-400 px-1">Keamanan Akun</h3>
-            <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden divide-y divide-slate-50">
+            <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-600 px-1">Keamanan Akun</h3>
+            <div class="bg-white rounded-2xl border-2 border-slate-200 shadow-sm overflow-hidden divide-y-2 divide-slate-200">
                 
                 <!-- Menu 1: Ubah Kata Sandi -->
-                <a href="{{ route('siswa.profile.edit') }}" class="flex items-center justify-between p-4 hover:bg-slate-50/80 transition-all group">
+                <a href="{{ route('siswa.profile.edit') }}" class="flex items-center justify-between p-4.5 hover:bg-slate-50 transition-all group">
                     <div class="flex items-center space-x-3">
-                        <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-105 transition-transform">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 border border-indigo-300 flex items-center justify-center group-hover:scale-105 transition-transform">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                         </div>
-                        <span class="text-xs font-bold text-slate-800">Ubah Kata Sandi</span>
+                        <span class="text-sm font-extrabold text-slate-900">Ubah Kata Sandi</span>
                     </div>
-                    <svg class="w-4 h-4 text-slate-300 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    <svg class="w-5 h-5 text-slate-400 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </a>
 
                 <!-- Toggle 1: Autentikasi 2 Langkah (Aktif) -->
-                <div class="flex items-center justify-between p-4">
+                <div class="flex items-center justify-between p-4.5">
                     <div class="flex items-center space-x-3">
-                        <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 border border-indigo-300 flex items-center justify-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                         </div>
-                        <span class="text-xs font-bold text-slate-800">Autentikasi 2 Langkah</span>
+                        <span class="text-sm font-extrabold text-slate-900">Autentikasi 2 Langkah</span>
                     </div>
                     <!-- Toggle Switch Active -->
                     <label class="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" checked class="sr-only peer">
-                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                        <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                     </label>
                 </div>
 
                 <!-- Toggle 2: Masuk dengan Sidik Jari / FaceID (Non-aktif) -->
-                <div class="flex items-center justify-between p-4">
+                <div class="flex items-center justify-between p-4.5">
                     <div class="flex items-center space-x-3">
-                        <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0115.171 17m3.839-1.132c.645-2.266.99-4.659.99-7.138A8 8 0 000 8c0 1.956.7 3.75 1.861 5.144"/></svg>
+                        <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 border border-indigo-300 flex items-center justify-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0115.171 17m3.839-1.132c.645-2.266.99-4.659.99-7.138A8 8 0 000 8c0 1.956.7 3.75 1.861 5.144"/></svg>
                         </div>
-                        <span class="text-xs font-bold text-slate-800">Masuk dengan Sidik Jari / FaceID</span>
+                        <span class="text-sm font-extrabold text-slate-900">Masuk dengan Sidik Jari / FaceID</span>
                     </div>
                     <!-- Toggle Switch Inactive -->
                     <label class="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" class="sr-only peer">
-                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                        <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                     </label>
                 </div>
 
@@ -82,8 +82,9 @@
 
         <!-- Section: PRIVASI DATA BELAJAR -->
         <div class="space-y-3">
-            <h3 class="text-[10px] font-black uppercase tracking-wider text-slate-400 px-1">Privasi Data Belajar</h3>
-            <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden divide-y divide-slate-50">
+            <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-600 px-1">Privasi Data Belajar</h3>
+            <div class="bg-white rounded-2xl border-2 border-slate-200 shadow-sm overflow-hidden divide-y-2 divide-slate-200">
+
                 
                 <!-- Toggle 3: Tampilkan Profil ke Publik (Aktif) -->
                 <div class="flex items-center justify-between p-4">

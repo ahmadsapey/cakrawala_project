@@ -19,77 +19,74 @@
         }
     </script>
 </head>
-<body class="bg-[#F8FAFC] text-slate-800 font-sans antialiased selection:bg-indigo-500 selection:text-white pb-28">
+<body class="bg-slate-100 text-slate-800 font-sans antialiased selection:bg-indigo-500 selection:text-white pb-28">
 
     @include('components.headerGuru')
     @include('components.headerGuru_mobile')
 
     <!-- Container Utama -->
-    <div class="mx-auto flex min-h-screen w-full max-w-md flex-col space-y-5 bg-[#F8FAFC] p-4 sm:p-6 md:max-w-7xl md:space-y-8 md:p-8 lg:px-12">
+    <div class="mx-auto flex min-h-screen w-full max-w-3xl flex-col space-y-6 bg-slate-100 p-4 sm:p-6 md:space-y-8 md:p-8 lg:px-12">
 
         <!-- Header Halaman -->
-        <div class="space-y-1 pt-2">
-            <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Buat Tugas Baru</h1>
-            <p class="text-xs text-slate-500 font-medium">Fisika XI - Semester Ganjil</p>
+        <div class="flex items-center justify-between pt-2">
+            <div>
+                <p class="text-xs font-extrabold uppercase tracking-wider text-indigo-700">Fisika XI - Semester Ganjil</p>
+                <h1 class="mt-1 text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Buat Tugas Baru</h1>
+            </div>
+            <a href="{{ route('guru.home') }}" class="rounded-xl border-2 border-slate-300 bg-white px-4 py-2.5 text-xs font-extrabold text-slate-700 hover:bg-slate-50 transition-all">Kembali</a>
         </div>
 
         <!-- Form Kontainer Utama -->
-        <div class="space-y-4">
+        <form class="space-y-5 rounded-2xl border-2 border-slate-300 bg-white p-6 shadow-sm sm:p-8">
             
             <!-- Input 1: Judul Tugas -->
             <div class="space-y-1.5">
-                <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider px-1">Judul Tugas</label>
-                <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4">
-                    <input type="text" value="Laporan Praktikum Efek Fotolistrik" class="w-full bg-transparent text-xs font-bold text-slate-800 focus:outline-none">
-                </div>
+                <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700">Judul Tugas</label>
+                <input type="text" value="Laporan Praktikum Efek Fotolistrik" class="w-full rounded-xl border-2 border-slate-300 bg-white px-4 py-3 text-xs sm:text-sm font-semibold text-slate-900 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition-all">
             </div>
 
             <!-- Input 2: Instruksi & Cara Pengerjaan -->
             <div class="space-y-1.5">
-                <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider px-1">Instruksi & Cara Pengerjaan</label>
-                <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4">
-                    <textarea rows="4" class="w-full bg-transparent text-xs font-medium text-slate-800 focus:outline-none resize-none leading-relaxed">1. Bacalah modul Bab 2 secara saksama.
+                <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700">Instruksi & Cara Pengerjaan</label>
+                <textarea rows="4" class="w-full rounded-xl border-2 border-slate-300 bg-white px-4 py-3 text-xs sm:text-sm font-semibold text-slate-900 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition-all resize-none leading-relaxed">1. Bacalah modul Bab 2 secara saksama.
 2. Lakukan simulasi virtual PhET Efek Fotolistrik.
 3. Catat tegangan penghenti (stopping voltage) untuk tiap variasi warna cahaya.
 4. Kirim berkas dalam format PDF.</textarea>
-                </div>
             </div>
 
-            <!-- Input 3: Bobot Nilai (%) & Tenggat Pengumpulan (2 Kolom) -->
-            <div class="grid grid-cols-2 gap-3">
+            <!-- Input 3: Bobot Nilai (%) & Tenggat Pengumpulan -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="space-y-1.5">
-                    <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider px-1">Bobot Nilai (%)</label>
-                    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4">
-                        <input type="text" value="15%" class="w-full bg-transparent text-xs font-bold text-slate-800 focus:outline-none">
-                    </div>
+                    <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700">Bobot Nilai (%)</label>
+                    <input type="text" value="15%" class="w-full rounded-xl border-2 border-slate-300 bg-white px-4 py-3 text-xs sm:text-sm font-semibold text-slate-900 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition-all">
                 </div>
                 <div class="space-y-1.5">
-                    <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider px-1">Tenggat Pengumpulan</label>
-                    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4">
-                        <input type="text" value="25 Okt, 23:59 WIB" class="w-full bg-transparent text-xs font-bold text-indigo-600 focus:outline-none">
-                    </div>
+                    <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700">Tenggat Pengumpulan</label>
+                    <input type="text" value="25 Okt, 23:59 WIB" class="w-full rounded-xl border-2 border-slate-300 bg-white px-4 py-3 text-xs sm:text-sm font-extrabold text-indigo-700 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition-all">
                 </div>
             </div>
 
             <!-- Input 4: File Panduan Praktikum (Opsional) -->
-            <div class="space-y-1.5 pt-1">
-                <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider px-1">File Panduan Praktikum <span class="text-slate-400 font-normal lowercase">(Opsional)</span></label>
-                <div class="border-2 border-dashed border-indigo-300/80 bg-indigo-50/20 hover:bg-indigo-50/40 rounded-2xl p-4 text-center space-y-2 transition-all cursor-pointer group">
-                    <div class="w-9 h-9 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center mx-auto shadow-sm group-hover:scale-105 transition-transform">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+            <div class="space-y-1.5 pt-2">
+                <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700">File Panduan Praktikum <span class="text-slate-400 font-medium lowercase">(opsional)</span></label>
+                <div class="border-2 border-dashed border-indigo-400 bg-indigo-50/50 hover:bg-indigo-50 rounded-xl p-5 text-center space-y-2 transition-all cursor-pointer group">
+                    <div class="w-10 h-10 bg-white text-indigo-600 border border-indigo-300 rounded-xl flex items-center justify-center mx-auto shadow-sm group-hover:scale-105 transition-transform">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
                     </div>
-                    <p class="text-xs font-black text-indigo-600">Ganti Berkas Panduan</p>
+                    <p class="text-xs font-extrabold text-indigo-700">Unggah atau Ganti Berkas Panduan (PDF/PPT)</p>
                 </div>
             </div>
 
-        </div>
-
-        <!-- Tombol Aksi Utama -->
-        <div class="pt-2">
-            <button class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-2xl shadow-lg shadow-indigo-200 transition-all flex items-center justify-center space-x-2">
-                <span>Publikasikan Tugas</span>
-            </button>
-        </div>
+            <!-- Tombol Aksi Utama -->
+            <div class="pt-3 flex gap-3">
+                <button type="button" class="flex-1 py-3.5 px-4 bg-white border-2 border-slate-300 hover:bg-slate-50 text-slate-700 font-extrabold text-xs sm:text-sm rounded-xl transition-all">
+                    Simpan Draf
+                </button>
+                <button type="button" class="flex-1 py-3.5 px-4 bg-indigo-600 border border-indigo-700 hover:bg-indigo-700 text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md transition-all">
+                    Publikasikan Tugas
+                </button>
+            </div>
+        </form>
 
     </div>
 

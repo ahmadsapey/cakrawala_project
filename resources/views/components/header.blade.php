@@ -24,12 +24,6 @@
                         Paket Belajar
                     </a>
                     <a href="{{ url('/') }}#pricing" class="block rounded-lg px-3 py-2.5 hover:bg-blue-50 hover:text-blue-700 transition-colors">
-                        Bimbingan Intensif
-                    </a>
-                    <a href="{{ url('/') }}#pricing" class="block rounded-lg px-3 py-2.5 hover:bg-blue-50 hover:text-blue-700 transition-colors">
-                        Tryout Nasional
-                    </a>
-                    <a href="{{ url('/') }}#pricing" class="block rounded-lg px-3 py-2.5 hover:bg-blue-50 hover:text-blue-700 transition-colors">
                         Konsultasi Privat
                     </a>
                 </div>

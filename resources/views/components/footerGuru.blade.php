@@ -4,7 +4,7 @@
         <nav class="flex items-center gap-5" aria-label="Navigasi footer guru">
             <a href="{{ route('guru.home') }}" class="transition-colors hover:text-indigo-600">Beranda</a>
             <a href="{{ route('guru.kelas') }}" class="transition-colors hover:text-indigo-600">Kelas</a>
-            <a href="{{ route('guru.bahan-ajar') }}" class="transition-colors hover:text-indigo-600">Materi</a>
+            <a href="{{ route('guru.material.create') }}" class="transition-colors hover:text-indigo-600">Materi</a>
             <a href="{{ route('guru.koreksi.tugas') }}" class="transition-colors hover:text-indigo-600">Koreksi</a>
         </nav>
     </div>

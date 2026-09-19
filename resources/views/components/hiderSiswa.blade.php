@@ -20,13 +20,24 @@
 				</svg>
 				Kelas
 			</a>
-			<a href="{{ route('siswa.materi') }}" class="inline-flex items-center gap-2 rounded-xl {{ request()->routeIs('siswa.materi') ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500' }} px-4 py-2.5 text-sm font-medium transition-colors hover:bg-indigo-50 hover:text-indigo-600 focus:bg-indigo-50 focus:text-indigo-600">
+			<details class="group relative">
+				<summary class="list-none inline-flex cursor-pointer items-center gap-2 rounded-xl {{ request()->routeIs('siswa.materi') || request()->routeIs('siswa.tugas') ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500' }} px-4 py-2.5 text-sm font-medium transition-colors hover:bg-indigo-50 hover:text-indigo-600">
 				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 					<rect width="14" height="19" x="5" y="2.5" rx="2"/>
 					<path stroke-linecap="round" stroke-width="1.8" d="M9 18.5h6"/>
 				</svg>
 				Materi
-			</a>
+				<svg class="h-4 w-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6"/></svg>
+				</summary>
+				<div class="absolute right-0 mt-2 w-52 rounded-2xl border border-slate-100 bg-white p-2 shadow-xl shadow-indigo-100/50">
+					<a href="{{ route('siswa.tugas') }}#tugas" class="flex items-center justify-between rounded-xl px-3 py-2.5 text-xs font-semibold text-slate-600 transition-colors hover:bg-indigo-50 hover:text-indigo-600">
+						<span>Tugas</span><span class="text-[10px] text-slate-400">Evaluasi</span>
+					</a>
+					<a href="{{ route('siswa.tugas') }}#kuis" class="flex items-center justify-between rounded-xl px-3 py-2.5 text-xs font-semibold text-slate-600 transition-colors hover:bg-indigo-50 hover:text-indigo-600">
+						<span>Kuis</span><span class="text-[10px] text-slate-400">Evaluasi</span>
+					</a>
+				</div>
+			</details>
 			<a href="{{ route('siswa.profile') }}" class="inline-flex items-center gap-2 rounded-xl {{ request()->routeIs('siswa.profile*') ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500' }} px-4 py-2.5 text-sm font-medium transition-colors hover:bg-indigo-50 hover:text-indigo-600 focus:bg-indigo-50 focus:text-indigo-600">
 				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 					<circle cx="12" cy="7" r="3.5"/>
