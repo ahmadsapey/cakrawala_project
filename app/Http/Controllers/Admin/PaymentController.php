@@ -5,15 +5,33 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class PaymentController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        return view('modulAdmin.payments.index', [
-            'payments' => Payment::with('student.user')->latest()->paginate(10),
-        ]);
+        $query = Payment::with('student.user');
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->string('status'));
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->string('search')->trim();
+            $query->where(function ($subQuery) use ($search): void {
+                $subQuery->where('invoice_number', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhereHas('student.user', function ($userQuery) use ($search): void {
+                        $userQuery->where('name', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $payments = $query->latest()->paginate(10)->withQueryString();
+
+        return view('modulAdmin.managePembayaran', compact('payments'));
     }
 
     public function confirm(Payment $payment): RedirectResponse

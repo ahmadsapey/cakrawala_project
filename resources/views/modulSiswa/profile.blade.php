@@ -28,26 +28,46 @@
 
         <!-- Header Halaman -->
         <div class="pt-2">
+        <div class="pt-2 flex items-center justify-between">
             <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Profil Saya</h1>
+            <a href="{{ route('siswa.profile.edit') }}" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-extrabold shadow-sm transition-all">
+                Edit Profil
+            </a>
         </div>
+
+        @if(session('success'))
+            <div class="p-4 bg-emerald-50 border-2 border-emerald-300 text-emerald-800 rounded-2xl text-xs sm:text-sm font-bold flex items-center space-x-2 shadow-sm">
+                <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <span>{{ session('success') }}</span>
+            </div>
+        @endif
 
         <!-- Kartu Identitas Pengguna -->
         <div class="bg-white p-6 rounded-2xl border-2 border-slate-200 shadow-sm flex items-center space-x-4">
             <div class="relative shrink-0">
                 <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Foto Profil" class="w-16 h-16 rounded-2xl object-cover shadow-sm border-2 border-indigo-600">
+            <div class="w-16 h-16 rounded-2xl bg-indigo-100 text-indigo-700 border-2 border-indigo-300 flex items-center justify-center font-extrabold text-xl shrink-0 shadow-sm">
+                {{ strtoupper(substr($user?->name ?? 'S', 0, 2)) }}
             </div>
             <div class="space-y-1 overflow-hidden">
                 <h2 class="text-base sm:text-lg font-extrabold text-slate-900 truncate">Bintang Cakrawala</h2>
                 <p class="text-xs font-semibold text-slate-500">NISN: 0082718291</p>
+                <h2 class="text-base sm:text-lg font-extrabold text-slate-900 truncate">{{ $user?->name ?? 'Siswa Cakrawala' }}</h2>
+                <p class="text-xs font-semibold text-slate-500">NISN: {{ $student?->nisn ?? '-' }} • {{ $user?->email ?? '-' }}</p>
                 <div class="pt-0.5">
                     <span class="inline-block px-3 py-1 bg-indigo-100 border border-indigo-300 text-indigo-700 font-extrabold text-xs rounded-md">Kelas XI - IPA 2</span>
+                    <span class="inline-block px-3 py-1 bg-indigo-100 border border-indigo-300 text-indigo-700 font-extrabold text-xs rounded-md">
+                        {{ $student?->class_name ?? 'Kelas Aktif' }}
+                    </span>
                 </div>
             </div>
         </div>
 
         <!-- Informasi Sekolah -->
+        <!-- Informasi Lembaga & Kurikulum -->
         <div class="bg-white p-5 rounded-2xl border-2 border-slate-200 shadow-sm space-y-3">
             <span class="text-xs font-extrabold uppercase tracking-wider text-slate-500 px-1">Informasi Sekolah</span>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-slate-500 px-1">Informasi Lembaga & Kurikulum</span>
             <div class="flex items-center space-x-3 p-3 bg-amber-50 rounded-xl border border-amber-300">
                 <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 border border-amber-300 flex items-center justify-center shrink-0">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.16 3.422A12.083 12.083 0 015.84 10.578L12 14z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14v7"/></svg>
@@ -55,6 +75,8 @@
                 <div>
                     <h3 class="text-xs sm:text-sm font-extrabold text-slate-900">SMA Negeri 1 Harapan Bangsa</h3>
                     <p class="text-xs font-semibold text-slate-600">Tahun Ajaran 2026/2027 (Semester Ganjil)</p>
+                    <h3 class="text-xs sm:text-sm font-extrabold text-slate-900">Cakrawala Educentre — Bimbingan Belajar Modern</h3>
+                    <p class="text-xs font-semibold text-slate-600">Kurikulum Merdeka • Tahun Ajaran 2026/2027</p>
                 </div>
             </div>
         </div>
@@ -63,20 +85,29 @@
         <div class="space-y-3">
             <h3 class="text-sm font-extrabold text-slate-900 uppercase tracking-wider px-1">Ringkasan Aktivitas Belajar</h3>
             <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 <!-- Box 1: Rerata Nilai -->
                 <div class="bg-white p-5 rounded-2xl border-2 border-slate-200 shadow-sm flex flex-col justify-between space-y-3">
                     <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Rerata Nilai</span>
                     <div class="flex items-baseline space-x-2">
                         <span class="text-3xl font-extrabold text-slate-900">88.4</span>
                         <span class="px-2 py-0.5 bg-emerald-100 border border-emerald-300 text-emerald-800 font-extrabold text-xs rounded-md">A</span>
+                        <span class="text-3xl font-extrabold text-slate-900">{{ number_format($avgScore, 1) }}</span>
+                        @php
+                            $gradeLetter = $avgScore >= 85 ? 'A' : ($avgScore >= 75 ? 'B' : 'C');
+                        @endphp
+                        <span class="px-2 py-0.5 {{ $avgScore >= 75 ? 'bg-emerald-100 border-emerald-300 text-emerald-800' : 'bg-rose-100 border-rose-300 text-rose-800' }} border font-extrabold text-xs rounded-md">{{ $gradeLetter }}</span>
                     </div>
                 </div>
 
                 <!-- Box 2: Materi Selesai -->
+                <!-- Box 2: Materi Tersedia -->
                 <div class="bg-white p-5 rounded-2xl border-2 border-slate-200 shadow-sm flex flex-col justify-between space-y-3">
                     <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Materi Selesai</span>
+                    <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Materi Aktif</span>
                     <div class="flex items-baseline space-x-1.5">
                         <span class="text-3xl font-extrabold text-slate-900">12</span>
+                        <span class="text-3xl font-extrabold text-slate-900">{{ $materialsCount }}</span>
                         <span class="text-xs font-extrabold text-slate-500">Bab</span>
                     </div>
                 </div>
@@ -84,9 +115,12 @@
                 <!-- Box 3: Tugas Selesai -->
                 <div class="bg-white p-5 rounded-2xl border-2 border-slate-200 shadow-sm flex flex-col justify-between space-y-3">
                     <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Tugas Selesai</span>
+                    <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Tugas Dikumpul</span>
                     <div class="flex items-baseline space-x-2">
                         <span class="text-3xl font-extrabold text-slate-900">14</span>
                         <span class="px-2 py-0.5 bg-indigo-100 border border-indigo-300 text-indigo-800 font-extrabold text-xs rounded-md">100%</span>
+                        <span class="text-3xl font-extrabold text-slate-900">{{ $completedTasksCount }}</span>
+                        <span class="px-2 py-0.5 bg-indigo-100 border border-indigo-300 text-indigo-800 font-extrabold text-xs rounded-md">Tugas</span>
                     </div>
                 </div>
 
@@ -96,6 +130,8 @@
                     <div class="flex items-baseline space-x-1">
                         <span class="text-3xl font-extrabold text-indigo-700">#3</span>
                         <span class="text-xs font-semibold text-slate-500">Dari 36</span>
+                        <span class="text-3xl font-extrabold text-indigo-700">#{{ $classRank }}</span>
+                        <span class="text-xs font-semibold text-slate-500">Dari {{ $totalStudentsInClass }}</span>
                     </div>
                 </div>
             </div>
@@ -108,40 +144,57 @@
         <div class="space-y-3">
             <h3 class="text-sm font-black text-slate-900 px-1">Pengaturan Akun & Informasi</h3>
             <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden divide-y divide-slate-50">
+            <h3 class="text-sm font-extrabold text-slate-900 uppercase tracking-wider px-1">Pengaturan Akun & Informasi</h3>
+            <div class="bg-white rounded-2xl border-2 border-slate-200 shadow-sm overflow-hidden divide-y-2 divide-slate-200">
                 <!-- Menu 1: Edit Profil -->
                 <a href="{{ route('siswa.profile.edit') }}" class="flex items-center justify-between p-4 hover:bg-slate-50/80 transition-all group">
+                <a href="{{ route('siswa.profile.edit') }}" class="flex items-center justify-between p-4.5 hover:bg-slate-50 transition-all group">
                     <div class="flex items-center space-x-3">
                         <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-105 transition-transform">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                        <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-200 flex items-center justify-center group-hover:scale-105 transition-transform">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                         </div>
                         <span class="text-xs font-bold text-slate-800">Edit Profil Lengkap</span>
+                        <span class="text-xs sm:text-sm font-extrabold text-slate-800">Edit Profil Lengkap</span>
                     </div>
                     <svg class="w-4 h-4 text-slate-300 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    <svg class="w-4 h-4 text-slate-400 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </a>
 
                 <!-- Menu 2: Keamanan & Kata Sandi -->
                 <a href="{{ route('siswa.pengaturan') }}" class="flex items-center justify-between p-4 hover:bg-slate-50/80 transition-all group">
+                <a href="{{ route('siswa.pengaturan') }}" class="flex items-center justify-between p-4.5 hover:bg-slate-50 transition-all group">
                     <div class="flex items-center space-x-3">
                         <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-105 transition-transform">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-200 flex items-center justify-center group-hover:scale-105 transition-transform">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                         </div>
                         <span class="text-xs font-bold text-slate-800">Keamanan & Kata Sandi</span>
+                        <span class="text-xs sm:text-sm font-extrabold text-slate-800">Keamanan & Kata Sandi</span>
                     </div>
                     <svg class="w-4 h-4 text-slate-300 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    <svg class="w-4 h-4 text-slate-400 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </a>
 
                 <!-- Menu 3: Pembayaran -->
                 <a href="{{ route('siswa.pengaturan') }}" class="flex items-center justify-between p-4 hover:bg-slate-50/80 transition-all group">
+                <a href="{{ route('siswa.payment.create') }}" class="flex items-center justify-between p-4.5 hover:bg-slate-50 transition-all group">
                     <div class="flex items-center space-x-3">
                         <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-105 transition-transform">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                        <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-200 flex items-center justify-center group-hover:scale-105 transition-transform">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
                         </div>
                         <span class="text-xs font-bold text-slate-800">Pembayaran</span>
+                        <span class="text-xs sm:text-sm font-extrabold text-slate-800">Administrasi & Pembayaran</span>
                     </div>
                     <div class="flex items-center space-x-2">
                         <span class="px-2 py-0.5 bg-amber-50 text-amber-600 font-bold text-[9px] rounded-md border border-amber-100">Baru</span>
                         <svg class="w-4 h-4 text-slate-300 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                     </div>
+                    <svg class="w-4 h-4 text-slate-400 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </a>
 
                 <!-- Menu 4: Keluar -->
@@ -149,11 +202,22 @@
                     <div class="flex items-center space-x-3">
                         <div class="w-9 h-9 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center group-hover:scale-105 transition-transform">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                <form method="POST" action="{{ route('siswa.logout') }}" class="block">
+                    @csrf
+                    <button type="submit" class="w-full flex items-center justify-between p-4.5 hover:bg-rose-50 transition-all group text-left">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 border border-rose-200 flex items-center justify-center group-hover:scale-105 transition-transform">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                            </div>
+                            <span class="text-xs sm:text-sm font-extrabold text-rose-600">Keluar dari Akun Siswa</span>
                         </div>
                         <span class="text-xs font-bold text-rose-600">Keluar</span>
                     </div>
                     <svg class="w-4 h-4 text-slate-300 group-hover:text-rose-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </a>
+                        <svg class="w-4 h-4 text-rose-400 group-hover:text-rose-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                </form>
             </div>
         </div>
 

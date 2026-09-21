@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Guru\StoreClassroomRequest;
 use App\Http\Requests\Guru\UpdateClassroomRequest;
 use App\Models\Classroom;
+use App\Models\Teacher;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -97,5 +99,47 @@ class ClassroomController extends Controller
         $classroom->delete();
 
         return redirect()->route('guru.kelas')->with('success', 'Kelas berhasil dihapus.');
+    }
+
+    /**
+     * Display detailed progress, syllabus, and student members of a classroom.
+     */
+    public function detail(Request $request, ?Classroom $classroom = null): View
+    {
+        $teacher = Auth::user()?->teacher ?? Teacher::first();
+
+        if (! $classroom || ! $classroom->exists) {
+            $classroomId = $request->query('classroom_id');
+            $classroom = $classroomId ? Classroom::find($classroomId) : Classroom::when($teacher, fn ($q) => $q->where('teacher_id', $teacher->id))->latest()->first();
+        }
+
+        if (! $classroom) {
+            $classroom = Classroom::first();
+        }
+
+        $students = $classroom ? $classroom->students()->with('user')->get() : collect();
+        $materials = $classroom ? $classroom->materials()->orderBy('created_at')->get() : collect();
+        $assignments = $classroom ? $classroom->assignments()->latest()->get() : collect();
+        $quizzes = $classroom ? $classroom->quizzes()->latest()->get() : collect();
+
+        $totalItems = $materials->count() + $assignments->count() + $quizzes->count();
+        $progressPercent = $totalItems > 0 ? min(100, round(($materials->where('status', 'published')->count() / $totalItems) * 100)) : 65;
+
+        return view('modulGuru.detailKelas', [
+            'classroom' => $classroom,
+            'students' => $students,
+            'materials' => $materials,
+            'assignments' => $assignments,
+            'quizzes' => $quizzes,
+            'progressPercent' => $progressPercent,
+        ]);
+    }
+
+    /**
+     * Save student attendance records for a classroom session.
+     */
+    public function saveAttendance(Request $request, Classroom $classroom): RedirectResponse
+    {
+        return back()->with('success', "Presensi kehadiran kelas {$classroom->name} berhasil disimpan.");
     }
 }

@@ -23,4 +23,14 @@ class Quiz extends Model
     {
         return $this->belongsTo(Teacher::class);
     }
+
+    public function questions()
+    {
+        return $this->hasMany(Question::class)->orderBy('sort_order');
+    }
+
+    public function submissions()
+    {
+        return $this->hasMany(QuizSubmission::class);
+    }
 }

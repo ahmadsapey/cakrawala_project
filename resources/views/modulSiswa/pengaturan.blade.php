@@ -29,9 +29,33 @@
         <!-- Header Halaman -->
         <div class="pt-2">
             <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Pengaturan & Keamanan</h1>
+        <div class="pt-2 flex items-center justify-between">
+            <div>
+                <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Pengaturan & Keamanan</h1>
+                <p class="text-xs font-semibold text-slate-500 mt-0.5">Kelola kata sandi, privasi, dan preferensi akun Anda.</p>
+            </div>
+            <a href="{{ route('siswa.profile') }}" class="px-4 py-2 bg-white border-2 border-slate-300 rounded-xl text-xs font-extrabold text-slate-700 hover:bg-slate-50 transition-all">
+                Kembali ke Profil
+            </a>
         </div>
 
         <!-- Section: KEAMANAN AKUN -->
+        @if(session('success'))
+            <div class="p-4 bg-emerald-50 border-2 border-emerald-300 text-emerald-800 rounded-2xl text-xs sm:text-sm font-bold flex items-center space-x-2 shadow-sm">
+                <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <span>{{ session('success') }}</span>
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="p-4 bg-rose-50 border-2 border-rose-300 text-rose-800 rounded-2xl text-xs font-bold space-y-1">
+                @foreach ($errors->all() as $error)
+                    <p>• {{ $error }}</p>
+                @endforeach
+            </div>
+        @endif
+
+        <!-- Section: KEAMANAN AKUN (Ubah Password) -->
         <div class="space-y-3">
             <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-600 px-1">Keamanan Akun</h3>
             <div class="bg-white rounded-2xl border-2 border-slate-200 shadow-sm overflow-hidden divide-y-2 divide-slate-200">
@@ -46,6 +70,10 @@
                     </div>
                     <svg class="w-5 h-5 text-slate-400 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </a>
+            <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-600 px-1">Ubah Kata Sandi</h3>
+            <form method="POST" action="{{ route('siswa.pengaturan.update') }}" class="bg-white rounded-2xl border-2 border-slate-200 shadow-sm p-6 space-y-4">
+                @csrf
+                @method('PUT')
 
                 <!-- Toggle 1: Autentikasi 2 Langkah (Aktif) -->
                 <div class="flex items-center justify-between p-4.5">
@@ -60,6 +88,9 @@
                         <input type="checkbox" checked class="sr-only peer">
                         <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                     </label>
+                <div class="space-y-1.5">
+                    <label for="password" class="block text-xs font-extrabold text-slate-700 uppercase tracking-wider">Kata Sandi Baru *</label>
+                    <input type="password" id="password" name="password" required minlength="6" placeholder="Minimal 6 karakter" class="w-full bg-white text-xs sm:text-sm font-semibold text-slate-900 px-4 py-3 border-2 border-slate-300 rounded-xl focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition-all">
                 </div>
 
                 <!-- Toggle 2: Masuk dengan Sidik Jari / FaceID (Non-aktif) -->
@@ -75,36 +106,58 @@
                         <input type="checkbox" class="sr-only peer">
                         <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                     </label>
+                <div class="space-y-1.5">
+                    <label for="password_confirmation" class="block text-xs font-extrabold text-slate-700 uppercase tracking-wider">Konfirmasi Kata Sandi Baru *</label>
+                    <input type="password" id="password_confirmation" name="password_confirmation" required minlength="6" placeholder="Ketik ulang kata sandi baru" class="w-full bg-white text-xs sm:text-sm font-semibold text-slate-900 px-4 py-3 border-2 border-slate-300 rounded-xl focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition-all">
                 </div>
 
             </div>
+                <button type="submit" class="px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs rounded-xl shadow-md transition-all">
+                    Simpan Kata Sandi Baru
+                </button>
+            </form>
         </div>
 
         <!-- Section: PRIVASI DATA BELAJAR -->
+        <!-- Section: PREFERENSI PRIVASI BELAJAR -->
         <div class="space-y-3">
             <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-600 px-1">Privasi Data Belajar</h3>
+            <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-600 px-1">Privasi & Preferensi Akun</h3>
             <div class="bg-white rounded-2xl border-2 border-slate-200 shadow-sm overflow-hidden divide-y-2 divide-slate-200">
 
                 
                 <!-- Toggle 3: Tampilkan Profil ke Publik (Aktif) -->
                 <div class="flex items-center justify-between p-4">
+                <!-- Toggle 1: Tampilkan Profil ke Publik -->
+                <div class="flex items-center justify-between p-4.5">
                     <div class="flex items-center space-x-3">
                         <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                        <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 border border-indigo-300 flex items-center justify-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                         </div>
                         <span class="text-xs font-bold text-slate-800">Tampilkan Profil ke Publik</span>
+                        <div>
+                            <span class="text-xs sm:text-sm font-extrabold text-slate-900">Tampilkan Profil ke Teman Sekelas</span>
+                            <p class="text-xs text-slate-500 font-semibold">Mengizinkan teman sekelas melihat foto dan statistik belajar Anda.</p>
+                        </div>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" checked class="sr-only peer">
                         <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                        <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                     </label>
                 </div>
 
                 <!-- Toggle 4: Bagikan Progres Mingguan (Non-aktif) -->
                 <div class="flex items-center justify-between p-4">
+                <!-- Toggle 2: Notifikasi Tugas Baru -->
+                <div class="flex items-center justify-between p-4.5">
                     <div class="flex items-center space-x-3">
                         <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                        <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 border border-indigo-300 flex items-center justify-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
                         </div>
                         <span class="text-xs font-bold text-slate-800">Bagikan Progres Mingguan</span>
                     </div>
@@ -119,12 +172,17 @@
                     <div class="flex items-center space-x-3">
                         <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411l0 0L21 21"/></svg>
+                        <div>
+                            <span class="text-xs sm:text-sm font-extrabold text-slate-900">Notifikasi Tugas & Kuis</span>
+                            <p class="text-xs text-slate-500 font-semibold">Dapatkan pemberitahuan saat guru menerbitkan tugas atau materi baru.</p>
                         </div>
                         <span class="text-xs font-bold text-slate-800">Sembunyikan Peringkat Kelas</span>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" class="sr-only peer">
                         <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                        <input type="checkbox" checked class="sr-only peer">
+                        <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                     </label>
                 </div>
 
@@ -132,6 +190,7 @@
         </div>
 
         <!-- Section: TENTANG CAKRAWALA -->
+        <!-- Section: KELUAR & AKUN -->
         <div class="space-y-3">
             <h3 class="text-[10px] font-black uppercase tracking-wider text-slate-400 px-1">Tentang Cakrawala</h3>
             <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden divide-y divide-slate-50">
@@ -141,6 +200,19 @@
                     <div class="flex items-center space-x-3">
                         <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-105 transition-transform">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-600 px-1">Sesi & Akun</h3>
+            <div class="bg-white rounded-2xl border-2 border-slate-200 shadow-sm overflow-hidden">
+                <form method="POST" action="{{ route('siswa.logout') }}">
+                    @csrf
+                    <button type="submit" class="w-full flex items-center justify-between p-4.5 hover:bg-rose-50 transition-all text-left">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 border border-rose-200 flex items-center justify-center">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                            </div>
+                            <div>
+                                <span class="text-xs sm:text-sm font-extrabold text-rose-600">Keluar dari Akun Siswa</span>
+                                <p class="text-xs text-slate-500 font-semibold">Akhiri sesi belajar Anda di perangkat ini secara aman.</p>
+                            </div>
                         </div>
                         <span class="text-xs font-bold text-slate-800">Kebijakan Privasi</span>
                     </div>
@@ -180,6 +252,9 @@
                     <svg class="w-4 h-4 text-slate-300 group-hover:text-rose-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </a>
 
+                        <svg class="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                </form>
             </div>
         </div>
 

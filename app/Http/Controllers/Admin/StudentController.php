@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\UpdateStudentRequest;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
@@ -16,11 +17,29 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        return view('modulAdmin.students.index', [
-            'students' => Student::with('user')->latest()->paginate(10),
-        ]);
+        $query = Student::with('user');
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->string('status'));
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->string('search')->trim();
+            $query->where(function ($subQuery) use ($search): void {
+                $subQuery->where('nisn', 'like', "%{$search}%")
+                    ->orWhere('class_name', 'like', "%{$search}%")
+                    ->orWhereHas('user', function ($userQuery) use ($search): void {
+                        $userQuery->where('name', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $students = $query->latest()->paginate(10)->withQueryString();
+
+        return view('modulAdmin.manageSiswa', compact('students'));
     }
 
     /**

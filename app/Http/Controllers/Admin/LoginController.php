@@ -1,14 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Siswa;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class LoginController extends Controller
 {
+    public function showLoginForm(): View
+    {
+        return view('modulAdmin.login');
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
@@ -16,14 +22,13 @@ class LoginController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        if (! Auth::attempt([...$credentials, 'role' => 'student'])) {
-            return back()->withErrors(['email' => 'Email atau kata sandi siswa tidak sesuai.'])->onlyInput('email');
+        if (! Auth::attempt([...$credentials, 'role' => 'admin'])) {
+            return back()->withErrors(['email' => 'Kredensial admin tidak valid atau Anda bukan admin.'])->onlyInput('email');
         }
 
         $request->session()->regenerate();
-        $request->session()->put('student_id', Auth::user()->student->id);
 
-        return redirect()->route('siswa.home');
+        return redirect()->route('admin.home');
     }
 
     public function destroy(Request $request): RedirectResponse
@@ -32,6 +37,6 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('siswa.login');
+        return redirect()->route('admin.login');
     }
 }

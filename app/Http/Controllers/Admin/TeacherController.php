@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\UpdateTeacherRequest;
 use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
@@ -16,10 +17,28 @@ class TeacherController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        return view('modulAdmin.teachers.index', [
-            'teachers' => Teacher::with('user')->latest()->paginate(10),
+        $query = Teacher::with('user');
+
+        if ($request->filled('search')) {
+            $search = $request->string('search')->toString();
+            $query->where(function ($q) use ($search) {
+                $q->where('nip', 'like', "%{$search}%")
+                    ->orWhere('subject', 'like', "%{$search}%")
+                    ->orWhereHas('user', function ($uq) use ($search) {
+                        $uq->where('name', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        if ($request->filled('status') && in_array($request->status, ['active', 'inactive'])) {
+            $query->where('status', $request->status);
+        }
+
+        return view('modulAdmin.manageGuru', [
+            'teachers' => $query->latest()->paginate(12)->withQueryString(),
         ]);
     }
 
