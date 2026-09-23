@@ -52,40 +52,40 @@
                 <!-- Kolom Kiri: Teks & Statistik -->
                 <div class="lg:col-span-6 space-y-6 text-center lg:text-left">
                     <div class="inline-flex items-center space-x-2 bg-indigo-50 border border-indigo-100 px-3.5 py-1.5 rounded-full text-indigo-600 text-xs font-semibold tracking-wide mx-auto lg:mx-0">
-                        <span class="w-2 h-2 rounded-full bg-indigo-600 animate-pulse"></span>
-                        <span class="uppercase">Pilihan Belajar Terbaik di Indonesia</span>
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span class="uppercase">PT Indo Prestasi Utama · Mitra Belajar Terintegrasi</span>
                     </div>
 
                     <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.15]">
-                        Belajar Lebih Mudah dengan Cakrawala Educentre
+                        Solusi Belajar Terintegrasi Bersama Cakrawala
                     </h1>
 
                     <p class="text-slate-600 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                        Temukan cara belajar efektif, interaktif, dan fleksibel untuk menguasai berbagai materi pelajaran sesuai impianmu.
+                        Startup jasa layanan pendidikan terpadu yang menyediakan les privat, bimbingan belajar, calistung, serta mitra penyelenggara CBT & LMS sekolah unggulan termasuk <strong class="text-indigo-600 font-bold">MAN Insan Cendikia</strong>.
                     </p>
 
                     <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
-                        <a href="{{ route('siswa.home') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm px-7 py-3.5 rounded-xl shadow-lg shadow-indigo-200 transition-all transform hover:-translate-y-0.5">
-                            Login Mulai Belajar
+                        <a href="{{ route('siswa.login') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm px-7 py-3.5 rounded-xl shadow-lg shadow-indigo-200 transition-all transform hover:-translate-y-0.5">
+                            Buka Portal LMS Siswa &rarr;
                         </a>
-                        <a href="#about" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-medium text-sm px-7 py-3.5 rounded-xl transition-all">
-                            DAFTAR
+                        <a href="{{ route('landing.tentang') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold text-sm px-7 py-3.5 rounded-xl transition-all">
+                            Profil Perusahaan
                         </a>
                     </div>
 
                     <!-- Statistik Bawah Hero -->
                     <div class="grid grid-cols-3 gap-6 pt-8 border-t border-slate-200/80 max-w-md mx-auto lg:mx-0">
                         <div>
-                            <p class="text-2xl sm:text-3xl font-black text-slate-900">15,000+</p>
-                            <p class="text-xs sm:text-sm text-slate-500 mt-1">Pengguna aktif</p>
+                            <p class="text-2xl sm:text-3xl font-black text-slate-900">4 Pilar</p>
+                            <p class="text-xs sm:text-sm text-slate-500 mt-1">Layanan terpadu</p>
                         </div>
                         <div>
                             <p class="text-2xl sm:text-3xl font-black text-slate-900">1,200+</p>
                             <p class="text-xs sm:text-sm text-slate-500 mt-1">Modul belajar</p>
                         </div>
                         <div>
-                            <p class="text-2xl sm:text-3xl font-black text-slate-900">4.9/5.0</p>
-                            <p class="text-xs sm:text-sm text-slate-500 mt-1">Kepuasan user</p>
+                            <p class="text-2xl sm:text-3xl font-black text-slate-900">MAN IC</p>
+                            <p class="text-xs sm:text-sm text-slate-500 mt-1">Mitra CBT & LMS</p>
                         </div>
                     </div>
                 </div>
@@ -120,6 +120,81 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </section>
+
+    <!-- 4 Pilar Layanan Pendidikan & Partnership MAN Insan Cendikia -->
+    <section class="py-16 bg-slate-50 border-t border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 space-y-12">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div>
+                    <span class="text-xs font-black uppercase tracking-wider text-indigo-600 bg-indigo-50 border border-indigo-200 px-3 py-1 rounded-full">
+                        Fondasi Layanan PT Indo Prestasi Utama
+                    </span>
+                    <h2 class="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight mt-3">
+                        4 Pilar Layanan Cakrawala Educentre
+                    </h2>
+                    <p class="text-sm text-slate-600 mt-1 max-w-2xl">
+                        Mendampingi setiap tahap tumbuh kembang akademis anak, dari pondasi dini hingga jenjang kampus impian.
+                    </p>
+                </div>
+                <a href="{{ route('landing.tentang') }}" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 transition-colors inline-flex items-center gap-1">
+                    <span>Pelajari Selengkapnya Tentang Kami</span> &rarr;
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Pilar 1 -->
+                <div class="bg-white p-6 rounded-2xl border-2 border-slate-200 hover:border-indigo-600 hover:shadow-lg transition-all space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-black text-sm">
+                        01
+                    </div>
+                    <h3 class="text-base font-extrabold text-slate-900">Les Privat (1-on-1)</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        Layanan les privat online maupun offline guru datang ke rumah dengan fokus materi sesuai kebutuhan siswa.
+                    </p>
+                    <div class="pt-2 text-xs font-bold text-indigo-600">Online & Guru Datang &rarr;</div>
+                </div>
+
+                <!-- Pilar 2 -->
+                <div class="bg-white p-6 rounded-2xl border-2 border-slate-200 hover:border-indigo-600 hover:shadow-lg transition-all space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-black text-sm">
+                        02
+                    </div>
+                    <h3 class="text-base font-extrabold text-slate-900">Bimbel Terpadu</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        Bimbingan belajar kelas intensif berjenjang SD, SMP, SMA dengan modul latihan tuntas dan pendampingan tutor master.
+                    </p>
+                    <div class="pt-2 text-xs font-bold text-blue-600">Kelas Intensif Siswa &rarr;</div>
+                </div>
+
+                <!-- Pilar 3: MAN IC Highlight -->
+                <div class="bg-white p-6 rounded-2xl border-2 border-amber-300 hover:border-amber-500 hover:shadow-lg transition-all space-y-3 bg-amber-50/20">
+                    <div class="flex items-center justify-between">
+                        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-black text-sm">
+                            03
+                        </div>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-black bg-amber-200 text-amber-900">MITRA RESMI</span>
+                    </div>
+                    <h3 class="text-base font-extrabold text-slate-900">Mitra Sekolah & Vendor LMS</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Penyelenggara Tryout Akbar CBT berstandar nasional dan platform LMS khusus acara kolaborasi <strong class="text-amber-800 font-bold">MAN Insan Cendikia</strong>.
+                    </p>
+                    <div class="pt-2 text-xs font-bold text-amber-700">Event Akbar & CBT LMS &rarr;</div>
+                </div>
+
+                <!-- Pilar 4 -->
+                <div class="bg-white p-6 rounded-2xl border-2 border-slate-200 hover:border-indigo-600 hover:shadow-lg transition-all space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-black text-sm">
+                        04
+                    </div>
+                    <h3 class="text-base font-extrabold text-slate-900">Calistung & Pengayaan</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        Program membaca, menulis, berhitung ramah anak serta pemantapan fondasi sains & logika dasar sejak dini.
+                    </p>
+                    <div class="pt-2 text-xs font-bold text-emerald-600">Metode Fonik Menyenangkan &rarr;</div>
+                </div>
             </div>
         </div>
     </section>
