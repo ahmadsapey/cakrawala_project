@@ -23,13 +23,15 @@ use App\Http\Controllers\Siswa\PaymentController as SiswaPaymentController;
 use App\Http\Controllers\Siswa\ProfileController;
 use App\Http\Controllers\Siswa\QuizTakingController;
 use App\Http\Controllers\Siswa\RegistrationController;
+use App\Http\Controllers\Siswa\ScheduleController as SiswaScheduleController;
 use App\Http\Controllers\Siswa\TaskController as SiswaTaskController;
+use App\Http\Controllers\Siswa\TryoutController as SiswaTryoutController;
 use App\Models\LandingContent;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 
 Route::get('/', function () {
-    if (!Schema::hasTable('landing_contents')) {
+    if (! Schema::hasTable('landing_contents')) {
         return view('landingPage', ['programs' => collect(), 'packages' => collect()]);
     }
 
@@ -38,6 +40,8 @@ Route::get('/', function () {
         'packages' => LandingContent::query()->where('type', 'package')->where('is_active', true)->orderBy('sort_order')->orderBy('id')->get(),
     ]);
 })->name('landing.page');
+
+Route::view('/tentang', 'landingTentang')->name('landing.tentang');
 
 Route::prefix('siswa')->name('siswa.')->group(function () {
     Route::view('/login', 'modulSiswa.login')->name('login');
@@ -50,6 +54,8 @@ Route::prefix('siswa')->name('siswa.')->group(function () {
     Route::get('/kelas', [SiswaClassroomController::class, 'index'])->name('kelas');
     Route::get('/kelas/{classroom}', [SiswaClassroomController::class, 'show'])->name('kelas.show');
     Route::get('/materi', [SiswaMaterialController::class, 'index'])->name('materi');
+    Route::get('/jadwal', [SiswaScheduleController::class, 'index'])->name('jadwal');
+    Route::get('/tryout', [SiswaTryoutController::class, 'index'])->name('tryout');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
