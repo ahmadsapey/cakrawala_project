@@ -12,7 +12,7 @@ class StorePaymentRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->session()->has('student_id') || $this->user()?->student !== null || auth()->check();
+        return $this->session()->has('student_id');
     }
 
     /**
