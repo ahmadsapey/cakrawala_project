@@ -1,7 +1,7 @@
 <header class="sticky top-0 z-50 border-b border-slate-200/80 bg-[#F8FAFC]/95 backdrop-blur-md md:hidden">
 	<div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 sm:px-8 lg:px-12">
 		<a href="{{ url('/') }}" class="flex items-center gap-3" aria-label="Cakrawala - Beranda">
-			<img src="{{ asset('storage/logoCakrawala.png') }}" alt="Logo Cakrawala" class="h-10 w-10 object-contain">
+			<img src="{{ asset('images/logoCakrawala.png') }}" alt="Logo Cakrawala" class="h-10 w-10 object-contain">
 			<span class="text-xl font-bold tracking-tight text-indigo-600">Cakrawala</span>
 		</a>
 

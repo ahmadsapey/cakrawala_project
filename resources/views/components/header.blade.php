@@ -1,7 +1,7 @@
 <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100 shadow-sm transition-all">
     <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 min-h-20 flex flex-wrap items-center justify-between gap-4 py-3">
         <a href="{{ url('/') }}" class="flex items-center gap-3 shrink-0" aria-label="Cakrawala Educentre - Beranda">
-            <img src="{{ asset('storage/logoCakrawala.png') }}" alt="Logo Cakrawala Educentre" class="w-12 h-12 object-contain">
+            <img src="{{ asset('images/logoCakrawala.png') }}" alt="Logo Cakrawala Educentre" class="w-12 h-12 object-contain">
             <span class="hidden sm:block text-sm font-bold tracking-wide text-slate-800 uppercase">Cakrawala Educentre</span>
         </a>
 
