@@ -94,7 +94,7 @@
                 <div class="lg:col-span-6 relative w-full">
                     <div class="flex items-center justify-between mb-4 px-2">
                         <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Program & Modul Pilihan</span>
-                        <span class="text-xs text-indigo-600 font-medium">bergulir Otomatis ⚡</span>
+                        
                     </div>
                     
                     <div id="autoScrollHero" class="flex space-x-5 overflow-x-auto no-scrollbar pb-6 pt-2 snap-x snap-mandatory px-2 scroll-smooth-container">
@@ -138,7 +138,6 @@
             <!-- Header Kecil Penanda Auto-Scroll Pricing -->
             <div class="flex items-center justify-between mb-4 px-2 max-w-6xl mx-auto">
                 <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Geser & Pilih Paket Layanan</span>
-                <span class="text-xs text-indigo-600 font-medium">Bergulir Otomatis⚡</span>
             </div>
 
             <!-- Pricing Colossal Container: Bergulir Otomatis (Auto-Scroll) & Rapi Tanpa Memanjang ke Bawah -->

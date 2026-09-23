@@ -30,10 +30,10 @@
             </details>
 
             <a href="{{ url('/') }}#about" class="px-3 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-colors">
-                Tentang
+                CBT
             </a>
             <a href="{{ url('/') }}#contact" class="px-3 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-colors">
-                Kontak
+                Login
             </a>
         </nav>
     </div>
