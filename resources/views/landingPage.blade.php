@@ -65,11 +65,9 @@
                     </p>
 
                     <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
-                        <a href="{{ route('siswa.home') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm px-7 py-3.5 rounded-xl shadow-lg shadow-indigo-200 transition-all transform hover:-translate-y-0.5">
-                            Login Mulai Belajar
-                        </a>
-                        <a href="#about" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-medium text-sm px-7 py-3.5 rounded-xl transition-all">
-                            DAFTAR
+                       
+                        <a href="#about" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm px-7 py-3.5 rounded-xl shadow-lg shadow-indigo-200 transition-all transform hover:-translate-y-0.5">
+                            DAFTAR SEKARANG
                         </a>
                     </div>
 

@@ -21,34 +21,25 @@
 </head>
 <body class="bg-[#F8FAFC] text-slate-800 font-sans antialiased selection:bg-indigo-500 selection:text-white pb-28">
 
-    <!-- Container Utama (Mobile-First Frame) -->
-    <div class="max-w-md mx-auto min-h-screen bg-[#F8FAFC] flex flex-col p-4 sm:p-6 space-y-6 relative shadow-2xl">
+    @include('components.header')
 
-        <!-- Navbar / Header Sederhana -->
-        <div class="flex items-center justify-between pt-2">
-            <div class="flex items-center space-x-2.5">
-                <div class="w-9 h-9 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-black text-sm shadow-md shadow-indigo-200">
-                    C
-                </div>
-                <span class="text-xs font-black tracking-wider uppercase text-slate-900">Cakrawala Educentre</span>
-            </div>
-            <a href="#kontak" class="px-3 py-1.5 bg-white border border-slate-200/80 text-indigo-600 font-bold text-[10px] rounded-full shadow-sm hover:bg-slate-50 transition-all">Kontak</a>
-        </div>
+    <div class="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:gap-8 lg:px-12 lg:py-10">
 
         <!-- Section: Hero / Banner Utama -->
-        <div class="bg-gradient-to-br from-indigo-900 to-indigo-700 rounded-3xl p-6 text-white space-y-3 shadow-xl relative overflow-hidden">
+        <div class="bg-gradient-to-br from-indigo-900 to-indigo-700 rounded-3xl p-6 sm:p-8 lg:p-12 text-white space-y-3 shadow-xl relative overflow-hidden">
             <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl"></div>
             <span class="px-3 py-1 bg-white/10 text-indigo-200 text-[10px] font-black uppercase tracking-wider rounded-full backdrop-blur-md">Tentang Perusahaan</span>
-            <h1 class="text-xl sm:text-2xl font-black tracking-tight leading-snug">
+            <h1 class="text-xl sm:text-3xl lg:text-5xl max-w-3xl font-black tracking-tight leading-snug">
                 Membangun Masa Depan Pendidikan Melalui Inovasi Digital
             </h1>
-            <p class="text-xs text-indigo-100 font-medium leading-relaxed">
+            <p class="text-xs sm:text-sm lg:text-base max-w-3xl text-indigo-100 font-medium leading-relaxed">
                 Kami adalah institusi pengembang teknologi pendidikan terdepan yang berfokus pada digitalisasi manajemen sekolah, efisiensi akademik, dan peningkatan kualitas pembelajaran modern.
             </p>
         </div>
 
+        <div class="grid gap-6 lg:grid-cols-2">
         <!-- Section: Sambutan Pengelola / Founder -->
-        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-5 space-y-4">
+        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-5 sm:p-7 space-y-4">
             <div class="flex items-center space-x-3.5">
                 <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" alt="Founder & CEO" class="w-14 h-14 rounded-2xl object-cover shadow-md flex-shrink-0">
                 <div class="space-y-0.5 overflow-hidden">
@@ -104,9 +95,10 @@
             </div>
 
         </div>
+        </div>
 
         <!-- Tombol Aksi / Footer Call to Action -->
-        <div id="kontak" class="pt-2">
+        <div id="kontak" class="pt-2 lg:pt-4 lg:max-w-xl lg:self-center lg:w-full">
             <button class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-2xl shadow-lg shadow-indigo-200 transition-all flex items-center justify-center space-x-2">
                 <span>Hubungi Tim Kami &rarr;</span>
             </button>

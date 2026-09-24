@@ -39,6 +39,9 @@ Route::get('/', function () {
     ]);
 })->name('landing.page');
 
+Route::view('/tentang', 'landingTentang')->name('landing.tentang');
+Route::view('/virtual', 'virtual')->name('landing.virtual');
+
 Route::prefix('siswa')->name('siswa.')->group(function () {
     Route::view('/login', 'modulSiswa.login')->name('login');
     Route::post('/login', [SiswaLoginController::class, 'store'])->name('login.submit');
