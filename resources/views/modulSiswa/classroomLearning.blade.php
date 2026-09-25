@@ -26,21 +26,6 @@
         </div>
     </div>
 
-    @if ($classroom->online_meeting_url)
-        <!-- Live Online Meeting Banner -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-3xl border border-indigo-200 bg-gradient-to-r from-indigo-500 to-purple-600 p-6 text-white shadow-md">
-            <div>
-                <span class="inline-block rounded-full bg-white/20 px-3 py-1 text-xs font-bold uppercase tracking-wider backdrop-blur-md">Live Meeting</span>
-                <h2 class="mt-2 text-xl font-black">Sesi Pembelajaran Online</h2>
-                <p class="mt-1 text-xs text-indigo-100">Klik tombol di samping untuk bergabung ke tatap muka virtual kelas ini.</p>
-            </div>
-            <a href="{{ $classroom->online_meeting_url }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3 text-xs font-black text-indigo-600 shadow-md hover:bg-indigo-50 transition-all shrink-0">
-                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                Gabung Sesi Online
-            </a>
-        </div>
-    @endif
-
     <!-- Bagian Materi Pembelajaran -->
     <section class="space-y-4">
         <div class="flex items-center justify-between">
@@ -56,13 +41,13 @@
                 <p class="mt-2 text-sm leading-relaxed text-slate-600">{{ $material->summary ?: 'Tidak ada ringkasan materi.' }}</p>
                 <div class="mt-5 flex flex-wrap gap-3 border-t border-slate-100 pt-4 text-xs font-bold">
                     @if ($material->video_url)
-                        <a href="{{ $material->video_url }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 rounded-xl bg-indigo-50 px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 hover:text-white">
-                            Tonton Video
+                        <a href="{{ $material->video_url }}" target="_blank" class="inline-flex items-center gap-1.5 rounded-xl bg-indigo-50 px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 hover:text-white">
+                            Masuk Zoom
                         </a>
                     @endif 
                     @if ($material->attachment_path)
                         <a href="{{ Storage::disk('public')->url($material->attachment_path) }}" target="_blank" class="inline-flex items-center gap-1.5 rounded-xl bg-rose-50 px-4 py-2 text-rose-600 transition-colors hover:bg-rose-600 hover:text-white">
-                            Unduh Modul (PDF)
+                            📥 Unduh Modul
                         </a>
                     @endif
                 </div>
@@ -90,13 +75,27 @@
                 <div class="mt-4 flex flex-wrap items-center gap-3 text-xs font-semibold text-slate-500">
                     <span class="rounded-lg bg-amber-50 px-2.5 py-1 text-amber-700 font-bold">Nilai maks: {{ $assignment->points }}</span>
                     @if ($assignment->due_at)
-                        <span class="rounded-lg bg-slate-100 px-2.5 py-1">Tenggat: {{ $assignment->due_at->format('d M Y H:i') }}</span>
+                        <span class="rounded-lg bg-slate-100 px-2.5 py-1">⏳ Tenggat: {{ $assignment->due_at->format('d M Y H:i') }}</span>
                     @endif
                 </div>
             </article>
         @empty
-            <p class="text-sm text-slate-400">Belum ada tugas yang diterbitkan.</p>
+            @if($quizzes->isEmpty())
+                <p class="text-sm text-slate-400">Belum ada tugas yang diterbitkan.</p>
+            @endif
         @endforelse 
+
+        @foreach ($quizzes as $quiz)
+            <article class="group rounded-3xl border border-sky-100 bg-white/80 p-6 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-sky-300 hover:shadow-md">
+                <span class="inline-block rounded-xl bg-gradient-to-r from-sky-500 to-cyan-500 px-3.5 py-1.5 text-xs font-bold text-white shadow-sm">Kuis</span>
+                <h3 class="mt-3 text-xl font-black text-slate-900 group-hover:text-sky-600 transition-colors">{{ $quiz->title }}</h3>
+                <div class="mt-3 flex flex-wrap gap-2 text-xs font-bold">
+                    <span class="rounded-lg bg-sky-50 px-3 py-1.5 text-sky-700">{{ $quiz->question_count }} Soal</span>
+                    <span class="rounded-lg bg-indigo-50 px-3 py-1.5 text-indigo-700">⏱️ {{ $quiz->duration_minutes }} menit</span>
+                    <span class="rounded-lg bg-emerald-50 px-3 py-1.5 text-emerald-700">🎯 KKM: {{ $quiz->passing_score }}</span>
+                </div>
+            </article>
+        @endforeach
     </section>
 </main>
 

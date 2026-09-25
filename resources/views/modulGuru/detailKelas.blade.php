@@ -69,15 +69,17 @@
             <div class="grid grid-cols-2 sm:grid-cols-3 pt-4 border-t-2 border-slate-200 gap-4">
                 <div>
                     <div class="text-xs text-slate-500 uppercase tracking-wider font-extrabold">Total Siswa Terdaftar</div>
+                    <div class="text-sm sm:text-base font-extrabold text-slate-900 mt-0.5">36 Siswa Aktif</div>
                     <div class="text-sm sm:text-base font-extrabold text-slate-900 mt-0.5">{{ $students->count() }} Siswa Aktif</div>
                 </div>
                 <div>
                     <div class="text-xs text-slate-500 uppercase tracking-wider font-extrabold">Progres Pembelajaran</div>
+                    <div class="text-sm sm:text-base font-extrabold text-indigo-600 mt-0.5">65% Selesai</div>
                     <div class="text-sm sm:text-base font-extrabold text-indigo-600 mt-0.5">{{ $progressPercent }}% Selesai</div>
                 </div>
                 <div>
-                    <div class="text-xs text-slate-500 uppercase tracking-wider font-extrabold">Total Materi Diterbitkan</div>
-                    <div class="text-sm sm:text-base font-extrabold text-slate-900 mt-0.5">{{ $materials->count() }} Modul</div>
+                    <div class="text-xs text-slate-500 uppercase tracking-wider font-extrabold">Total Materi & Kuis</div>
+                    <div class="text-sm sm:text-base font-extrabold text-slate-900 mt-0.5">{{ $materials->count() + $quizzes->count() }} Modul</div>
                 </div>
             </div>
         </div>

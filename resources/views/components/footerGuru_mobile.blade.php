@@ -16,7 +16,7 @@
 			<span class="text-[11px] font-semibold">Kelas Ajar</span>
 		</a>
 
-		<details class="group relative flex h-full flex-col items-center justify-center {{ request()->routeIs('guru.material.*') || request()->routeIs('guru.tugas.*') ? 'text-indigo-600' : 'text-slate-500' }}">
+		<details class="group relative flex h-full flex-col items-center justify-center {{ request()->routeIs('guru.material.create') || request()->routeIs('guru.tugas.*') || request()->routeIs('guru.kuis.*') ? 'text-indigo-600' : 'text-slate-500' }}">
 			<summary class="list-none flex cursor-pointer flex-col items-center justify-center gap-1 transition-colors hover:text-indigo-600 focus:text-indigo-600">
 			<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5v-16Z"/>
@@ -25,17 +25,24 @@
 			<span class="text-[11px] font-medium">Materi</span>
 			</summary>
 			<div class="absolute bottom-[66px] right-0 w-40 rounded-2xl border border-slate-100 bg-white p-2 text-left shadow-xl shadow-indigo-100/50">
-				<a href="{{ route('guru.material.create') }}" class="block rounded-xl px-3 py-2 text-[11px] font-semibold text-slate-600 hover:bg-indigo-50 hover:text-indigo-600">Upload Materi</a>
+				
 				<a href="{{ route('guru.tugas.tambah') }}" class="block rounded-xl px-3 py-2 text-[11px] font-semibold text-slate-600 hover:bg-indigo-50 hover:text-indigo-600">Tambah Tugas</a>
+				<a href="{{ route('guru.kuis.tambah') }}" class="block rounded-xl px-3 py-2 text-[11px] font-semibold text-slate-600 hover:bg-indigo-50 hover:text-indigo-600">Tambah Kuis</a>
 			</div>
 		</details>
 
-		<a href="{{ route('guru.koreksi.tugas') }}" class="flex h-full flex-col items-center justify-center gap-1 {{ request()->routeIs('guru.koreksi.*') ? 'text-indigo-600' : 'text-slate-500' }} transition-colors hover:text-indigo-600 focus:text-indigo-600">
+		<details class="group relative flex h-full flex-col items-center justify-center {{ request()->routeIs('guru.koreksi.*') ? 'text-indigo-600' : 'text-slate-500' }}">
+			<summary class="list-none flex cursor-pointer flex-col items-center justify-center gap-1 transition-colors hover:text-indigo-600 focus:text-indigo-600">
 			<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 3h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/>
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="m8 12 2.5 2.5L16 9"/>
 			</svg>
 			<span class="text-[11px] font-medium">Koreksi</span>
-		</a>
+			</summary>
+			<div class="absolute bottom-[66px] right-0 w-40 rounded-2xl border border-slate-100 bg-white p-2 text-left shadow-xl shadow-indigo-100/50">
+				<a href="{{ route('guru.koreksi.kuis') }}" class="block rounded-xl px-3 py-2 text-[11px] font-semibold text-slate-600 hover:bg-indigo-50 hover:text-indigo-600">Koreksi Kuis</a>
+				<a href="{{ route('guru.koreksi.tugas') }}" class="block rounded-xl px-3 py-2 text-[11px] font-semibold text-slate-600 hover:bg-indigo-50 hover:text-indigo-600">Koreksi Tugas</a>
+			</div>
+		</details>
 	</nav>
 </footer>

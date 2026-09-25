@@ -10,11 +10,8 @@ use App\Models\Payment;
 use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\QuizSubmission;
-use App\Models\Schedule;
 use App\Models\Student;
-use App\Models\Subject;
 use App\Models\Teacher;
-use App\Models\TeacherAttendance;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -29,28 +26,6 @@ class DemoFlowSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'admin@gmail.com'],
             ['name' => 'Admin', 'password' => Hash::make('admin123'), 'role' => 'admin'],
-        );
-
-        User::updateOrCreate(
-            ['email' => 'admin.demo@cakrawala.test'],
-            ['name' => 'Admin Demo', 'password' => Hash::make('password123'), 'role' => 'admin'],
-        );
-
-        $fisikaSubject = Subject::updateOrCreate(
-            ['code' => 'FIS'],
-            ['name' => 'Fisika', 'description' => 'Mata pelajaran Fisika SMA'],
-        );
-        Subject::updateOrCreate(
-            ['code' => 'MAT'],
-            ['name' => 'Matematika', 'description' => 'Mata pelajaran Matematika SMA'],
-        );
-        Subject::updateOrCreate(
-            ['code' => 'KIM'],
-            ['name' => 'Kimia', 'description' => 'Mata pelajaran Kimia SMA'],
-        );
-        Subject::updateOrCreate(
-            ['code' => 'BIO'],
-            ['name' => 'Biologi', 'description' => 'Mata pelajaran Biologi SMA'],
         );
 
         $studentUser = User::updateOrCreate(
@@ -84,34 +59,12 @@ class DemoFlowSeeder extends Seeder
             ['teacher_id' => $teacher->id, 'name' => 'Fisika Modern & Praktikum'],
             [
                 'subject' => 'Fisika',
-                'subject_id' => $fisikaSubject->id,
-                'online_meeting_url' => 'https://meet.google.com/abc-demo-xyz',
                 'grade_level' => 'Kelas 12',
                 'section' => 'XII IPA 1',
                 'description' => 'Mempelajari hukum fisika modern, termodinamika, dan gelombang elektromagnetik.',
             ],
         );
         $classroom->students()->syncWithoutDetaching([$student->id, $student2->id]);
-
-        Schedule::updateOrCreate(
-            ['classroom_id' => $classroom->id, 'day_of_week' => 'Senin'],
-            [
-                'teacher_id' => $teacher->id,
-                'subject_id' => $fisikaSubject->id,
-                'start_time' => '08:00:00',
-                'end_time' => '09:30:00',
-                'online_meeting_url' => 'https://meet.google.com/abc-demo-xyz',
-            ],
-        );
-
-        TeacherAttendance::firstOrCreate([
-            'teacher_id' => $teacher->id,
-            'classroom_id' => $classroom->id,
-            'attendance_date' => now()->toDateString(),
-        ], [
-            'session_started_at' => now(),
-            'status' => 'hadir',
-        ]);
 
         Payment::updateOrCreate(
             ['invoice_number' => 'INV-DEMO-0001'],

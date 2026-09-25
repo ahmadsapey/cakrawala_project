@@ -30,10 +30,10 @@
             <div>
                 <span class="text-xs font-black uppercase tracking-[0.18em] text-teal-700 bg-teal-50 border border-teal-100 px-3 py-1.5 rounded-xl inline-block shadow-2xs">Modul Guru</span>
                 <h1 class="mt-2 text-2xl sm:text-3xl font-black tracking-tight text-slate-900">Kelas yang Anda Ajar</h1>
-                <p class="mt-1.5 text-xs sm:text-sm font-bold text-slate-500">Daftar kelas yang ditugaskan oleh Admin untuk Anda ampu.</p>
+                <p class="mt-1.5 text-xs sm:text-sm font-bold text-slate-500">Lihat, ubah, atau hapus kelas yang sudah Anda input.</p>
             </div>
-            <a href="{{ route('guru.material.create') }}" class="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-teal-600 to-emerald-700 px-5 py-3 text-xs font-black text-white shadow-lg shadow-teal-200 hover:from-teal-700 hover:to-emerald-800 transition-all shrink-0">
-                + Upload Bahan Ajar
+            <a href="{{ route('guru.kelas.create') }}" class="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-teal-600 to-emerald-700 px-5 py-3 text-xs font-black text-white shadow-lg shadow-teal-200 hover:from-teal-700 hover:to-emerald-800 transition-all shrink-0">
+                + Tambah Kelas Baru
             </a>
         </div>
 
@@ -65,13 +65,19 @@
                         @endif
                     </div>
                     
-                    <div class="mt-6 border-t border-slate-200 pt-4">
-                        <a href="{{ route('guru.kelas.learning', $classroom) }}" class="block w-full rounded-2xl bg-teal-600 border border-teal-700 px-4 py-2.5 text-center text-xs font-black text-white transition-all hover:bg-teal-700 shadow-2xs">Masuk Pembelajaran &rarr;</a>
+                    <div class="mt-6 flex items-center gap-2 border-t border-slate-200 pt-4">
+                        <a href="{{ route('guru.kelas.learning', $classroom) }}" class="flex-1 rounded-2xl bg-teal-600 border border-teal-700 px-3 py-2.5 text-center text-xs font-black text-white transition-all hover:bg-teal-700 shadow-2xs">Masuk</a>
+                        <a href="{{ route('guru.kelas.edit', $classroom) }}" class="flex-1 rounded-2xl border border-teal-200 bg-teal-50 px-3 py-2.5 text-center text-xs font-black text-teal-800 transition-all hover:bg-teal-100 shadow-2xs">Edit</a>
+                        <form method="POST" action="{{ route('guru.kelas.destroy', $classroom) }}" class="flex-1" onsubmit="return confirm('Hapus kelas ini?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="w-full rounded-2xl border border-rose-200 bg-rose-50 px-3 py-2.5 text-xs font-black text-rose-700 transition-all hover:bg-rose-100 shadow-2xs">Hapus</button>
+                        </form>
                     </div>
                     </article>
                 @empty
                     <div class="rounded-3xl border border-dashed border-slate-300 bg-white/80 px-5 py-12 text-center text-xs font-bold text-slate-400 md:col-span-2 lg:col-span-3">
-                        Belum ada kelas yang ditugaskan oleh Admin kepada Anda.
+                        Belum ada kelas yang diinput. Tambahkan kelas pertama Anda.
                     </div>
                 @endforelse
             </div>
