@@ -33,6 +33,13 @@ class LandingContentController extends Controller
 
     public function index(): View
     {
+        if (request()->routeIs('admin.*')) {
+            return view('modulAdmin.kelolaLanding', [
+                'programs' => LandingContent::query()->where('type', 'program')->orderBy('sort_order')->orderBy('id')->get(),
+                'packages' => LandingContent::query()->where('type', 'package')->orderBy('sort_order')->orderBy('id')->get(),
+            ]);
+        }
+
         return view('maintenance.dashbord', [
             'contents' => LandingContent::query()->orderBy('type')->orderBy('sort_order')->orderBy('id')->get(),
             'brandContent' => LandingContent::query()->where('type', 'brand')->first(),
@@ -113,6 +120,13 @@ class LandingContentController extends Controller
         LandingContent::create($this->payload($request));
 
         return to_route('maintenance.landing.layer', 'hero')->with('status', 'Program & unggulan berhasil ditambahkan.');
+    }
+
+    public function store(LandingContentRequest $request): RedirectResponse
+    {
+        LandingContent::create($this->payload($request));
+
+        return to_route('admin.landing.index')->with('status', 'Konten landing page berhasil ditambahkan.');
     }
 
     public function update(LandingContentRequest $request, LandingContent $landingContent): RedirectResponse

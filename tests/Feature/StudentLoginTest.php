@@ -4,10 +4,13 @@ namespace Tests\Feature;
 
 use App\Models\Student;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class StudentLoginTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_student_can_login_again_after_being_reactivated(): void
     {
         $studentUser = User::factory()->create([

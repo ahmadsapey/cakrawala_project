@@ -124,6 +124,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/pembayaran', [AdminPaymentController::class, 'index'])->name('pembayaran');
         Route::patch('/pembayaran/{payment}/confirm', [AdminPaymentController::class, 'confirm'])->name('pembayaran.confirm');
         Route::patch('/pembayaran/{payment}/reject', [AdminPaymentController::class, 'reject'])->name('pembayaran.reject');
+        Route::resource('landing', LandingContentController::class)->names('landing')->parameters(['landing' => 'landingContent']);
     });
 });
 
