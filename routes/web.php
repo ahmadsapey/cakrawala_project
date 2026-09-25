@@ -49,23 +49,25 @@ Route::prefix('siswa')->name('siswa.')->group(function () {
     Route::post('/login', [SiswaLoginController::class, 'store'])->name('login.submit');
     Route::view('/register', 'modulSiswa.register')->name('register');
     Route::post('/register', [RegistrationController::class, 'store'])->name('register.submit');
-    Route::get('/pembayaran', [SiswaPaymentController::class, 'create'])->name('payment.create');
-    Route::post('/pembayaran', [SiswaPaymentController::class, 'store'])->name('payment.store');
-    Route::get('/home', [SiswaHomeController::class, 'index'])->name('home');
-    Route::get('/kelas', [SiswaClassroomController::class, 'index'])->name('kelas');
-    Route::get('/kelas/{classroom}', [SiswaClassroomController::class, 'show'])->name('kelas.show');
-    Route::get('/materi', [SiswaMaterialController::class, 'index'])->name('materi');
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::get('/pengaturan', [ProfileController::class, 'settings'])->name('pengaturan');
-    Route::put('/pengaturan', [ProfileController::class, 'updateSettings'])->name('pengaturan.update');
-    Route::post('/logout', [SiswaLoginController::class, 'destroy'])->name('logout');
-    Route::get('/tugas', [SiswaTaskController::class, 'index'])->name('tugas');
-    Route::post('/tugas/{assignment}/submit', [AssignmentSubmissionController::class, 'store'])->name('tugas.submit');
-    Route::get('/pengerjaan/{quiz?}', [QuizTakingController::class, 'show'])->name('pengerjaan');
-    Route::post('/pengerjaan/{quiz}', [QuizTakingController::class, 'submit'])->name('pengerjaan.submit');
-    Route::get('/evaluasi/{submission?}', [QuizTakingController::class, 'evaluation'])->name('evaluasi');
+    Route::middleware(['auth', 'student'])->group(function () {
+        Route::get('/pembayaran', [SiswaPaymentController::class, 'create'])->name('payment.create');
+        Route::post('/pembayaran', [SiswaPaymentController::class, 'store'])->name('payment.store');
+        Route::get('/home', [SiswaHomeController::class, 'index'])->name('home');
+        Route::get('/kelas', [SiswaClassroomController::class, 'index'])->name('kelas');
+        Route::get('/kelas/{classroom}', [SiswaClassroomController::class, 'show'])->name('kelas.show');
+        Route::get('/materi', [SiswaMaterialController::class, 'index'])->name('materi');
+        Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+        Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::get('/pengaturan', [ProfileController::class, 'settings'])->name('pengaturan');
+        Route::put('/pengaturan', [ProfileController::class, 'updateSettings'])->name('pengaturan.update');
+        Route::post('/logout', [SiswaLoginController::class, 'destroy'])->name('logout');
+        Route::get('/tugas', [SiswaTaskController::class, 'index'])->name('tugas');
+        Route::post('/tugas/{assignment}/submit', [AssignmentSubmissionController::class, 'store'])->name('tugas.submit');
+        Route::get('/pengerjaan/{quiz?}', [QuizTakingController::class, 'show'])->name('pengerjaan');
+        Route::post('/pengerjaan/{quiz}', [QuizTakingController::class, 'submit'])->name('pengerjaan.submit');
+        Route::get('/evaluasi/{submission?}', [QuizTakingController::class, 'evaluation'])->name('evaluasi');
+    });
 });
 
 Route::prefix('guru')->name('guru.')->group(function () {
@@ -109,12 +111,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AdminLoginController::class, 'store'])->name('login.submit');
     Route::post('/logout', [AdminLoginController::class, 'destroy'])->name('logout');
-    Route::get('/home', [AdminHomeController::class, 'index'])->name('home');
-    Route::resource('siswa', StudentController::class)->names('siswa')->parameters(['siswa' => 'student']);
-    Route::resource('guru', TeacherController::class)->names('guru')->parameters(['guru' => 'teacher']);
-    Route::resource('kelas', AdminClassroomController::class)->names('kelas')->parameters(['kelas' => 'classroom']);
-    Route::get('/pembayaran', [AdminPaymentController::class, 'index'])->name('pembayaran');
-    Route::patch('/pembayaran/{payment}/confirm', [AdminPaymentController::class, 'confirm'])->name('pembayaran.confirm');
-    Route::patch('/pembayaran/{payment}/reject', [AdminPaymentController::class, 'reject'])->name('pembayaran.reject');
-    Route::resource('landing', LandingContentController::class)->only(['index', 'store', 'update', 'destroy'])->parameters(['landing' => 'landingContent']);
+    Route::middleware(['auth', 'admin'])->group(function () {
+        Route::get('/home', [AdminHomeController::class, 'index'])->name('home');
+        Route::resource('siswa', StudentController::class)->names('siswa')->parameters(['siswa' => 'student']);
+        Route::resource('guru', TeacherController::class)->names('guru')->parameters(['guru' => 'teacher']);
+        Route::resource('kelas', AdminClassroomController::class)->names('kelas')->parameters(['kelas' => 'classroom']);
+        Route::get('/pembayaran', [AdminPaymentController::class, 'index'])->name('pembayaran');
+        Route::patch('/pembayaran/{payment}/confirm', [AdminPaymentController::class, 'confirm'])->name('pembayaran.confirm');
+        Route::patch('/pembayaran/{payment}/reject', [AdminPaymentController::class, 'reject'])->name('pembayaran.reject');
+        Route::resource('landing', LandingContentController::class)->only(['index', 'store', 'update', 'destroy'])->parameters(['landing' => 'landingContent']);
+    });
 });

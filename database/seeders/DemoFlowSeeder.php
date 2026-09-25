@@ -24,8 +24,8 @@ class DemoFlowSeeder extends Seeder
     public function run(): void
     {
         User::updateOrCreate(
-            ['email' => 'admin.demo@cakrawala.test'],
-            ['name' => 'Admin Demo', 'password' => Hash::make('password123'), 'role' => 'admin'],
+            ['email' => 'admin@gmail.com'],
+            ['name' => 'Admin', 'password' => Hash::make('admin123'), 'role' => 'admin'],
         );
 
         $studentUser = User::updateOrCreate(

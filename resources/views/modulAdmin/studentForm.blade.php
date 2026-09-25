@@ -91,12 +91,12 @@
                         class="w-full rounded-2xl border-2 border-indigo-100 bg-slate-50/50 px-4 py-3 font-semibold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all">{{ old('address', $student?->address) }}</textarea>
                 </label>
 
-                <label class="space-y-2 text-xs sm:text-sm font-black text-slate-700 sm:col-span-2">Nama wali
+                <label class="space-y-2 text-xs sm:text-sm font-black text-slate-700 sm:col-span-2">Nama Wali
                     <input name="guardian_name" value="{{ old('guardian_name', $student?->guardian_name) }}" required
                         class="w-full rounded-2xl border-2 border-indigo-100 bg-slate-50/50 px-4 py-3 font-semibold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all">
                 </label>
 
-                <label class="space-y-2 text-xs sm:text-sm font-black text-slate-700 sm:col-span-2">No. HP orang tua <span class="font-bold text-slate-400">(opsional)</span>
+                <label class="space-y-2 text-xs sm:text-sm font-black text-slate-700 sm:col-span-2">No Wali <span class="font-bold text-slate-400">(opsional)</span>
                     <input name="phone" value="{{ old('phone', $student?->phone) }}" 
                         class="w-full rounded-2xl border-2 border-indigo-100 bg-slate-50/50 px-4 py-3 font-semibold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all">
                 </label>

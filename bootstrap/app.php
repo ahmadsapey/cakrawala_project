@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\AdminOnly;
+use App\Http\Middleware\StudentOnly;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,10 +14,15 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->alias([
+            'admin' => AdminOnly::class,
+            'student' => StudentOnly::class,
+        ]);
+
         $middleware->redirectGuestsTo(function (Request $request): string {
             return $request->is('guru/*')
                 ? route('guru.login')
-                : route('siswa.login');
+                : ($request->is('admin/*') ? route('admin.login') : route('siswa.login'));
         });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
