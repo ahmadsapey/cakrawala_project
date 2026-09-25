@@ -1,8 +1,8 @@
 <header class="sticky top-0 z-50 border-b border-slate-200/80 bg-[#F8FAFC]/95 backdrop-blur-md md:hidden">
 	<div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
 		<a href="{{ url('/') }}" class="flex items-center gap-2.5" aria-label="Cakrawala - Beranda">
-			<img src="{{ asset('images/logoCakrawala.png') }}" alt="Logo Cakrawala" class="h-8 w-8 object-contain">
-			<span class="text-sm font-bold tracking-tight text-indigo-600">Cakrawala</span>
+			<img src="{{ $brandContent?->image_url ?? asset('images/logoCakrawala.png') }}" alt="Logo {{ $brandContent?->title ?? 'Cakrawala' }}" class="h-8 w-8 object-contain">
+			<span class="text-sm font-bold tracking-tight text-indigo-600">{{ $brandContent?->title ?? 'Cakrawala' }}</span>
 			<span class="rounded bg-amber-50 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wide text-amber-600">Tutorial Portal</span>
 		</a>
 

@@ -24,6 +24,11 @@
     <!-- Container Utama -->
     <div class="w-full max-w-md bg-white rounded-2xl border-2 border-slate-200 shadow-xl p-6 sm:p-8 space-y-6 relative">
 
+        <div class="flex items-center gap-3">
+            <img src="{{ $brandContent?->image_url ?? asset('images/logoCakrawala.png') }}" alt="Logo {{ $brandContent?->title ?? 'Cakrawala Educentre' }}" class="h-10 w-10 object-contain">
+            <span class="text-sm font-black uppercase tracking-tight text-slate-900">{{ $brandContent?->title ?? 'Cakrawala Educentre' }}</span>
+        </div>
+
         <!-- Header: Judul & Subjudul -->
         <div class="space-y-1.5 pt-2">
             <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Selamat Datang, Guru!</h1>
@@ -36,7 +41,7 @@
         <form method="POST" action="{{ route('guru.login.submit') }}" class="space-y-5">
             @csrf
             @if ($errors->any())<div class="rounded-xl border-2 border-rose-300 bg-rose-50 px-4 py-3 text-xs font-bold text-rose-700">{{ $errors->first() }}</div>@endif
-            
+
             <!-- Input 1: Email Resmi Guru / NUPTK -->
             <div class="space-y-1.5">
                 <label class="block text-xs font-extrabold text-slate-700 uppercase tracking-wider">Email Resmi Guru / NUPTK</label>
@@ -78,4 +83,4 @@
     </div>
 
 </body>
-</html>
+</html>

@@ -38,10 +38,7 @@ class StudentController extends Controller
             $query->where(function ($subQuery) use ($search): void {
                 $subQuery->where('nisn', 'like', "%{$search}%")
                     ->orWhere('class_name', 'like', "%{$search}%")
-                    ->orWhereHas('user', function ($userQuery) use ($search): void {
-                        $userQuery->where('name', 'like', "%{$search}%")
-                            ->orWhere('email', 'like', "%{$search}%");
-                    });
+                    ->orWhereHas('user', fn ($userQuery) => $userQuery->where('name', 'like', "%{$search}%"));
             });
         }
 

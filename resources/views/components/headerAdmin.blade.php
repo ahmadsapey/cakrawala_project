@@ -1,11 +1,11 @@
 <header class="sticky top-0 z-50 hidden border-b border-slate-200/80 bg-[#F8FAFC]/95 backdrop-blur-md md:block">
     <div class="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-8 px-4 sm:px-6 lg:px-12">
-        <a href="{{ route('admin.home') }}" class="group flex shrink-0 items-center gap-3" aria-label="Cakrawala Admin - Dashboard">
+        <a href="{{ route('admin.home') }}" class="group flex shrink-0 items-center gap-3" aria-label="{{ $brandContent?->title ?? 'Cakrawala' }} Admin - Dashboard">
             <span class="flex h-10 w-10 items-center justify-center rounded-2xl border border-indigo-100 bg-white shadow-sm transition-transform group-hover:-rotate-3">
-                <img src="{{ asset('images/logoCakrawala.png') }}" alt="Logo Cakrawala" class="h-7 w-7 object-contain">
+                <img src="{{ $brandContent?->image_url ?? asset('images/logoCakrawala.png') }}" alt="Logo {{ $brandContent?->title ?? 'Cakrawala' }}" class="h-7 w-7 object-contain">
             </span>
             <span class="flex flex-col gap-0.5">
-                <span class="text-sm font-black tracking-tight text-slate-900">Cakrawala</span>
+                <span class="text-sm font-black tracking-tight text-slate-900">{{ $brandContent?->title ?? 'Cakrawala' }}</span>
                 <span class="text-[9px] font-bold uppercase tracking-[0.16em] text-slate-400">Admin Portal</span>
             </span>
         </a>

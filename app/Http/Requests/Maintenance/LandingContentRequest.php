@@ -1,33 +1,27 @@
 <?php
 
-namespace App\Http\Requests\Admin;
+namespace App\Http\Requests\Maintenance;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LandingContentRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
+    /** @return array<string, ValidationRule|array<mixed>|string> */
     public function rules(): array
     {
         return [
-            'type' => ['required', 'in:program,package'],
+            'type' => ['required', 'in:program,package,hero,stat,section,benefit,cta,footer,brand'],
             'badge' => ['nullable', 'string', 'max:80'],
             'title' => ['required', 'string', 'max:150'],
-            'description' => ['required', 'string', 'max:500'],
-            'image_url' => ['nullable', 'url', 'max:500'],
+            'description' => ['nullable', 'string', 'max:500'],
+            'image_url' => ['nullable', 'string', 'max:500'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
             'meta' => ['nullable', 'string', 'max:150'],
             'price' => ['nullable', 'string', 'max:80'],
             'price_suffix' => ['nullable', 'string', 'max:30'],

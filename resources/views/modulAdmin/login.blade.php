@@ -30,6 +30,11 @@
         <!-- Bagian Atas: Header & Form -->
         <div class="space-y-6 pt-4">
 
+            <div class="flex items-center gap-3">
+                <img src="{{ $brandContent?->image_url ?? asset('images/logoCakrawala.png') }}" alt="Logo {{ $brandContent?->title ?? 'Cakrawala Educentre' }}" class="h-10 w-10 object-contain">
+                <span class="text-sm font-black uppercase tracking-tight text-slate-900">{{ $brandContent?->title ?? 'Cakrawala Educentre' }}</span>
+            </div>
+
             <!-- Header Halaman -->
             <div class="space-y-1.5">
                 <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Admin Panel</h1>

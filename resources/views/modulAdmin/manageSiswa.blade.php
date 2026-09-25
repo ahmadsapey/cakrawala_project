@@ -33,8 +33,15 @@
             <div>
                 <span class="text-xs font-black uppercase tracking-[0.18em] text-indigo-700 bg-indigo-50 border border-indigo-200 px-3 py-1.5 rounded-xl inline-block shadow-2xs">Modul Admin</span>
                 <h1 class="mt-2 text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Manajemen Siswa</h1>
+                 
                 <p class="text-xs sm:text-sm text-slate-600 font-bold mt-1">Kelola data siswa, NISN, dan rombel kelas aktif secara terpusat.</p>
+
+                
             </div>
+            <a href="{{ route('admin.siswa.create') }}"
+                class="rounded-2xl bg-gradient-to-r from-indigo-600 to-blue-700 border-2 border-indigo-700 px-5 py-3 text-center text-xs font-black text-white shadow-md shadow-indigo-200 hover:from-indigo-700 hover:to-blue-800 transition-all inline-flex items-center justify-center gap-2">
+                <span class="text-base leading-none font-bold">+</span> Tambah Siswa
+            </a>
            
         </div>
 
@@ -115,7 +122,6 @@
                                         </div>
                                         <div class="min-w-0">
                                             <p class="font-black text-slate-900 truncate">{{ $student->user?->name ?? 'Siswa' }}</p>
-                                            <p class="text-[11px] font-medium text-slate-400 truncate">{{ $student->user?->email }}</p>
                                         </div>
                                     </div>
                                 </td>

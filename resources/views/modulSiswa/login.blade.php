@@ -26,12 +26,8 @@
         
         <!-- Logo / Nama Brand Kecil di Atas -->
         <div class="flex items-center space-x-3 mb-6">
-            <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-sm border border-indigo-700">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
-                </svg>
-            </div>
-            <span class="text-sm font-extrabold tracking-wider text-slate-900 uppercase">Cakrawala Educentre</span>
+            <img src="{{ $brandContent?->image_url ?? asset('images/logoCakrawala.png') }}" alt="Logo {{ $brandContent?->title ?? 'Cakrawala Educentre' }}" class="h-9 w-9 object-contain">
+            <span class="text-sm font-extrabold tracking-wider text-slate-900 uppercase">{{ $brandContent?->title ?? 'Cakrawala Educentre' }}</span>
         </div>
 
         <!-- Header Judul -->

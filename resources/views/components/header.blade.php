@@ -2,9 +2,9 @@
     <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 min-h-20 flex flex-wrap items-center justify-between gap-4 py-3">
 
         <!-- Logo & Brand -->
-        <a href="{{ url('/') }}" class="flex items-center gap-3 shrink-0 group" aria-label="Cakrawala Educentre - Beranda">
-            <img src="{{ asset('images/logoCakrawala.png') }}" alt="Logo Cakrawala Educentre" class="w-11 h-11 object-contain transition-transform group-hover:scale-105">
-            <span class="hidden sm:block text-sm font-extrabold tracking-tight text-slate-900 uppercase">Cakrawala Educentre</span>
+        <a href="{{ url('/') }}" class="flex items-center gap-3 shrink-0 group" aria-label="{{ $brandContent?->title ?? 'Cakrawala Educentre' }} - Beranda">
+            <img src="{{ $brandContent?->image_url ?? asset('images/logoCakrawala.png') }}" alt="Logo {{ $brandContent?->title ?? 'Cakrawala Educentre' }}" class="w-11 h-11 object-contain transition-transform group-hover:scale-105">
+            <span class="hidden sm:block text-sm font-extrabold tracking-tight text-slate-900 uppercase">{{ $brandContent?->title ?? 'Cakrawala Educentre' }}</span>
         </a>
 
         <!-- Navigasi Utama -->

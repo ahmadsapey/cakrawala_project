@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Admin\ClassroomController as AdminClassroomController;
 use App\Http\Controllers\Admin\HomeController as AdminHomeController;
-use App\Http\Controllers\Admin\LandingContentController;
 use App\Http\Controllers\Admin\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\StudentController;
@@ -15,6 +14,8 @@ use App\Http\Controllers\Guru\LearningRecommendationController;
 use App\Http\Controllers\Guru\LoginController as GuruLoginController;
 use App\Http\Controllers\Guru\MaterialController as GuruMaterialController;
 use App\Http\Controllers\Guru\QuizController;
+use App\Http\Controllers\Maintenance\LandingContentController;
+use App\Http\Controllers\Maintenance\LoginController as MaintenanceLoginController;
 use App\Http\Controllers\Siswa\AssignmentSubmissionController;
 use App\Http\Controllers\Siswa\ClassroomController as SiswaClassroomController;
 use App\Http\Controllers\Siswa\HomeController as SiswaHomeController;
@@ -31,12 +32,16 @@ use Illuminate\Support\Facades\Schema;
 
 Route::get('/', function () {
     if (! Schema::hasTable('landing_contents')) {
-        return view('landingPage', ['programs' => collect(), 'packages' => collect()]);
+        return view('landingPage', ['contents' => collect(), 'programs' => collect(), 'packages' => collect()]);
     }
 
+    $contents = LandingContent::query()->where('is_active', true)->orderBy('sort_order')->orderBy('id')->get()->groupBy('type');
+
     return view('landingPage', [
-        'programs' => LandingContent::query()->where('type', 'program')->where('is_active', true)->orderBy('sort_order')->orderBy('id')->get(),
-        'packages' => LandingContent::query()->where('type', 'package')->where('is_active', true)->orderBy('sort_order')->orderBy('id')->get(),
+        'contents' => $contents,
+        'programs' => $contents->get('program', collect()),
+        'packages' => $contents->get('package', collect()),
+        'footerContent' => $contents->get('footer', collect())->first(),
     ]);
 })->name('landing.page');
 
@@ -119,6 +124,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/pembayaran', [AdminPaymentController::class, 'index'])->name('pembayaran');
         Route::patch('/pembayaran/{payment}/confirm', [AdminPaymentController::class, 'confirm'])->name('pembayaran.confirm');
         Route::patch('/pembayaran/{payment}/reject', [AdminPaymentController::class, 'reject'])->name('pembayaran.reject');
-        Route::resource('landing', LandingContentController::class)->only(['index', 'store', 'update', 'destroy'])->parameters(['landing' => 'landingContent']);
+    });
+});
+
+Route::prefix('maintenance')->name('maintenance.')->group(function () {
+    Route::get('/login', [MaintenanceLoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [MaintenanceLoginController::class, 'store'])->name('login.submit');
+    Route::post('/logout', [MaintenanceLoginController::class, 'destroy'])->middleware('auth')->name('logout');
+    Route::middleware(['auth', 'maintenance'])->group(function (): void {
+        Route::get('/landing/package/create', [LandingContentController::class, 'createPackage'])->name('landing.package.create');
+        Route::post('/landing/package', [LandingContentController::class, 'storePackage'])->name('landing.package.store');
+        Route::get('/landing/program/create', [LandingContentController::class, 'createProgram'])->name('landing.program.create');
+        Route::post('/landing/program', [LandingContentController::class, 'storeProgram'])->name('landing.program.store');
+        Route::get('/landing/layer/{layer}', [LandingContentController::class, 'layer'])->name('landing.layer');
+        Route::get('/landing/section/{type}', [LandingContentController::class, 'section'])->name('landing.section');
+        Route::resource('landing', LandingContentController::class)->only(['index', 'show', 'edit', 'update', 'destroy'])->parameters(['landing' => 'landingContent']);
     });
 });
