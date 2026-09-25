@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Payment;
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -40,9 +41,10 @@ class PaymentConfirmationTest extends TestCase
 
     public function test_admin_can_confirm_pending_payment(): void
     {
+        $adminUser = User::factory()->create(['role' => 'admin']);
         $payment = Payment::factory()->create();
 
-        $response = $this->patch(route('admin.pembayaran.confirm', $payment));
+        $response = $this->actingAs($adminUser)->patch(route('admin.pembayaran.confirm', $payment));
 
         $response->assertRedirect();
         $this->assertDatabaseHas('payments', [

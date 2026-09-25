@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\LandingContent;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -12,7 +13,14 @@ class LandingContentTest extends TestCase
 
     public function test_admin_content_is_rendered_on_the_public_landing_page(): void
     {
-        $response = $this->post(route('admin.landing.store'), [
+        $admin = User::create([
+            'name' => 'Admin Test',
+            'email' => 'admin.landing@cakrawala.test',
+            'password' => 'secret123',
+            'role' => 'admin',
+        ]);
+
+        $response = $this->actingAs($admin)->post(route('admin.landing.store'), [
             'type' => 'program',
             'badge' => 'PROGRAM BARU',
             'title' => 'Kelas Data Sains',
@@ -30,7 +38,7 @@ class LandingContentTest extends TestCase
         $response->assertRedirect(route('admin.landing.index'));
         $content = LandingContent::query()->where('title', 'Kelas Data Sains')->firstOrFail();
         $this->assertSame(['Mentor ahli', 'Materi terarah'], $content->features);
-        $this->get(route('admin.landing.index'))
+        $this->actingAs($admin)->get(route('admin.landing.index'))
             ->assertOk()
             ->assertSee('Kelola Landing Page')
             ->assertSee('Kelas Data Sains');

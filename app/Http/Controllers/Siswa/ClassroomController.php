@@ -13,9 +13,10 @@ class ClassroomController extends Controller
     public function index(Request $request): View
     {
         $student = Student::find(session('student_id'));
-        $query = $student
+        $hasEnrolled = $student && $student->classrooms()->exists();
+        $query = $hasEnrolled
             ? $student->classrooms()->with('teacher.user')->withCount('students')
-            : Classroom::query()->whereKey([]);
+            : Classroom::query()->with('teacher.user')->withCount('students');
 
         if ($request->filled('subject') && $request->string('subject')->toString() !== 'Semua') {
             $query->where('subject', $request->string('subject'));
@@ -35,9 +36,9 @@ class ClassroomController extends Controller
 
         $classrooms = $query->latest()->get();
 
-        $availableSubjects = $student
+        $availableSubjects = $hasEnrolled
             ? $student->classrooms()->whereNotNull('subject')->distinct()->pluck('subject')->toArray()
-            : [];
+            : Classroom::whereNotNull('subject')->distinct()->pluck('subject')->toArray();
         $defaultSubjects = ['Fisika', 'Matematika', 'Kimia', 'Biologi'];
         $subjects = array_values(array_unique(array_merge($defaultSubjects, $availableSubjects)));
 

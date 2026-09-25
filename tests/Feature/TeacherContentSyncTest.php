@@ -4,17 +4,19 @@ namespace Tests\Feature;
 
 use App\Models\Assignment;
 use App\Models\Classroom;
-use App\Models\Quiz;
+use App\Models\Material;
+use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class TeacherContentSyncTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_published_teacher_tasks_and_quizzes_appear_for_students(): void
+    public function test_published_teacher_tasks_and_materials_appear_for_students(): void
     {
         $teacherUser = User::factory()->create(['role' => 'teacher']);
         $teacher = Teacher::factory()->create(['user_id' => $teacherUser->id]);
@@ -23,24 +25,52 @@ class TeacherContentSyncTest extends TestCase
             'name' => 'Fisika XI IPA 2',
             'subject' => 'Fisika',
             'grade_level' => 'Kelas XI',
+            'online_meeting_url' => 'https://meet.google.com/abc-defg-hij',
         ]);
+
         $this->actingAs($teacherUser);
+
+        // Teacher cannot create class directly
+        $this->post(route('guru.kelas.store'), [
+            'name' => 'Forbidden Class',
+            'grade_level' => '10',
+        ])->assertForbidden();
 
         $this->get(route('guru.kelas'))
             ->assertOk()
             ->assertSee(route('guru.kelas.learning', $classroom));
 
+        // When teacher visits learning room, auto-records attendance
         $this->get(route('guru.kelas.learning', $classroom))
             ->assertOk()
             ->assertSee('Tambah Materi')
             ->assertSee('Tambah Tugas')
-            ->assertSee('Tambah Kuis');
+            ->assertDontSee('Tambah Kuis');
 
+        $this->assertDatabaseHas('teacher_attendances', [
+            'teacher_id' => $teacher->id,
+            'classroom_id' => $classroom->id,
+            'status' => 'hadir',
+        ]);
+
+        // Upload Material
         $this->get(route('guru.material.create', ['classroom_id' => $classroom->id]))
             ->assertOk()
             ->assertSee('name="classroom_id"', false)
             ->assertSee('value="'.$classroom->id.'"', false);
 
+        Material::create([
+            'classroom_id' => $classroom->id,
+            'teacher_id' => $teacher->id,
+            'title' => 'Modul Termodinamika',
+            'subject' => 'Fisika',
+            'grade_level' => 'Kelas XI',
+            'summary' => 'Hukum Termodinamika 1 dan 2',
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
+
+        // Create Assignment
         $this->get(route('guru.tugas.tambah'))->assertOk()->assertSee('name="classroom_id"', false);
         $this->post(route('guru.tugas.store'), [
             'classroom_id' => $classroom->id,
@@ -50,38 +80,41 @@ class TeacherContentSyncTest extends TestCase
             'status' => 'published',
         ])->assertRedirect(route('guru.tugas.tambah'));
 
-        $this->post(route('guru.kuis.store'), [
-            'classroom_id' => $classroom->id,
-            'title' => 'Kuis Fotolistrik',
-            'duration_minutes' => 30,
-            'passing_score' => 75,
-            'question_count' => 10,
-            'status' => 'published',
-        ])->assertRedirect(route('guru.kuis.tambah'));
-
         $this->assertDatabaseHas('assignments', ['title' => 'Laporan Efek Fotolistrik', 'status' => 'published']);
-        $this->assertDatabaseHas('quizzes', ['title' => 'Kuis Fotolistrik', 'status' => 'published']);
+
+        // Student Access
+        $studentUser = User::create([
+            'name' => 'Bintang Pratama',
+            'email' => 'bintang@cakrawala.test',
+            'password' => Hash::make('password123'),
+            'role' => 'student',
+        ]);
+        $student = Student::create([
+            'user_id' => $studentUser->id,
+            'nisn' => '0089128391',
+            'class_name' => 'XI IPA 2',
+            'status' => 'active',
+        ]);
+        $classroom->students()->attach($student->id);
+
+        $this->actingAs($studentUser)->withSession(['student_id' => $student->id]);
 
         $this->get(route('siswa.tugas'))
             ->assertOk()
             ->assertSee('Laporan Efek Fotolistrik')
-            ->assertSee('Kuis Fotolistrik')
             ->assertSee('Fisika XI IPA 2');
 
         $this->get(route('siswa.materi'))
             ->assertOk()
-            ->assertSee('Tugas dari guru')
-            ->assertSee('Laporan Efek Fotolistrik')
-            ->assertSee('Kuis dari guru')
-            ->assertSee('Kuis Fotolistrik');
+            ->assertSee('Modul Termodinamika');
 
         $this->get(route('siswa.kelas.show', $classroom))
             ->assertOk()
             ->assertSee('Laporan Efek Fotolistrik')
-            ->assertSee('Kuis Fotolistrik')
-            ->assertSee('Fisika XI IPA 2');
+            ->assertSee('Modul Termodinamika')
+            ->assertSee('Gabung Sesi Online')
+            ->assertDontSee('Kuis');
 
         $this->assertTrue(Assignment::where('classroom_id', $classroom->id)->exists());
-        $this->assertTrue(Quiz::where('classroom_id', $classroom->id)->exists());
     }
 }

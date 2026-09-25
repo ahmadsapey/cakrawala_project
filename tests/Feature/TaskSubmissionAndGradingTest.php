@@ -225,57 +225,6 @@ class TaskSubmissionAndGradingTest extends TestCase
             ->assertSee('Belum Mencapai KKM'); // passing score is 70, score is 50
     }
 
-    public function test_teacher_can_view_quiz_analytics_with_hardest_question(): void
-    {
-        [$teacherUser, $teacher, $classroom] = $this->createTeacherAndClassroom();
-        [$studentUser, $student] = $this->createStudent($classroom);
-
-        $quiz = Quiz::create([
-            'teacher_id' => $teacher->id,
-            'classroom_id' => $classroom->id,
-            'title' => 'Kuis Analisis Performa',
-            'duration_minutes' => 20,
-            'passing_score' => 75,
-            'status' => 'published',
-        ]);
-
-        $q1 = Question::create([
-            'quiz_id' => $quiz->id,
-            'question_text' => 'Soal Mudah',
-            'options' => ['A' => 'Benar', 'B' => 'Salah'],
-            'correct_answer' => 'A',
-            'sort_order' => 1,
-        ]);
-
-        $q2 = Question::create([
-            'quiz_id' => $quiz->id,
-            'question_text' => 'Soal Sangat Sulit',
-            'options' => ['A' => 'Pilihan 1', 'B' => 'Pilihan 2'],
-            'correct_answer' => 'A',
-            'sort_order' => 2,
-        ]);
-
-        // Create submission with score
-        QuizSubmission::create([
-            'quiz_id' => $quiz->id,
-            'student_id' => $student->id,
-            'answers' => [$q1->id => 'A', $q2->id => 'B'], // Q2 missed
-            'score' => 50,
-            'correct_count' => 1,
-            'incorrect_count' => 1,
-            'duration_seconds' => 400,
-            'status' => 'completed',
-            'started_at' => now()->subMinutes(10),
-            'submitted_at' => now(),
-        ]);
-
-        $response = $this->actingAs($teacherUser)->get(route('guru.koreksi.kuis', $quiz));
-        $response->assertOk()
-            ->assertSee('Analisis Hasil Kuis')
-            ->assertSee('Kuis Analisis Performa')
-            ->assertSee('Soal Sangat Sulit');
-    }
-
     public function test_teacher_can_view_classroom_students_list(): void
     {
         [$teacherUser, $teacher, $classroom] = $this->createTeacherAndClassroom();

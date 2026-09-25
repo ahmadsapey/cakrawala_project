@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Guru;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Guru\StoreAttendanceRequest;
 use App\Http\Requests\Guru\StoreClassroomRequest;
 use App\Http\Requests\Guru\UpdateClassroomRequest;
 use App\Models\Attendance;
 use App\Models\Classroom;
 use App\Models\Teacher;
+use App\Models\TeacherAttendance;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,18 +33,28 @@ class ClassroomController extends Controller
      */
     public function create(): View
     {
-        return view('modulGuru.classroomForm', ['classroom' => new Classroom]);
+        abort(403, 'Hanya admin yang berhak membuat kelas.');
     }
 
     public function learning(Classroom $classroom): View
     {
         abort_unless($classroom->teacher_id === Auth::user()?->teacher?->id, 404);
 
+        if ($teacher = Auth::user()?->teacher) {
+            TeacherAttendance::firstOrCreate([
+                'teacher_id' => $teacher->id,
+                'classroom_id' => $classroom->id,
+                'attendance_date' => now()->toDateString(),
+            ], [
+                'session_started_at' => now(),
+                'status' => 'hadir',
+            ]);
+        }
+
         return view('modulGuru.kelasGuru_pembelajaran', [
             'classroom' => $classroom,
             'materials' => $classroom->materials()->latest('published_at')->get(),
             'assignments' => $classroom->assignments()->latest()->get(),
-            'quizzes' => $classroom->quizzes()->latest()->get(),
         ]);
     }
 
@@ -53,13 +63,7 @@ class ClassroomController extends Controller
      */
     public function store(StoreClassroomRequest $request): RedirectResponse
     {
-        Classroom::create([
-            ...$request->validated(),
-            'teacher_id' => $request->user()->teacher->id,
-            'subject' => $request->user()->teacher->subject,
-        ]);
-
-        return redirect()->route('guru.kelas')->with('success', 'Kelas berhasil ditambahkan.');
+        abort(403, 'Hanya admin yang berhak membuat kelas.');
     }
 
     /**
@@ -77,9 +81,7 @@ class ClassroomController extends Controller
      */
     public function edit(Classroom $classroom): View
     {
-        abort_unless($classroom->teacher_id === Auth::user()?->teacher?->id, 404);
-
-        return view('modulGuru.classroomForm', compact('classroom'));
+        abort(403, 'Hanya admin yang berhak mengubah kelas.');
     }
 
     /**
@@ -87,10 +89,7 @@ class ClassroomController extends Controller
      */
     public function update(UpdateClassroomRequest $request, Classroom $classroom): RedirectResponse
     {
-        abort_unless($classroom->teacher_id === $request->user()->teacher->id, 404);
-        $classroom->update($request->validated());
-
-        return redirect()->route('guru.kelas')->with('success', 'Kelas berhasil diperbarui.');
+        abort(403, 'Hanya admin yang berhak mengubah kelas.');
     }
 
     /**
@@ -98,10 +97,7 @@ class ClassroomController extends Controller
      */
     public function destroy(Classroom $classroom): RedirectResponse
     {
-        abort_unless($classroom->teacher_id === Auth::user()?->teacher?->id, 404);
-        $classroom->delete();
-
-        return redirect()->route('guru.kelas')->with('success', 'Kelas berhasil dihapus.');
+        abort(403, 'Hanya admin yang berhak menghapus kelas.');
     }
 
     /**
@@ -123,9 +119,9 @@ class ClassroomController extends Controller
         $students = $classroom ? $classroom->students()->with('user')->get() : collect();
         $materials = $classroom ? $classroom->materials()->orderBy('created_at')->get() : collect();
         $assignments = $classroom ? $classroom->assignments()->latest()->get() : collect();
-        $quizzes = $classroom ? $classroom->quizzes()->latest()->get() : collect();
+        $quizzes = collect();
 
-        $totalItems = $materials->count() + $assignments->count() + $quizzes->count();
+        $totalItems = $materials->count() + $assignments->count();
         $progressPercent = $totalItems > 0 ? min(100, round(($materials->where('status', 'published')->count() / $totalItems) * 100)) : 65;
 
         return view('modulGuru.detailKelas', [
@@ -141,30 +137,50 @@ class ClassroomController extends Controller
     /**
      * Save student attendance records for a classroom session.
      */
-    public function saveAttendance(StoreAttendanceRequest $request, Classroom $classroom): RedirectResponse
+    public function saveAttendance(Request $request, Classroom $classroom): RedirectResponse
     {
         abort_unless($classroom->teacher_id === Auth::user()?->teacher?->id, 404);
 
-        $validated = $request->validated();
+        $date = $request->input('date', now()->toDateString());
+        $attendance = $request->input('attendance', $request->input('attendances', []));
         $studentIds = $classroom->students()->pluck('students.id')->all();
-        $attendance = $validated['attendance'];
-        $submittedStudentIds = array_map('intval', array_keys($attendance));
 
-        abort_if(array_diff($submittedStudentIds, $studentIds), 422, 'Siswa tidak terdaftar di kelas ini.');
+        if (! empty($attendance)) {
+            $statusMap = [
+                'Hadir' => 'present',
+                'hadir' => 'present',
+                'present' => 'present',
+                'Izin' => 'excused',
+                'izin' => 'excused',
+                'excused' => 'excused',
+                'Sakit' => 'excused',
+                'sakit' => 'excused',
+                'Alpa' => 'absent',
+                'alpa' => 'absent',
+                'absent' => 'absent',
+            ];
 
-        $timestamp = now();
-        $records = collect($studentIds)->map(fn (int $studentId): array => [
-            'classroom_id' => $classroom->id,
-            'student_id' => $studentId,
-            'attendance_date' => $validated['date'],
-            'status' => $attendance[$studentId] ?? 'absent',
-            'created_at' => $timestamp,
-            'updated_at' => $timestamp,
-        ])->all();
+            $timestamp = now();
+            $records = [];
+            foreach ($studentIds as $studentId) {
+                $rawStatus = $attendance[$studentId] ?? 'absent';
+                $status = $statusMap[$rawStatus] ?? 'present';
+                $records[] = [
+                    'classroom_id' => $classroom->id,
+                    'student_id' => $studentId,
+                    'attendance_date' => $date,
+                    'status' => $status,
+                    'created_at' => $timestamp,
+                    'updated_at' => $timestamp,
+                ];
+            }
 
-        Attendance::upsert($records, ['classroom_id', 'student_id', 'attendance_date'], ['status', 'updated_at']);
+            if (! empty($records)) {
+                Attendance::upsert($records, ['classroom_id', 'student_id', 'attendance_date'], ['status', 'updated_at']);
+            }
+        }
 
-        return redirect()->route('guru.kelas.absensi', ['classroom' => $classroom, 'date' => $validated['date']])
+        return redirect()->route('guru.kelas.absensi', ['classroom' => $classroom, 'date' => $date])
             ->with('success', "Presensi kehadiran kelas {$classroom->name} berhasil disimpan.");
     }
 
