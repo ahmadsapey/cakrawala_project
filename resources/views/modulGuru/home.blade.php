@@ -40,11 +40,11 @@
                         <h1 class="text-lg sm:text-xl font-black text-slate-900 tracking-tight">Halo, {{ $teacherName }}!</h1>
                         <span class="text-xs" title="Tutor Utama">👨‍🏫</span>
                     </div>
-                    <p class="text-xs sm:text-sm text-slate-600 font-bold">Tutor Utama • Bidang {{ $teacherSubject }}</p>
+                    <p class="text-xs sm:text-sm text-slate-600 font-bold">Tutor Utama + Bidang {{ $teacherSubject }}</p>
                 </div>
             </div>
-            <a href="{{ route('guru.material.create') }}" class="hidden sm:inline-flex items-center gap-1.5 rounded-xl bg-teal-600 px-4 py-2.5 text-xs font-black text-white shadow-md hover:bg-teal-700 transition">
-                <span>+</span> Tambah Materi
+            <a href="{{ route('guru.kelas.create') }}" class="hidden sm:inline-flex items-center gap-1.5 rounded-xl bg-teal-600 px-4 py-2.5 text-xs font-black text-white shadow-md hover:bg-teal-700 transition">
+                <span>+</span> Buat Kelas Baru
             </a>
         </div>
 
@@ -105,34 +105,17 @@
                     </a>
                 @empty
                     <div class="col-span-full rounded-2xl border-2 border-dashed border-slate-300 bg-white/80 p-8 text-center">
-                        <p class="text-xs font-bold text-slate-500">Belum ada kelas yang ditugaskan oleh Admin.</p>
+                        <p class="text-xs font-bold text-slate-500">Belum ada kelas yang dibuat.</p>
+                        <a href="{{ route('guru.kelas.create') }}" class="mt-3 inline-block rounded-xl bg-teal-600 px-4 py-2.5 text-xs font-black text-white shadow-xs hover:bg-teal-700 transition">Buat Kelas Sekarang</a>
                     </div>
                 @endforelse
             </div>
         </div>
 
-        <!-- Section: Tugas yang Diterbitkan -->
-        <div class="space-y-3">
-            <div class="flex items-center justify-between px-1">
-                <h3 class="text-xs font-black uppercase tracking-wider text-slate-700">Tugas Terkini</h3>
-                <a href="{{ route('guru.koreksi.tugas') }}" class="text-xs font-black text-teal-700 hover:underline">Kelola Tugas &rarr;</a>
-            </div>
+        
 
-            <div class="grid gap-3">
-                @forelse ($assignments as $assignment)
-                    <div class="flex items-center justify-between rounded-2xl border border-teal-100 bg-white/85 p-4 shadow-xs">
-                        <div>
-                            <h4 class="text-sm font-black text-slate-900">{{ $assignment->title }}</h4>
-                            <p class="mt-0.5 text-xs text-slate-500">{{ $assignment->classroom?->name }} • {{ $assignment->points }} Poin</p>
-                        </div>
-                        <a href="{{ route('guru.koreksi.tugas') }}" class="rounded-xl bg-teal-50 px-3 py-1.5 text-xs font-black text-teal-800 hover:bg-teal-100 transition">Koreksi</a>
-                    </div>
-                @empty
-                    <div class="rounded-2xl border border-dashed border-slate-200 bg-white/60 p-6 text-center text-xs text-slate-400">
-                        Belum ada tugas yang diterbitkan.
-                    </div>
-                @endforelse
-            </div>
+               
+            
         </div>
 
     </div>
