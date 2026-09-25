@@ -12,7 +12,7 @@
                 <circle cx="9" cy="8" r="3" stroke-width="1.8"/>
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 21v-1a6 6 0 0 1 12 0v1m3-10a3 3 0 1 1-2.5 2.9M18 21v-1a5 5 0 0 0-2.5-4.33"/>
             </svg>
-            <span class="text-[11px] font-medium">Mahasiswa</span>
+            <span class="text-[11px] font-medium">Siswa</span>
         </a>
 
         <a href="{{ route('admin.guru.index') }}" class="flex h-14 flex-col items-center justify-center gap-1 rounded-2xl transition-colors {{ request()->routeIs('admin.guru.*') ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500 hover:bg-slate-50 hover:text-indigo-600' }}" @if (request()->routeIs('admin.guru.*')) aria-current="page" @endif>
@@ -31,11 +31,6 @@
             <span class="text-[11px] font-medium">Pembayaran</span>
         </a>
 
-        <a href="{{ route('admin.landing.index') }}" class="flex h-14 flex-col items-center justify-center gap-1 rounded-2xl transition-colors {{ request()->routeIs('admin.landing.*') ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500 hover:bg-slate-50 hover:text-indigo-600' }}" @if (request()->routeIs('admin.landing.*')) aria-current="page" @endif>
-            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 5h16v14H4zM8 9h8M8 13h5"/>
-            </svg>
-            <span class="text-[11px] font-medium">Landing</span>
-        </a>
+        
     </nav>
 </footer>

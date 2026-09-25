@@ -6,14 +6,14 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class StoreClassroomRequest extends FormRequest
+class StoreAttendanceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Auth::user()?->role === 'teacher' && Auth::user()->teacher !== null;
+        return Auth::user()?->role === 'teacher';
     }
 
     /**
@@ -24,10 +24,9 @@ class StoreClassroomRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:150'],
-            'grade_level' => ['required', 'string', 'max:50'],
-            'section' => ['nullable', 'string', 'max:50'],
-            'description' => ['nullable', 'string', 'max:1000'],
+            'date' => ['required', 'date'],
+            'attendance' => ['required', 'array'],
+            'attendance.*' => ['required', 'in:present,late,excused,absent'],
         ];
     }
 }

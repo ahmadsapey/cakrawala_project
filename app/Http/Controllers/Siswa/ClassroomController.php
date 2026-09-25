@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Siswa;
 
 use App\Http\Controllers\Controller;
 use App\Models\Classroom;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -11,7 +12,10 @@ class ClassroomController extends Controller
 {
     public function index(Request $request): View
     {
-        $query = Classroom::with('teacher.user')->withCount('students');
+        $student = Student::find(session('student_id'));
+        $query = $student
+            ? $student->classrooms()->with('teacher.user')->withCount('students')
+            : Classroom::query()->whereKey([]);
 
         if ($request->filled('subject') && $request->string('subject')->toString() !== 'Semua') {
             $query->where('subject', $request->string('subject'));
@@ -31,7 +35,9 @@ class ClassroomController extends Controller
 
         $classrooms = $query->latest()->get();
 
-        $availableSubjects = Classroom::query()->whereNotNull('subject')->distinct()->pluck('subject')->toArray();
+        $availableSubjects = $student
+            ? $student->classrooms()->whereNotNull('subject')->distinct()->pluck('subject')->toArray()
+            : [];
         $defaultSubjects = ['Fisika', 'Matematika', 'Kimia', 'Biologi'];
         $subjects = array_values(array_unique(array_merge($defaultSubjects, $availableSubjects)));
 

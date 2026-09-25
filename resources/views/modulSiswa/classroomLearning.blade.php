@@ -59,11 +59,11 @@
         @endforelse
     </section>
 
-    <!-- Bagian Tugas dan Kuis -->
+    <!-- Bagian Tugas -->
     <section class="space-y-4">
         <div class="flex items-center justify-between">
             <h2 class="text-lg font-black text-slate-900 flex items-center gap-2">
-                <span class="inline-block h-3 w-3 rounded-full bg-amber-500"></span> Tugas & Kuis
+                <span class="inline-block h-3 w-3 rounded-full bg-amber-500"></span> Tugas
             </h2>
         </div>
 
@@ -81,7 +81,7 @@
             </article>
         @empty
             @if($quizzes->isEmpty())
-                <p class="text-sm text-slate-400">Belum ada tugas atau kuis yang diterbitkan.</p>
+                <p class="text-sm text-slate-400">Belum ada tugas yang diterbitkan.</p>
             @endif
         @endforelse 
 

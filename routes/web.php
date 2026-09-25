@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 
 Route::get('/', function () {
-    if (!Schema::hasTable('landing_contents')) {
+    if (! Schema::hasTable('landing_contents')) {
         return view('landingPage', ['programs' => collect(), 'packages' => collect()]);
     }
 
@@ -41,6 +41,7 @@ Route::get('/', function () {
 
 Route::view('/tentang', 'landingTentang')->name('landing.tentang');
 Route::view('/virtual', 'virtual')->name('landing.virtual');
+Route::view('/pendaftaran', 'pendaftaran')->name('pendaftaran');
 
 Route::prefix('siswa')->name('siswa.')->group(function () {
     Route::view('/login', 'modulSiswa.login')->name('login');
@@ -82,13 +83,17 @@ Route::prefix('guru')->name('guru.')->group(function () {
     Route::get('/kelas/{classroom}/pembelajaran', [ClassroomController::class, 'learning'])->middleware('auth')->name('kelas.learning');
     Route::post('/kelas/rekomendasi', [LearningRecommendationController::class, 'store'])->middleware('auth')->name('kelas.rekomendasi.store');
     Route::get('/kelas/detail/{classroom?}', [ClassroomController::class, 'detail'])->name('kelas.detail');
-    Route::post('/kelas/{classroom}/absensi', [ClassroomController::class, 'saveAttendance'])->name('kelas.absensi');
+    Route::get('/kelas/{classroom}/absensi', [ClassroomController::class, 'attendance'])->middleware('auth')->name('kelas.absensi');
+    Route::post('/kelas/{classroom}/absensi', [ClassroomController::class, 'saveAttendance'])->middleware('auth')->name('kelas.absensi.store');
     Route::post('/logout', [GuruLoginController::class, 'destroy'])->name('logout');
     Route::get('/kelas/siswa/{classroom?}', [GradingController::class, 'classStudents'])->name('siswa');
     Route::get('/input-nilai/{submission?}', [GradingController::class, 'inputGrade'])->name('input-nilai');
     Route::post('/input-nilai/{submission}', [GradingController::class, 'storeGrade'])->name('input-nilai.store');
     Route::get('/bahan-ajar', [GuruMaterialController::class, 'create'])->name('material.create');
     Route::post('/bahan-ajar', [GuruMaterialController::class, 'store'])->middleware('auth')->name('material.store');
+    Route::get('/bahan-ajar/{material}/edit', [GuruMaterialController::class, 'edit'])->middleware('auth')->name('material.edit');
+    Route::put('/bahan-ajar/{material}', [GuruMaterialController::class, 'update'])->middleware('auth')->name('material.update');
+    Route::delete('/bahan-ajar/{material}', [GuruMaterialController::class, 'destroy'])->middleware('auth')->name('material.destroy');
     Route::get('/koreksi/kuis/{quiz?}', [GradingController::class, 'quizAnalytics'])->name('koreksi.kuis');
     Route::get('/koreksi/tugas', [GradingController::class, 'taskCorrection'])->name('koreksi.tugas');
     Route::get('/kuis/tambah', [QuizController::class, 'create'])->middleware('auth')->name('kuis.tambah');

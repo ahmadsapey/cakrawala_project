@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Siswa;
 
 use App\Http\Controllers\Controller;
-use App\Models\Classroom;
 use App\Models\LearningRecommendation;
 use App\Models\Material;
 use App\Models\Student;
@@ -14,14 +13,20 @@ class HomeController extends Controller
     public function index(): View
     {
         $student = Student::with('user')->find(session('student_id'));
-        $publishedMaterials = Material::query()->where('status', 'published');
+        $classrooms = $student
+            ? $student->classrooms()->with('teacher.user')->withCount('students')->latest()->limit(4)->get()
+            : collect();
+        $publishedMaterials = Material::query()
+            ->where('status', 'published')
+            ->when(
+                $student,
+                fn ($query) => $query->whereIn('classroom_id', $student->classrooms()->select('classrooms.id')),
+                fn ($query) => $query->whereKey([]),
+            );
 
         return view('modulSiswa.home', [
             'student' => $student,
-            'classrooms' => Classroom::with('teacher.user')
-                ->latest()
-                ->limit(4)
-                ->get(),
+            'classrooms' => $classrooms,
             'subjects' => (clone $publishedMaterials)
                 ->select('subject')
                 ->selectRaw('count(*) as materials_count')
@@ -34,8 +39,8 @@ class HomeController extends Controller
                 ->latest('published_at')
                 ->limit(4)
                 ->get(),
-            'videoRecommendations' => Material::with('teacher.user')
-                ->where('status', 'published')
+            'videoRecommendations' => (clone $publishedMaterials)
+                ->with('teacher.user')
                 ->whereNotNull('video_url')
                 ->where('video_url', '!=', '')
                 ->latest('published_at')

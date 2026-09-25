@@ -34,9 +34,7 @@
 					<a href="{{ route('guru.tugas.tambah') }}" class="flex items-center justify-between rounded-xl px-3 py-2.5 text-xs font-semibold text-slate-600 transition-colors hover:bg-indigo-50 hover:text-indigo-600">
 						<span>Tambah Tugas</span><span class="text-[10px] text-slate-400">Tugas</span>
 					</a>
-					<a href="{{ route('guru.kuis.tambah') }}" class="flex items-center justify-between rounded-xl px-3 py-2.5 text-xs font-semibold text-slate-600 transition-colors hover:bg-indigo-50 hover:text-indigo-600">
-						<span>Tambah Kuis</span><span class="text-[10px] text-slate-400">Kuis</span>
-					</a>
+					
 				</div>
 			</details>
 			<details class="group relative">

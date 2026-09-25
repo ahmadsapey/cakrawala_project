@@ -25,7 +25,6 @@ class UpdateClassroomRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:150'],
-            'subject' => ['required', 'string', 'max:100'],
             'grade_level' => ['required', 'string', 'max:50'],
             'section' => ['nullable', 'string', 'max:50'],
             'description' => ['nullable', 'string', 'max:1000'],
