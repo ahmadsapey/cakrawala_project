@@ -7,6 +7,11 @@
             <span class="text-[11px] font-semibold">Dashboard</span>
         </a>
 
+           <a href="{{ route('admin.kelas.index') }}" class="flex h-14 flex-col items-center justify-center gap-1 rounded-2xl transition-colors {{ request()->routeIs('admin.kelas.*') ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500 hover:bg-slate-50 hover:text-indigo-600' }}" @if (request()->routeIs('admin.kelas.*')) aria-current="page" @endif>
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect width="13" height="9" x="3" y="7" rx="2" stroke-width="1.8"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="m16 10 5-3v10l-5-3"/></svg>
+            <span class="text-[11px] font-medium">Kelas</span>
+        </a>
+
         <a href="{{ route('admin.siswa.index') }}" class="flex h-14 flex-col items-center justify-center gap-1 rounded-2xl transition-colors {{ request()->routeIs('admin.siswa.*') ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500 hover:bg-slate-50 hover:text-indigo-600' }}" @if (request()->routeIs('admin.siswa.*')) aria-current="page" @endif>
             <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <circle cx="9" cy="8" r="3" stroke-width="1.8"/>
@@ -22,6 +27,8 @@
             </svg>
             <span class="text-[11px] font-medium">Guru</span>
         </a>
+
+     
 
         <a href="{{ route('admin.pembayaran') }}" class="flex h-14 flex-col items-center justify-center gap-1 rounded-2xl transition-colors {{ request()->routeIs('admin.pembayaran') ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500 hover:bg-slate-50 hover:text-indigo-600' }}" @if (request()->routeIs('admin.pembayaran')) aria-current="page" @endif>
             <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">

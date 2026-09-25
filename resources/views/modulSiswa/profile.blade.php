@@ -56,8 +56,16 @@
                             {{ $student?->class_name ?? 'Kelas Aktif' }}
                         </span>
                     </div>
+                    <p class="text-xs font-semibold text-slate-500">{{ $student?->school_name ?? 'Asal sekolah belum diisi' }}</p>
                 </div>
             </div>
+        </div>
+
+        <div class="grid gap-4 rounded-3xl border border-indigo-100 bg-white/85 p-6 shadow-sm sm:grid-cols-2">
+            <div class="sm:col-span-2"><p class="text-xs font-black uppercase tracking-wider text-slate-500">Biodata</p></div>
+            <div><p class="text-xs font-bold text-slate-400">No. HP orang tua</p><p class="mt-1 text-sm font-bold text-slate-800">{{ $student?->phone ?: '-' }}</p></div>
+            <div><p class="text-xs font-bold text-slate-400">Nama wali</p><p class="mt-1 text-sm font-bold text-slate-800">{{ $student?->guardian_name ?: '-' }}</p></div>
+            <div class="sm:col-span-2"><p class="text-xs font-bold text-slate-400">Alamat</p><p class="mt-1 whitespace-pre-line text-sm font-bold text-slate-800">{{ $student?->address ?: '-' }}</p></div>
         </div>
 
         <!-- Informasi Lembaga & Kurikulum -->

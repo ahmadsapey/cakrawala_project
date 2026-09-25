@@ -94,17 +94,6 @@
                     </div>
                 </div>
 
-                <!-- Input 3: Alamat Email -->
-                <div class="space-y-1.5">
-                    <label for="email" class="block text-xs font-black text-slate-700 uppercase tracking-wider">Alamat Email *</label>
-                    <div class="relative flex items-center">
-                        <span class="absolute left-4 text-indigo-500">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                        </span>
-                        <input type="email" id="email" name="email" value="{{ old('email', $user?->email) }}" required class="w-full bg-white text-xs sm:text-sm font-bold text-slate-900 pl-11 pr-4 py-3 border border-indigo-100 rounded-2xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition-all shadow-2xs">
-                    </div>
-                </div>
-
                 <!-- Input 4: Nomor Telepon / WA -->
                 <div class="space-y-1.5">
                     <label for="phone" class="block text-xs font-black text-slate-700 uppercase tracking-wider">Nomor Telepon / WhatsApp</label>
@@ -114,6 +103,11 @@
                         </span>
                         <input type="text" id="phone" name="phone" value="{{ old('phone', $student?->phone) }}" placeholder="08123456789" class="w-full bg-white text-xs sm:text-sm font-bold text-slate-900 pl-11 pr-4 py-3 border border-indigo-100 rounded-2xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition-all shadow-2xs">
                     </div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label for="guardian_name" class="block text-xs font-black text-slate-700 uppercase tracking-wider">Nama Wali *</label>
+                    <input type="text" id="guardian_name" name="guardian_name" value="{{ old('guardian_name', $student?->guardian_name) }}" required class="w-full bg-white text-xs sm:text-sm font-bold text-slate-900 px-4 py-3 border border-indigo-100 rounded-2xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition-all shadow-2xs">
                 </div>
 
                 <!-- Input 5: Kelas -->
@@ -127,15 +121,19 @@
                     </div>
                 </div>
 
-                <!-- Input 6: Password Baru (Opsional) -->
-                <div class="space-y-1.5 pt-3 border-t border-indigo-50">
-                    <label for="password" class="block text-xs font-black text-slate-700 uppercase tracking-wider">Kata Sandi Baru (Opsional)</label>
-                    <div class="relative flex items-center">
-                        <span class="absolute left-4 text-indigo-500">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                        </span>
-                        <input type="password" id="password" name="password" placeholder="Kosongkan jika tidak ingin mengubah kata sandi" class="w-full bg-white text-xs sm:text-sm font-bold text-slate-900 pl-11 pr-4 py-3 border border-indigo-100 rounded-2xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition-all shadow-2xs">
-                    </div>
+                <div class="space-y-1.5">
+                    <label for="school_name" class="block text-xs font-black text-slate-700 uppercase tracking-wider">Asal Sekolah *</label>
+                    <input type="text" id="school_name" name="school_name" value="{{ old('school_name', $student?->school_name) }}" required class="w-full bg-white text-xs sm:text-sm font-bold text-slate-900 px-4 py-3 border border-indigo-100 rounded-2xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition-all shadow-2xs">
+                </div>
+
+                <div class="space-y-1.5">
+                    <label for="phone" class="block text-xs font-black text-slate-700 uppercase tracking-wider">No. HP Orang Tua (Opsional)</label>
+                    <input type="text" id="phone" name="phone" value="{{ old('phone', $student?->phone) }}" class="w-full bg-white text-xs sm:text-sm font-bold text-slate-900 px-4 py-3 border border-indigo-100 rounded-2xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition-all shadow-2xs">
+                </div>
+
+                <div class="space-y-1.5 sm:col-span-2">
+                    <label for="address" class="block text-xs font-black text-slate-700 uppercase tracking-wider">Alamat *</label>
+                    <textarea id="address" name="address" rows="3" required class="w-full bg-white text-xs sm:text-sm font-bold text-slate-900 px-4 py-3 border border-indigo-100 rounded-2xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition-all shadow-2xs">{{ old('address', $student?->address) }}</textarea>
                 </div>
 
             </div>

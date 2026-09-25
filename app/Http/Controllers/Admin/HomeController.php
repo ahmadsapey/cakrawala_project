@@ -29,8 +29,8 @@ class HomeController extends Controller
         $recentStudents = Student::with('user')->latest()->take(3)->get()->map(function (Student $student): array {
             return [
                 'type' => 'student',
-                'title' => 'Mahasiswa baru terdaftar',
-                'subtitle' => ($student->user?->name ?? 'Mahasiswa').' - '.($student->class_name ?? 'Kelas'),
+                'title' => 'siswa baru terdaftar',
+                'subtitle' => ($student->user?->name ?? 'siswa').' - '.($student->class_name ?? 'Kelas'),
                 'time' => $student->created_at?->diffForHumans() ?? 'Baru saja',
                 'raw_time' => $student->created_at,
             ];

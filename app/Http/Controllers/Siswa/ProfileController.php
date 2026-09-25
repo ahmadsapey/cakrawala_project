@@ -99,26 +99,26 @@ class ProfileController extends Controller
 
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user?->id)],
             'nisn' => ['required', 'string', 'max:20', Rule::unique('students')->ignore($student?->id)],
+            'school_name' => ['required', 'string', 'max:150'],
+            'address' => ['required', 'string', 'max:1000'],
             'phone' => ['nullable', 'string', 'max:30'],
+            'guardian_name' => ['required', 'string', 'max:150'],
             'class_name' => ['required', 'string', 'max:100'],
-            'password' => ['nullable', 'string', 'min:6'],
         ]);
 
-        if ($user) {
+        if ($user instanceof User) {
             $user->name = $request->input('name');
-            $user->email = $request->input('email');
-            if ($request->filled('password')) {
-                $user->password = Hash::make($request->input('password'));
-            }
             $user->save();
         }
 
         if ($student) {
             $student->update([
                 'nisn' => $request->input('nisn'),
+                'school_name' => $request->input('school_name'),
+                'address' => $request->input('address'),
                 'phone' => $request->input('phone'),
+                'guardian_name' => $request->input('guardian_name'),
                 'class_name' => $request->input('class_name'),
             ]);
         }
@@ -150,7 +150,7 @@ class ProfileController extends Controller
         ]);
 
         $user = Auth::user();
-        if ($user) {
+        if ($user instanceof User) {
             $user->update(['password' => Hash::make($request->input('password'))]);
         }
 

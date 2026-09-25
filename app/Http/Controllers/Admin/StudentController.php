@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreStudentRequest;
 use App\Http\Requests\Admin\UpdateStudentRequest;
+use App\Models\Classroom;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class StudentController extends Controller
@@ -23,6 +25,12 @@ class StudentController extends Controller
 
         if ($request->filled('status')) {
             $query->where('status', $request->string('status'));
+        }
+
+        if ($request->filled('classroom_id')) {
+            $query->whereHas('classrooms', function ($classroomQuery) use ($request): void {
+                $classroomQuery->whereKey($request->integer('classroom_id'));
+            });
         }
 
         if ($request->filled('search')) {
@@ -39,7 +47,10 @@ class StudentController extends Controller
 
         $students = $query->latest()->paginate(10)->withQueryString();
 
-        return view('modulAdmin.manageSiswa', compact('students'));
+        return view('modulAdmin.manageSiswa', [
+            'students' => $students,
+            'classrooms' => Classroom::latest()->get(['id', 'name']),
+        ]);
     }
 
     /**
@@ -47,7 +58,10 @@ class StudentController extends Controller
      */
     public function create(): View
     {
-        return view('modulAdmin.studentForm', ['student' => null]);
+        return view('modulAdmin.studentForm', [
+            'student' => null,
+            'classrooms' => Classroom::with('teacher.user')->latest()->get(),
+        ]);
     }
 
     /**
@@ -57,19 +71,26 @@ class StudentController extends Controller
     {
         $student = DB::transaction(function () use ($request): Student {
             $data = $request->validated();
+            $classroom = Classroom::findOrFail($data['classroom_id']);
             $user = User::create([
                 'name' => $data['name'],
-                'email' => $data['email'],
-                'password' => $data['password'],
+                'email' => 'student.'.$data['nisn'].'@internal.cakrawala.local',
+                'password' => Str::random(40),
                 'role' => 'student',
             ]);
 
-            return $user->student()->create([
+            $student = $user->student()->create([
                 'nisn' => $data['nisn'],
-                'class_name' => $data['class_name'],
+                'school_name' => $data['school_name'],
+                'address' => $data['address'],
+                'class_name' => $classroom->name,
                 'phone' => $data['phone'] ?? null,
+                'guardian_name' => $data['guardian_name'],
                 'status' => $data['status'],
             ]);
+            $student->classrooms()->sync([$classroom->id]);
+
+            return $student;
         });
 
         return redirect()->route('admin.siswa.index')->with('success', "Mahasiswa {$student->user->name} berhasil ditambahkan.");
@@ -88,7 +109,10 @@ class StudentController extends Controller
      */
     public function edit(Student $student): View
     {
-        return view('modulAdmin.studentForm', ['student' => $student->load('user')]);
+        return view('modulAdmin.studentForm', [
+            'student' => $student->load(['user', 'classrooms']),
+            'classrooms' => Classroom::with('teacher.user')->latest()->get(),
+        ]);
     }
 
     /**
@@ -98,16 +122,18 @@ class StudentController extends Controller
     {
         DB::transaction(function () use ($request, $student): void {
             $data = $request->validated();
-            $student->user->update([
-                'name' => $data['name'],
-                'email' => $data['email'],
-            ] + (! empty($data['password']) ? ['password' => $data['password']] : []));
+            $classroom = Classroom::findOrFail($data['classroom_id']);
+            $student->user->update(['name' => $data['name']]);
             $student->update([
                 'nisn' => $data['nisn'],
-                'class_name' => $data['class_name'],
+                'school_name' => $data['school_name'],
+                'address' => $data['address'],
+                'class_name' => $classroom->name,
                 'phone' => $data['phone'] ?? null,
+                'guardian_name' => $data['guardian_name'],
                 'status' => $data['status'],
             ]);
+            $student->classrooms()->sync([$classroom->id]);
         });
 
         return redirect()->route('admin.siswa.index')->with('success', 'Data mahasiswa berhasil diperbarui.');

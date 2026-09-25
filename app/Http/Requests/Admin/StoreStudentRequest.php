@@ -24,11 +24,12 @@ class StoreStudentRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
             'nisn' => ['required', 'string', 'max:20', 'unique:students,nisn'],
-            'class_name' => ['required', 'string', 'max:100'],
+            'school_name' => ['required', 'string', 'max:150'],
+            'address' => ['required', 'string', 'max:1000'],
+            'classroom_id' => ['required', 'integer', 'exists:classrooms,id'],
             'phone' => ['nullable', 'string', 'max:30'],
+            'guardian_name' => ['required', 'string', 'max:150'],
             'status' => ['required', 'in:active,inactive'],
         ];
     }

@@ -15,6 +15,10 @@
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 13h8V3H3v10Zm10 8h8V11h-8v10ZM3 21h8v-6H3v6Zm10-12h8V3h-8v6Z"/></svg>
                 Dashboard
             </a>
+            <a href="{{ route('admin.kelas.index') }}" class="inline-flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all {{ request()->routeIs('admin.kelas.*') ? 'bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200/70' : 'text-slate-500 hover:bg-white/70 hover:text-slate-800' }}" @if (request()->routeIs('admin.kelas.*')) aria-current="page" @endif>
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect width="13" height="9" x="3" y="7" rx="2" stroke-width="1.8"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="m16 10 5-3v10l-5-3"/></svg>
+                Kelas
+            </a>
             <a href="{{ route('admin.siswa.index') }}" class="inline-flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all {{ request()->routeIs('admin.siswa.*') ? 'bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200/70' : 'text-slate-500 hover:bg-white/70 hover:text-slate-800' }}" @if (request()->routeIs('admin.siswa.*')) aria-current="page" @endif>
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3" stroke-width="1.8"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 21v-1a6 6 0 0 1 12 0v1m3-10a3 3 0 1 1-2.5 2.9M18 21v-1a5 5 0 0 0-2.5-4.33"/></svg>
                 Siswa
@@ -23,6 +27,7 @@
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="3" stroke-width="1.8"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 21v-1.5a7 7 0 0 1 14 0V21m-7-5v5"/></svg>
                 Guru
             </a>
+            
             <a href="{{ route('admin.pembayaran') }}" class="inline-flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all {{ request()->routeIs('admin.pembayaran') ? 'bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200/70' : 'text-slate-500 hover:bg-white/70 hover:text-slate-800' }}" @if (request()->routeIs('admin.pembayaran')) aria-current="page" @endif>
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="13" x="3" y="5.5" rx="2" stroke-width="1.8"/><path stroke-linecap="round" stroke-width="1.8" d="M3 10h18M7 15h3"/></svg>
                 Pembayaran

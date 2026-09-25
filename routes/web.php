@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ClassroomController as AdminClassroomController;
 use App\Http\Controllers\Admin\HomeController as AdminHomeController;
 use App\Http\Controllers\Admin\LandingContentController;
 use App\Http\Controllers\Admin\LoginController as AdminLoginController;
@@ -109,8 +110,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/login', [AdminLoginController::class, 'store'])->name('login.submit');
     Route::post('/logout', [AdminLoginController::class, 'destroy'])->name('logout');
     Route::get('/home', [AdminHomeController::class, 'index'])->name('home');
-    Route::resource('mahasiswa', StudentController::class)->names('siswa')->parameters(['mahasiswa' => 'student']);
+    Route::resource('siswa', StudentController::class)->names('siswa')->parameters(['siswa' => 'student']);
     Route::resource('guru', TeacherController::class)->names('guru')->parameters(['guru' => 'teacher']);
+    Route::resource('kelas', AdminClassroomController::class)->names('kelas')->parameters(['kelas' => 'classroom']);
     Route::get('/pembayaran', [AdminPaymentController::class, 'index'])->name('pembayaran');
     Route::patch('/pembayaran/{payment}/confirm', [AdminPaymentController::class, 'confirm'])->name('pembayaran.confirm');
     Route::patch('/pembayaran/{payment}/reject', [AdminPaymentController::class, 'reject'])->name('pembayaran.reject');
