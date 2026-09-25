@@ -182,7 +182,7 @@ class DashboardAndSearchTest extends TestCase
             ->get(route('siswa.tugas'))
             ->assertOk()
             ->assertSee('Struktur Hidrokarbon')
-            ->assertSee('Kuis Reaksi Redoks')
+            ->assertDontSee('Kuis Reaksi Redoks')
             ->assertSee('Kimia Karbon X');
     }
 }

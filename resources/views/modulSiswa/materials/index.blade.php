@@ -105,27 +105,6 @@
             </div>
         </section>
 
-        <!-- SECTION: KUIS DARI GURU -->
-        <section class="space-y-4">
-            <h2 class="text-xs font-black text-slate-500 uppercase tracking-wider px-1">Kuis Dari Guru</h2>
-
-            <div class="space-y-4">
-                @forelse ($quizzes as $quiz)
-                    <article class="rounded-3xl border border-indigo-100 bg-white/85 backdrop-blur-sm p-6 shadow-sm transition-all hover:border-indigo-300 hover:shadow-md space-y-3">
-                        <span class="rounded-xl bg-sky-50 border border-sky-200 px-3 py-1.5 text-xs font-black text-sky-700 inline-block shadow-2xs">{{ $quiz->classroom->name }}</span>
-                        <h2 class="text-base sm:text-lg font-black text-slate-900 tracking-tight">{{ $quiz->title }}</h2>
-                        <div class="flex flex-wrap items-center gap-2 pt-1 text-xs font-bold text-slate-600">
-                            <span class="bg-indigo-50 border border-indigo-200 px-3 py-1 rounded-xl text-indigo-700 font-black">{{ $quiz->question_count }} Soal</span>
-                            <span class="bg-slate-100 border border-slate-200 px-3 py-1 rounded-xl">{{ $quiz->duration_minutes }} Menit</span>
-                            <span class="bg-amber-50 border border-amber-200 px-3 py-1 rounded-xl text-amber-700">KKM {{ $quiz->passing_score }}</span>
-                        </div>
-                    </article>
-                @empty
-                    <div class="rounded-3xl border border-indigo-100 bg-white/85 backdrop-blur-sm px-6 py-8 text-center text-xs font-bold text-slate-500 shadow-sm">Belum ada kuis yang diterbitkan.</div>
-                @endforelse
-            </div>
-        </section>
-
     </main>
 
     @include('components.footerSiswa')
