@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Siswa;
 
 use App\Http\Controllers\Controller;
+use App\Models\Classroom;
 use App\Models\LearningRecommendation;
 use App\Models\Material;
 use App\Models\Student;
@@ -13,15 +14,17 @@ class HomeController extends Controller
     public function index(): View
     {
         $student = Student::with('user')->find(session('student_id'));
-        $classrooms = $student
+        $hasEnrolledClassrooms = $student && $student->classrooms()->exists();
+
+        $classrooms = $hasEnrolledClassrooms
             ? $student->classrooms()->with('teacher.user')->withCount('students')->latest()->limit(4)->get()
-            : collect();
+            : Classroom::with('teacher.user')->latest()->limit(4)->get();
+
         $publishedMaterials = Material::query()
             ->where('status', 'published')
             ->when(
-                $student,
-                fn ($query) => $query->whereIn('classroom_id', $student->classrooms()->select('classrooms.id')),
-                fn ($query) => $query->whereKey([]),
+                $hasEnrolledClassrooms,
+                fn ($query) => $query->whereIn('classroom_id', $student->classrooms()->select('classrooms.id'))
             );
 
         return view('modulSiswa.home', [

@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Assignment;
 use App\Models\Classroom;
 use App\Models\Quiz;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -96,14 +97,29 @@ class DashboardAndSearchTest extends TestCase
             'grade_level' => 'Kelas 11',
         ]);
 
+        $studentUser = User::create([
+            'name' => 'Siswa Search',
+            'email' => 'siswa.search@example.test',
+            'password' => 'password123',
+            'role' => 'student',
+        ]);
+        $student = Student::create([
+            'user_id' => $studentUser->id,
+            'nisn' => '1122334455',
+            'class_name' => 'Kelas 12',
+            'status' => 'active',
+        ]);
+
         // Subject filter
-        $this->get(route('siswa.kelas', ['subject' => 'Matematika']))
+        $this->actingAs($studentUser)->withSession(['student_id' => $student->id])
+            ->get(route('siswa.kelas', ['subject' => 'Matematika']))
             ->assertOk()
             ->assertSee('Kalkulus Lanjut')
             ->assertDontSee('Genetika Dasar');
 
         // Search query
-        $this->get(route('siswa.kelas', ['search' => 'Genetika']))
+        $this->actingAs($studentUser)->withSession(['student_id' => $student->id])
+            ->get(route('siswa.kelas', ['search' => 'Genetika']))
             ->assertOk()
             ->assertSee('Genetika Dasar')
             ->assertDontSee('Kalkulus Lanjut');
@@ -149,7 +165,21 @@ class DashboardAndSearchTest extends TestCase
             'status' => 'published',
         ]);
 
-        $this->get(route('siswa.tugas'))
+        $studentUser = User::create([
+            'name' => 'Siswa Tugas',
+            'email' => 'siswa.tugas@example.test',
+            'password' => 'password123',
+            'role' => 'student',
+        ]);
+        $student = Student::create([
+            'user_id' => $studentUser->id,
+            'nisn' => '5544332211',
+            'class_name' => 'Kelas 10',
+            'status' => 'active',
+        ]);
+
+        $this->actingAs($studentUser)->withSession(['student_id' => $student->id])
+            ->get(route('siswa.tugas'))
             ->assertOk()
             ->assertSee('Struktur Hidrokarbon')
             ->assertSee('Kuis Reaksi Redoks')

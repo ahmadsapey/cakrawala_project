@@ -12,6 +12,25 @@ class LoginController extends Controller
 {
     public function store(Request $request): RedirectResponse
     {
+        if ($request->filled('email') && $request->filled('password')) {
+            $credentials = $request->validate([
+                'email' => ['required', 'email'],
+                'password' => ['required', 'string'],
+            ]);
+
+            if (! Auth::attempt([...$credentials, 'role' => 'student'])) {
+                return back()->withErrors(['email' => 'Email atau kata sandi siswa tidak sesuai.'])->onlyInput('email');
+            }
+
+            $student = Auth::user()?->student;
+            $request->session()->regenerate();
+            if ($student) {
+                $request->session()->put('student_id', $student->id);
+            }
+
+            return redirect()->route('siswa.home');
+        }
+
         $credentials = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'nisn' => ['required', 'string', 'max:20'],

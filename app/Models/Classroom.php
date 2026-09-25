@@ -11,16 +11,23 @@ class Classroom extends Model
 {
     protected $fillable = [
         'teacher_id',
+        'subject_id',
         'name',
         'subject',
         'grade_level',
         'section',
         'description',
+        'online_meeting_url',
     ];
 
     public function teacher(): BelongsTo
     {
         return $this->belongsTo(Teacher::class);
+    }
+
+    public function subjectRelation(): BelongsTo
+    {
+        return $this->belongsTo(Subject::class, 'subject_id');
     }
 
     public function students(): BelongsToMany
@@ -36,6 +43,16 @@ class Classroom extends Model
     public function assignments(): HasMany
     {
         return $this->hasMany(Assignment::class);
+    }
+
+    public function schedules(): HasMany
+    {
+        return $this->hasMany(Schedule::class);
+    }
+
+    public function teacherAttendances(): HasMany
+    {
+        return $this->hasMany(TeacherAttendance::class);
     }
 
     public function quizzes(): HasMany

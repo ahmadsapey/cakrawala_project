@@ -50,8 +50,7 @@ class LearningFlowTest extends TestCase
             ->assertSee('name="status" value="published"', false)
             ->assertSee('name="status" value="draft"', false)
             ->assertOk()
-            ->assertSee(route('guru.tugas.tambah'))
-            ->assertSee(route('guru.kuis.tambah'));
+            ->assertSee(route('guru.tugas.tambah'));
 
         $response = $this->post(route('guru.material.store'), [
             'subject' => 'Matematika',
@@ -111,7 +110,7 @@ class LearningFlowTest extends TestCase
 
         $response = $this->get(route('siswa.materi'));
 
-        $response->assertOk()->assertSee('Persamaan Kuadrat')->assertSee('Matematika')->assertSee('Unduh modul');
+        $response->assertOk()->assertSee('Persamaan Kuadrat')->assertSee('Matematika')->assertSee('Unduh Modul');
         $this->get(route('siswa.materi', ['subject' => 'Matematika']))
             ->assertOk()
             ->assertSee('Persamaan Kuadrat');

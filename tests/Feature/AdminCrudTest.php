@@ -12,6 +12,14 @@ class AdminCrudTest extends TestCase
 
     public function test_admin_can_update_and_delete_teacher_with_related_user(): void
     {
+        $admin = User::create([
+            'name' => 'Admin Test',
+            'email' => 'admin.teacher@cakrawala.test',
+            'password' => 'secret123',
+            'role' => 'admin',
+        ]);
+        $this->actingAs($admin);
+
         $user = User::create([
             'name' => 'Budi Guru',
             'email' => 'budi@example.test',
@@ -45,6 +53,14 @@ class AdminCrudTest extends TestCase
 
     public function test_admin_can_filter_and_manage_students(): void
     {
+        $admin = User::create([
+            'name' => 'Admin Student Test',
+            'email' => 'admin.student@cakrawala.test',
+            'password' => 'secret123',
+            'role' => 'admin',
+        ]);
+        $this->actingAs($admin);
+
         $userActive = User::create([
             'name' => 'Ahmad Siswa',
             'email' => 'ahmad@example.test',
@@ -89,6 +105,14 @@ class AdminCrudTest extends TestCase
 
     public function test_admin_can_filter_and_search_payments(): void
     {
+        $admin = User::create([
+            'name' => 'Admin Payment Test',
+            'email' => 'admin.payment@cakrawala.test',
+            'password' => 'secret123',
+            'role' => 'admin',
+        ]);
+        $this->actingAs($admin);
+
         $user = User::create([
             'name' => 'Citra Siswa',
             'email' => 'citra@example.test',
