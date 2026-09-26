@@ -33,9 +33,8 @@
                     <div class="flex items-center space-x-4">
                         <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Avatar siswa" class="w-14 h-14 rounded-2xl object-cover border-2 border-indigo-200 shadow-sm shrink-0">
                         <div>
-                            <h2 class="text-base sm:text-lg font-black text-slate-900 flex items-center space-x-1.5 tracking-tight">
-                                <span>Halo, {{ $student?->user?->name ?? 'Siswa' }}!</span>
-                                <span class="text-base">👋</span>
+                            <h2 class="text-base sm:text-lg font-black text-slate-900 tracking-tight">
+                                Halo, {{ $student?->user?->name ?? 'Siswa' }}!
                             </h2>
                             <p class="text-xs text-indigo-600 font-extrabold mt-0.5 tracking-wide uppercase">{{ $student?->class_name ?? 'Kelas siswa' }}</p>
                         </div>

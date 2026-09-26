@@ -87,7 +87,7 @@
             <div class="px-1 flex items-center justify-between">
                 <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-700">Daftar Siswa Terdaftar</h3>
                 <a href="{{ route('guru.siswa') }}" class="text-xs font-extrabold text-indigo-600 hover:underline">Semua (36 Siswa)</a>
-                <a href="{{ route('guru.siswa', $classroom) }}" class="text-xs font-extrabold text-indigo-600 hover:underline">Semua ({{ $students->count() }} Siswa) &rarr;</a>
+                <a href="{{ route('guru.siswa', $classroom) }}" class="text-xs font-extrabold text-indigo-600 hover:underline">Semua ({{ $students->count() }} Siswa)</a>
             </div>
 
             <!-- List Avatar Siswa Horisontal -->

@@ -55,7 +55,7 @@
 
         @if($questions->isEmpty())
             <div class="bg-white/80 backdrop-blur-sm p-12 rounded-3xl border border-indigo-100 text-center space-y-4 shadow-sm">
-                <span class="text-4xl">⚠️</span>
+                <span class="text-4xl"></span>
                 <p class="text-slate-700 font-extrabold text-sm">Belum ada butir soal pada kuis ini.</p>
                 <a href="{{ route('siswa.tugas') }}"
                     class="inline-block px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl font-black text-xs shadow-md shadow-indigo-200 transition-all">Kembali ke Tugas</a>
@@ -160,7 +160,7 @@
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
-                        <span>Selesaikan & Kumpulkan Ujian 🚀</span>
+                        <span>Selesaikan & Kumpulkan Ujian </span>
                     </button>
                 </div>
 

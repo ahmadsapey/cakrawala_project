@@ -42,7 +42,7 @@
                 <select name="classroom_id" required class="mt-2 w-full rounded-xl border-2 border-slate-300 bg-white px-4 py-3 text-xs sm:text-sm font-semibold text-slate-900 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition-all">
                     <option value="">-- Pilih Kelas Target --</option>
                     @foreach ($classrooms as $classroom)
-                        <option value="{{ $classroom->id }}" @selected(old('classroom_id', $selectedClassroomId) == $classroom->id)>{{ $classroom->name }} · {{ $classroom->subject }}</option>
+                        <option value="{{ $classroom->id }}" @selected(old('classroom_id', $selectedClassroomId) == $classroom->id)>{{ $classroom->name }} - {{ $classroom->subject }}</option>
                     @endforeach
                 </select>
             </label>

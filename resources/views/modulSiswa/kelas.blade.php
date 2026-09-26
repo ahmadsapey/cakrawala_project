@@ -34,9 +34,8 @@
             <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div class="space-y-2">
                     <span class="inline-block rounded-full bg-white/20 px-3.5 py-1 text-xs font-bold uppercase tracking-widest backdrop-blur-md">Portal Siswa</span>
-                    <h1 class="text-2xl sm:text-3xl font-black tracking-tight flex items-center space-x-3">
-                        <span>Kelas Belajarmu</span>
-                        <span class="text-xl">📚</span>
+                    <h1 class="text-2xl sm:text-3xl font-black tracking-tight">
+                        Kelas Belajarmu
                     </h1>
                     <p class="text-xs sm:text-sm font-medium text-indigo-100">Pantau progres dan ikuti kelas interaktif harian dengan penuh semangat.</p>
                 </div>
@@ -67,7 +66,7 @@
             <div class="flex items-center space-x-2.5 overflow-x-auto pb-2 scrollbar-none">
                 <a href="{{ route('siswa.kelas', array_filter(['search' => $search])) }}"
                     class="px-4.5 py-2.5 {{ $selectedSubject === 'Semua' ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-black shadow-md shadow-indigo-200' : 'bg-white/80 text-slate-600 border border-slate-200 font-bold hover:bg-white hover:border-indigo-300' }} text-xs rounded-2xl shrink-0 backdrop-blur-sm transition-all">
-                    ✨ Semua
+                    Semua
                 </a>
                 @foreach ($subjects as $subject)
                     <a href="{{ route('siswa.kelas', array_filter(['subject' => $subject, 'search' => $search])) }}"
@@ -155,7 +154,9 @@
                     </a>
                 @empty
                     <div class="col-span-full rounded-3xl border-2 border-dashed border-indigo-200 bg-white/60 backdrop-blur-sm px-5 py-16 text-center space-y-3">
-                        <div class="w-14 h-14 bg-indigo-50 text-indigo-500 rounded-2xl flex items-center justify-center mx-auto mb-2 text-2xl font-bold shadow-sm">📂</div>
+                        <div class="w-14 h-14 bg-indigo-50 text-indigo-500 rounded-2xl flex items-center justify-center mx-auto mb-2 shadow-sm">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+                        </div>
                         <p class="text-sm font-black text-slate-800">Tidak ada kelas yang sesuai filter.</p>
                         <p class="text-xs text-slate-400 font-semibold">Coba ubah kata kunci pencarian atau kategori kelas Anda.</p>
                     </div>

@@ -28,7 +28,7 @@
         <!-- Header & Filter Tanggal -->
         <div class="sticky top-16 z-40 flex flex-col justify-between gap-6 rounded-3xl border border-teal-100 bg-white/95 p-6 shadow-md shadow-slate-200/60 backdrop-blur-md sm:flex-row sm:items-end sm:p-8">
             <div>
-                <a href="{{ route('guru.kelas.learning', $classroom) }}" class="text-xs font-black uppercase tracking-wider text-teal-700 hover:text-teal-900 transition-colors">&larr; Kembali ke kelas</a>
+                <a href="{{ route('guru.kelas.learning', $classroom) }}" class="text-xs font-black uppercase tracking-wider text-teal-700 hover:text-teal-900 transition-colors">Kembali ke kelas</a>
                 <span class="mt-4 block text-xs font-black uppercase tracking-[0.18em] text-teal-700 bg-teal-50 border border-teal-100 px-3 py-1.5 rounded-xl w-max shadow-2xs">Kehadiran Siswa</span>
                 <h1 class="mt-2 text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">{{ $classroom->name }}</h1>
                 <p class="mt-1 text-xs sm:text-sm font-bold text-slate-500">{{ $classroom->subject }} · {{ $classroom->grade_level }}{{ $classroom->section ? ' · ' . $classroom->section : '' }}</p>

@@ -39,7 +39,7 @@
                 </p>
             </div>
             <a href="{{ route('guru.kelas') }}" class="rounded-2xl border border-teal-200 bg-white px-4 py-3 text-center text-xs font-black text-teal-800 hover:bg-teal-50 transition-all shadow-2xs shrink-0">
-                &larr; Kembali ke Daftar Kelas
+                Kembali ke Daftar Kelas
             </a>
         </div>
 
@@ -54,20 +54,20 @@
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <a href="{{ route('guru.material.create', ['classroom_id' => $classroom->id]) }}" class="rounded-3xl border border-teal-600 bg-gradient-to-r from-teal-600 to-emerald-700 p-6 text-white shadow-lg shadow-teal-200 hover:from-teal-700 hover:to-emerald-800 transition-all group">
                 <p class="text-xs font-black uppercase tracking-wider text-teal-100">Konten Kelas</p>
-                <p class="mt-2 text-base font-black flex items-center gap-2">
-                    <span class="text-lg">+</span> Tambah Materi
+                <p class="mt-2 text-base font-black">
+                    Tambah Materi
                 </p>
             </a>
             <a href="{{ route('guru.tugas.create', ['classroom_id' => $classroom->id]) }}" class="rounded-3xl border border-teal-600 bg-gradient-to-r from-teal-700 to-emerald-800 p-6 text-white shadow-lg shadow-teal-200 hover:from-teal-800 hover:to-emerald-900 transition-all group">
                 <p class="text-xs font-black uppercase tracking-wider text-teal-100">Penugasan</p>
-                <p class="mt-2 text-base font-black flex items-center gap-2">
-                    <span class="text-lg">+</span> Tambah Tugas
+                <p class="mt-2 text-base font-black">
+                    Tambah Tugas
                 </p>
             </a>
             <a href="{{ route('guru.kelas.absensi', $classroom) }}" class="rounded-3xl border border-teal-100 bg-white/85 backdrop-blur-md p-6 text-slate-900 shadow-xs hover:border-teal-600 hover:shadow-md transition-all group">
                 <p class="text-xs font-black uppercase tracking-wider text-emerald-700">Kehadiran Siswa</p>
-                <p class="mt-2 text-base font-black flex items-center gap-2 group-hover:text-teal-700 transition-colors">
-                    <span class="text-lg">📋</span> Kelola Absensi
+                <p class="mt-2 text-base font-black group-hover:text-teal-700 transition-colors">
+                    Kelola Absensi
                 </p>
             </a>
         </div>
@@ -94,12 +94,12 @@
                             <div class="flex flex-wrap gap-3 mt-4 text-xs font-black">
                                 @if ($material->video_url)
                                     <a href="{{ $material->video_url }}" target="_blank" class="text-teal-700 hover:underline flex items-center gap-1.5">
-                                        📺 Tonton Video
+                                        Tonton Video
                                     </a>
                                 @endif
                                 @if ($material->attachment_path)
                                     <a href="{{ Storage::disk('public')->url($material->attachment_path) }}" target="_blank" class="text-rose-600 hover:underline flex items-center gap-1.5">
-                                        📄 Buka Modul (PDF/PPT)
+                                        Buka Modul (PDF/PPT)
                                     </a>
                                 @endif
                             </div>
@@ -131,7 +131,7 @@
         <section class="space-y-4 pt-4">
             <div class="flex items-center justify-between">
                 <h2 class="text-base sm:text-lg font-black text-slate-900 tracking-tight">Daftar Tugas Kelas</h2>
-                <a href="{{ route('guru.tugas.create', ['classroom_id' => $classroom->id]) }}" class="text-xs font-black text-teal-700 hover:underline">+ Buat Tugas</a>
+                <a href="{{ route('guru.tugas.create', ['classroom_id' => $classroom->id]) }}" class="text-xs font-black text-teal-700 hover:underline">Buat Tugas</a>
             </div>
             <div class="grid gap-4 md:grid-cols-2">
                 @forelse ($assignments as $assignment)
@@ -152,7 +152,7 @@
                         <div class="flex items-center justify-between border-t border-slate-200 pt-4 text-xs font-bold">
                             <span class="text-slate-500">{{ $assignment->submissions()->count() }} Jawaban Siswa</span>
                             <a href="{{ route('guru.koreksi.tugas') }}" class="rounded-xl bg-teal-50 border border-teal-200 px-4 py-2 font-black text-teal-800 hover:bg-teal-100 transition-all">
-                                Koreksi Kiriman Siswa &rarr;
+                                Koreksi Kiriman Siswa
                             </a>
                         </div>
                     </article>

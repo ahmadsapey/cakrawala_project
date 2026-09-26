@@ -36,10 +36,7 @@
                     {{ strtoupper(substr($teacherName, 0, 2)) }}
                 </div>
                 <div>
-                    <div class="flex items-center space-x-2">
-                        <h1 class="text-lg sm:text-xl font-black text-slate-900 tracking-tight">Halo, {{ $teacherName }}!</h1>
-                        <span class="text-xs" title="Tutor Utama">👨‍🏫</span>
-                    </div>
+                    <h1 class="text-lg sm:text-xl font-black text-slate-900 tracking-tight">Halo, {{ $teacherName }}!</h1>
                     <p class="text-xs sm:text-sm text-slate-600 font-bold">Tutor Utama • Bidang {{ $teacherSubject }}</p>
                 </div>
             </div>
@@ -75,7 +72,7 @@
         <div class="space-y-3">
             <div class="flex items-center justify-between px-1">
                 <h3 class="text-xs font-black uppercase tracking-wider text-slate-700">Kelas yang Diampu</h3>
-                <a href="{{ route('guru.kelas') }}" class="text-xs font-black text-teal-700 hover:underline">Kelola Semua Kelas &rarr;</a>
+                <a href="{{ route('guru.kelas') }}" class="text-xs font-black text-teal-700 hover:underline">Kelola Semua Kelas</a>
             </div>
 
             <div class="grid gap-4 md:grid-cols-2">
@@ -113,7 +110,7 @@
         <div class="space-y-3">
             <div class="flex items-center justify-between px-1">
                 <h3 class="text-xs font-black uppercase tracking-wider text-slate-700">Tugas Terkini</h3>
-                <a href="{{ route('guru.koreksi.tugas') }}" class="text-xs font-black text-teal-700 hover:underline">Kelola Semua Tugas &rarr;</a>
+                <a href="{{ route('guru.koreksi.tugas') }}" class="text-xs font-black text-teal-700 hover:underline">Kelola Semua Tugas</a>
             </div>
 
             <div class="grid gap-3">

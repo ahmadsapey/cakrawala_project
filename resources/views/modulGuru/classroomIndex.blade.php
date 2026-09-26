@@ -55,7 +55,7 @@
                             <span class="shrink-0 text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-xl shadow-2xs">{{ $classroom->grade_level }}</span>
                         </div>
                         @if ($classroom->section)
-                            <p class="mt-2 text-xs font-bold text-teal-700 truncate">🔗 {{ $classroom->section }}</p>
+                            <p class="mt-2 text-xs font-bold text-teal-700 truncate">{{ $classroom->section }}</p>
                         @endif
                         @if ($classroom->description)
                             <p class="mt-3 line-clamp-3 text-xs font-semibold leading-relaxed text-slate-500">{{ $classroom->description }}</p>
@@ -63,7 +63,7 @@
                     </div>
                     
                     <div class="mt-6 border-t border-slate-200 pt-4">
-                        <a href="{{ route('guru.kelas.learning', $classroom) }}" class="block w-full rounded-2xl bg-teal-600 border border-teal-700 px-4 py-2.5 text-center text-xs font-black text-white transition-all hover:bg-teal-700 shadow-2xs">Masuk Pembelajaran &rarr;</a>
+                        <a href="{{ route('guru.kelas.learning', $classroom) }}" class="block w-full rounded-2xl bg-teal-600 border border-teal-700 px-4 py-2.5 text-center text-xs font-black text-white transition-all hover:bg-teal-700 shadow-2xs">Masuk Pembelajaran</a>
                     </div>
                     </article>
                 @empty

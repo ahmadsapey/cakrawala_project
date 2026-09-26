@@ -33,22 +33,21 @@
             <div class="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/15 blur-2xl"></div>
             <div class="relative z-10 space-y-2">
                 <span class="inline-block rounded-full bg-white/20 px-3.5 py-1 text-xs font-bold uppercase tracking-widest backdrop-blur-md">Evaluasi Belajar</span>
-                <h1 class="text-2xl sm:text-3xl font-black tracking-tight flex items-center space-x-3">
-                    <span>Tugas & Evaluasi</span>
-                    <span class="text-xl">🎯</span>
+                <h1 class="text-2xl sm:text-3xl font-black tracking-tight">
+                    Tugas & Evaluasi
                 </h1>
                 <p class="text-xs sm:text-sm font-medium text-indigo-100">Kerjakan tugas pembelajaran dan kumpulkan tepat waktu.</p>
             </div>
         </div>
 
         @if (session('success'))
-            <div class="rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-xs font-bold text-emerald-800 shadow-sm flex items-center gap-2">
-                <span>✅</span> {{ session('success') }}
+            <div class="rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-xs font-bold text-emerald-800 shadow-sm">
+                {{ session('success') }}
             </div>
         @endif
         @if (session('error'))
-            <div class="rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-xs font-bold text-rose-800 shadow-sm flex items-center gap-2">
-                <span>❌</span> {{ session('error') }}
+            <div class="rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-xs font-bold text-rose-800 shadow-sm">
+                {{ session('error') }}
             </div>
         @endif
 
@@ -95,15 +94,15 @@
                             <div class="flex items-center gap-2">
                                 @if ($submission && $submission->status === 'graded')
                                     <span class="px-3.5 py-1.5 bg-emerald-50 border border-emerald-200 text-emerald-700 font-extrabold text-xs rounded-xl shadow-2xs">
-                                        ✨ Nilai: {{ $submission->score }}/{{ $assignment->points }}
+                                        Nilai: {{ $submission->score }}/{{ $assignment->points }}
                                     </span>
                                 @elseif ($submission)
                                     <span class="px-3.5 py-1.5 bg-amber-50 border border-amber-200 text-amber-700 font-extrabold text-xs rounded-xl shadow-2xs">
-                                        ⏳ Menunggu Koreksi
+                                        Menunggu Koreksi
                                     </span>
                                 @else
                                     <span class="px-3.5 py-1.5 bg-slate-100 border border-slate-200 text-slate-600 font-extrabold text-xs rounded-xl shadow-2xs">
-                                        🕒 {{ $assignment->due_at ? 'Tenggat: ' . $assignment->due_at->format('d M Y') : 'Tanpa tenggat' }}
+                                        {{ $assignment->due_at ? 'Tenggat: ' . $assignment->due_at->format('d M Y') : 'Tanpa tenggat' }}
                                     </span>
                                 @endif
                             </div>
@@ -123,7 +122,7 @@
                         <details class="group rounded-2xl border border-amber-200/60 bg-white/80 p-4 transition shadow-2xs">
                             <summary class="flex cursor-pointer items-center justify-between text-xs font-black text-amber-700 list-none">
                                 <span class="flex items-center gap-2">
-                                    <span>📂</span> {{ $submission ? 'Perbarui Pengumpulan Tugas' : 'Kumpulkan Tugas Ini' }}
+                                    {{ $submission ? 'Perbarui Pengumpulan Tugas' : 'Kumpulkan Tugas Ini' }}
                                 </span>
                                 <span class="transition-transform duration-300 group-open:rotate-180 bg-amber-100 p-1 rounded-lg text-amber-800">&darr;</span>
                             </summary>
@@ -141,7 +140,7 @@
                                         class="w-full text-xs text-slate-500 file:mr-3 file:rounded-xl file:border-0 file:bg-amber-50 file:px-4 file:py-2 file:text-xs file:font-extrabold file:text-amber-700 hover:file:bg-amber-100 transition-colors">
                                     @if ($submission && $submission->file_name)
                                         <p class="mt-2 text-xs font-bold text-emerald-600 flex items-center gap-1">
-                                            <span>📎</span> Berkas terunggah: {{ $submission->file_name }}
+                                            Berkas terunggah: {{ $submission->file_name }}
                                         </p>
                                     @endif
                                 </div>
