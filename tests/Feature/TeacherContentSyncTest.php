@@ -36,9 +36,18 @@ class TeacherContentSyncTest extends TestCase
             'grade_level' => '10',
         ])->assertForbidden();
 
+        $this->get(route('guru.home'))
+            ->assertOk()
+            ->assertDontSee('Tambah Materi');
+
         $this->get(route('guru.kelas'))
             ->assertOk()
+            ->assertDontSee('Upload Bahan Ajar')
             ->assertSee(route('guru.kelas.learning', $classroom));
+
+        $this->get(route('guru.koreksi.tugas'))
+            ->assertOk()
+            ->assertDontSee('Buat Tugas Baru');
 
         // When teacher visits learning room, auto-records attendance
         $this->get(route('guru.kelas.learning', $classroom))
