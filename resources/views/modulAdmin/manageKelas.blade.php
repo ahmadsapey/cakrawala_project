@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Manajemen Kelas | Cakrawala Educentre</title><script src="https://cdn.tailwindcss.com"></script></head>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Manajemen Kelas | Cakrawala Educentre</title><script src="https://cdn.tailwindcss.com"></script>    @include('components.fonts')
+</head>
 <body class="min-h-screen bg-slate-100 pb-28 font-sans text-slate-800 antialiased">
 @include('components.headerAdmin')
 <main class="mx-auto max-w-6xl space-y-6 px-4 py-8 sm:px-6 lg:px-12">

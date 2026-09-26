@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $classroom->name }} | Cakrawala</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    @include('components.fonts')
 </head>
 <body class="min-h-screen bg-gradient-to-br from-indigo-50 via-sky-50 to-purple-50 pb-28 font-sans text-slate-800 antialiased">
 @include('components.hiderSiswa')

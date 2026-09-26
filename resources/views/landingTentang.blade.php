@@ -18,6 +18,7 @@
             }
         }
     </script>
+    @include('components.fonts')
 </head>
 <body class="bg-[#F8FAFC] text-slate-800 font-sans antialiased selection:bg-indigo-500 selection:text-white pb-28">
 

@@ -39,6 +39,7 @@
             box-shadow: 0 0 0 1px #38bdf8, 0 0 18px rgba(14, 165, 233, 0.48), 0 0 36px rgba(37, 99, 235, 0.3);
         }
     </style>
+    @include('components.fonts')
 </head>
 <body class="bg-[#F8FAFC] text-slate-800 font-sans antialiased selection:bg-indigo-500 selection:text-white">
 

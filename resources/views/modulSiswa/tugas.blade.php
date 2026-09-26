@@ -19,6 +19,7 @@
             }
         }
     </script>
+    @include('components.fonts')
 </head>
 
 <body class="bg-gradient-to-br from-indigo-50/50 via-sky-50/30 to-purple-50/50 text-slate-800 font-sans antialiased selection:bg-indigo-500 selection:text-white pb-28">

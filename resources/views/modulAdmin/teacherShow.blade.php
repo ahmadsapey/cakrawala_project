@@ -19,6 +19,7 @@
             }
         }
     </script>
+    @include('components.fonts')
 </head>
 
 <body class="min-h-screen bg-gradient-to-br from-indigo-50/50 via-slate-50 to-blue-50/40 pb-32 font-sans text-slate-800 antialiased selection:bg-indigo-500 selection:text-white">

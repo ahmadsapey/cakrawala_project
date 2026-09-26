@@ -5,6 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Login Maintenance | {{ $brandContent?->title ?? 'Cakrawala Educentre' }}</title>
 	<script src="https://cdn.tailwindcss.com"></script>
+    @include('components.fonts')
 </head>
 <body class="flex min-h-screen items-center justify-center bg-slate-100 px-4 font-sans text-slate-800 antialiased">
 	<main class="w-full max-w-md rounded-3xl border-2 border-slate-200 bg-white p-7 shadow-xl sm:p-9">

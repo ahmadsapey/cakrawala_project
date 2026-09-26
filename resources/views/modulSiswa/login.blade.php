@@ -18,6 +18,7 @@
             }
         }
     </script>
+    @include('components.fonts')
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans antialiased selection:bg-indigo-500 selection:text-white flex items-center justify-center min-h-screen py-12 px-4 sm:px-6 lg:px-8">
 

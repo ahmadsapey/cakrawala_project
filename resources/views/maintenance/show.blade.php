@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $content->title }} | Cakrawala Maintenance</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    @include('components.fonts')
 </head>
 <body class="min-h-screen bg-gradient-to-br from-indigo-50/50 via-slate-50 to-blue-50/40 font-sans text-slate-800 antialiased">
     <header class="border-b border-slate-200/80 bg-white/90 backdrop-blur-md">

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pembayaran | Cakrawala Educentre</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    @include('components.fonts')
 </head>
 <body class="min-h-screen bg-[#F8FAFC] px-4 py-8 font-sans text-slate-800 antialiased sm:px-6">
     <main class="mx-auto max-w-2xl space-y-6">
