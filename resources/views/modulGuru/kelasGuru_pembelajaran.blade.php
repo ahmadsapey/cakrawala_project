@@ -51,17 +51,23 @@
         @endif
 
         <!-- Kartu Aksi Cepat (Quick Actions) -->
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <a href="{{ route('guru.material.create', ['classroom_id' => $classroom->id]) }}" class="rounded-3xl border border-teal-600 bg-gradient-to-r from-teal-600 to-emerald-700 p-6 text-white shadow-lg shadow-teal-200 hover:from-teal-700 hover:to-emerald-800 transition-all group">
                 <p class="text-xs font-black uppercase tracking-wider text-teal-100">Konten Kelas</p>
                 <p class="mt-2 text-base font-black flex items-center gap-2">
-                    <span class="text-lg">+</span> Tambah Materi & Bahan Ajar
+                    <span class="text-lg">+</span> Tambah Materi
+                </p>
+            </a>
+            <a href="{{ route('guru.tugas.create', ['classroom_id' => $classroom->id]) }}" class="rounded-3xl border border-teal-600 bg-gradient-to-r from-teal-700 to-emerald-800 p-6 text-white shadow-lg shadow-teal-200 hover:from-teal-800 hover:to-emerald-900 transition-all group">
+                <p class="text-xs font-black uppercase tracking-wider text-teal-100">Penugasan</p>
+                <p class="mt-2 text-base font-black flex items-center gap-2">
+                    <span class="text-lg">+</span> Tambah Tugas
                 </p>
             </a>
             <a href="{{ route('guru.kelas.absensi', $classroom) }}" class="rounded-3xl border border-teal-100 bg-white/85 backdrop-blur-md p-6 text-slate-900 shadow-xs hover:border-teal-600 hover:shadow-md transition-all group">
                 <p class="text-xs font-black uppercase tracking-wider text-emerald-700">Kehadiran Siswa</p>
                 <p class="mt-2 text-base font-black flex items-center gap-2 group-hover:text-teal-700 transition-colors">
-                    <span class="text-lg">📋</span> Kelola Absensi Kelas
+                    <span class="text-lg">📋</span> Kelola Absensi
                 </p>
             </a>
         </div>
@@ -116,6 +122,43 @@
                 @empty
                     <div class="rounded-3xl border border-dashed border-slate-300 bg-white/80 p-12 text-center text-xs font-bold text-slate-400 md:col-span-2 shadow-2xs">
                         Belum ada materi di kelas ini. Klik tombol di atas untuk menerbitkan materi.
+                    </div>
+                @endforelse
+            </div>
+        </section>
+
+        <!-- Section: Penugasan Kelas -->
+        <section class="space-y-4 pt-4">
+            <div class="flex items-center justify-between">
+                <h2 class="text-base sm:text-lg font-black text-slate-900 tracking-tight">Daftar Tugas Kelas</h2>
+                <a href="{{ route('guru.tugas.create', ['classroom_id' => $classroom->id]) }}" class="text-xs font-black text-teal-700 hover:underline">+ Buat Tugas</a>
+            </div>
+            <div class="grid gap-4 md:grid-cols-2">
+                @forelse ($assignments as $assignment)
+                    <article class="rounded-3xl border border-teal-100 bg-white/85 backdrop-blur-md p-6 shadow-xs space-y-4 hover:border-teal-600 hover:shadow-md transition-all flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start gap-3">
+                                <div>
+                                    <span class="rounded-xl bg-teal-50 border border-teal-200 px-3 py-1 text-xs font-black uppercase tracking-wider text-teal-800 shadow-2xs">{{ $assignment->points }} Poin</span>
+                                    <h3 class="mt-3 text-base sm:text-lg font-black text-slate-900">{{ $assignment->title }}</h3>
+                                    <p class="mt-2 text-xs sm:text-sm font-semibold leading-relaxed text-slate-500">
+                                        {{ $assignment->instructions ?: 'Tidak ada petunjuk khusus.' }}
+                                    </p>
+                                </div>
+                                <span class="shrink-0 text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-xl shadow-2xs">Batas: {{ $assignment->due_at?->format('d M Y, H:i') ?? '-' }}</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between border-t border-slate-200 pt-4 text-xs font-bold">
+                            <span class="text-slate-500">{{ $assignment->submissions()->count() }} Jawaban Siswa</span>
+                            <a href="{{ route('guru.koreksi.tugas') }}" class="rounded-xl bg-teal-50 border border-teal-200 px-4 py-2 font-black text-teal-800 hover:bg-teal-100 transition-all">
+                                Koreksi Kiriman Siswa &rarr;
+                            </a>
+                        </div>
+                    </article>
+                @empty
+                    <div class="rounded-3xl border border-dashed border-slate-300 bg-white/80 p-8 text-center text-xs font-bold text-slate-400 md:col-span-2 shadow-2xs">
+                        Belum ada tugas di kelas ini. Klik tombol di atas untuk membuat tugas baru.
                     </div>
                 @endforelse
             </div>

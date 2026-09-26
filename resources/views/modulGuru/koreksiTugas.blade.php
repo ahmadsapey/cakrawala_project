@@ -57,8 +57,6 @@
                 <span class="text-xs font-black uppercase tracking-[0.18em] text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1.5 rounded-xl inline-block shadow-2xs">Modul Guru</span>
                 <h1 class="mt-2 text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Koreksi & Penilaian Tugas</h1>
             </div>
-            <a href="{{ route('guru.tugas.create') }}"
-                class="rounded-2xl bg-gradient-to-r from-teal-600 to-emerald-700 border-2 border-teal-700 px-5 py-3 text-center text-xs font-black text-white shadow-md shadow-teal-200 hover:from-teal-700 hover:to-emerald-800 transition-all">+ Buat Tugas Baru</a>
         </div>
 
         <!-- Filter Tab Kategori -->

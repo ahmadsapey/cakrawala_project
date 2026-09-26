@@ -32,9 +32,6 @@
                 <h1 class="mt-2 text-2xl sm:text-3xl font-black tracking-tight text-slate-900">Kelas yang Anda Ajar</h1>
                 <p class="mt-1.5 text-xs sm:text-sm font-bold text-slate-500">Daftar kelas yang ditugaskan oleh Admin untuk Anda ampu.</p>
             </div>
-            <a href="{{ route('guru.material.create') }}" class="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-teal-600 to-emerald-700 px-5 py-3 text-xs font-black text-white shadow-lg shadow-teal-200 hover:from-teal-700 hover:to-emerald-800 transition-all shrink-0">
-                + Upload Bahan Ajar
-            </a>
         </div>
 
         <!-- Notifikasi Sukses -->

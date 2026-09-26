@@ -43,9 +43,6 @@
                     <p class="text-xs sm:text-sm text-slate-600 font-bold">Tutor Utama • Bidang {{ $teacherSubject }}</p>
                 </div>
             </div>
-            <a href="{{ route('guru.material.create') }}" class="hidden sm:inline-flex items-center gap-1.5 rounded-xl bg-teal-600 px-4 py-2.5 text-xs font-black text-white shadow-md hover:bg-teal-700 transition">
-                <span>+</span> Tambah Materi
-            </a>
         </div>
 
         <!-- Kartu Ringkasan Mengajar Pekan Ini -->
