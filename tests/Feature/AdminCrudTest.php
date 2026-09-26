@@ -10,6 +10,66 @@ class AdminCrudTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_admin_can_access_teacher_create_form_and_store_teacher(): void
+    {
+        $admin = User::create([
+            'name' => 'Admin Test',
+            'email' => 'admin.teacher@cakrawala.test',
+            'password' => 'secret123',
+            'role' => 'admin',
+        ]);
+        $this->actingAs($admin);
+
+        $this->get(route('admin.guru.create'))
+            ->assertOk()
+            ->assertSee('Tambah Guru Baru');
+
+        $response = $this->post(route('admin.guru.store'), [
+            'name' => 'Guru Anyar, S.Pd',
+            'email' => 'guru.anyar@cakrawala.test',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+            'nip' => '19900101202602',
+            'subject' => 'Kimia',
+            'phone' => '08123456789',
+            'status' => 'active',
+        ]);
+
+        $response->assertRedirect(route('admin.guru.index'));
+        $this->assertDatabaseHas('users', ['email' => 'guru.anyar@cakrawala.test', 'name' => 'Guru Anyar, S.Pd']);
+        $this->assertDatabaseHas('teachers', ['nip' => '19900101202602', 'subject' => 'Kimia']);
+    }
+
+    public function test_admin_can_view_teacher_details(): void
+    {
+        $admin = User::create([
+            'name' => 'Admin Teacher Detail Test',
+            'email' => 'admin.teacherdetail@cakrawala.test',
+            'password' => 'secret123',
+            'role' => 'admin',
+        ]);
+        $this->actingAs($admin);
+
+        $user = User::create([
+            'name' => 'Siti Guru',
+            'email' => 'siti@example.test',
+            'password' => 'password123',
+            'role' => 'teacher',
+        ]);
+        $teacher = $user->teacher()->create([
+            'nip' => '19850101202603',
+            'subject' => 'Biologi',
+            'phone' => '081299998888',
+            'status' => 'active',
+        ]);
+
+        $this->get(route('admin.guru.show', $teacher))
+            ->assertOk()
+            ->assertSee('Siti Guru')
+            ->assertSee('Biologi')
+            ->assertSee('19850101202603');
+    }
+
     public function test_admin_can_update_and_delete_teacher_with_related_user(): void
     {
         $admin = User::create([
