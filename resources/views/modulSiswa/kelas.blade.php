@@ -119,6 +119,7 @@
                             ],
                         ];
                         $theme = $themes[$loop->index % count($themes)];
+                        $schedule = $classroom->schedules->first();
                     @endphp
 
                     <a href="{{ route('siswa.kelas.show', $classroom) }}"
@@ -136,10 +137,16 @@
                                         {{ $classroom->name }}
                                     </h4>
                                     <p class="text-xs font-semibold text-slate-500">{{ $classroom->subject }} · <span class="text-slate-700 font-bold">{{ $classroom->teacher?->user?->name ?? 'Guru Pengampu' }}</span></p>
+                                    @if ($schedule && $schedule->day_of_week)
+                                        <p class="text-xs font-bold text-indigo-700 flex items-center gap-1.5 pt-0.5">
+                                            <svg class="h-3.5 w-3.5 text-indigo-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                            <span>{{ $schedule->day_of_week }} · {{ $schedule->start_time }} - {{ $schedule->end_time }} WIB</span>
+                                        </p>
+                                    @endif
                                 </div>
                             </div>
                             <span class="text-[11px] font-extrabold {{ $theme['badge'] }} border px-3 py-1.5 rounded-xl shrink-0 shadow-xs">
-                                {{ $classroom->grade_level }}
+                                Tingkat {{ $classroom->grade_level }}
                             </span>
                         </div>
 

@@ -78,24 +78,34 @@
 
             <div class="grid gap-4 md:grid-cols-2">
                 @forelse ($classrooms as $classroom)
-                    <a href="{{ route('guru.kelas.learning', $classroom) }}" class="bg-white/85 backdrop-blur-md rounded-2xl border border-teal-100 p-5 shadow-xs space-y-3 hover:border-teal-600 hover:shadow-md transition-all block group">
-                        <div class="flex items-center justify-between">
-                            <span class="rounded-xl bg-teal-50 border border-teal-200 px-3 py-1 text-xs font-black uppercase tracking-wider text-teal-800">
+                    @php
+                        $schedule = $classroom->schedules->first();
+                    @endphp
+                    <a href="{{ route('guru.kelas.learning', $classroom) }}" class="bg-white/90 backdrop-blur-md rounded-2xl border border-teal-100 p-5 shadow-xs space-y-3 hover:border-teal-600 hover:shadow-md transition-all block group">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="rounded-xl bg-teal-50 border border-teal-200 px-3 py-1 text-xs font-black uppercase tracking-wider text-teal-800 truncate">
                                 {{ $classroom->subject ?? $teacherSubject }}
                             </span>
-                            <span class="text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-xl">
+                            <span class="shrink-0 text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-xl">
                                 {{ $classroom->students_count ?? 0 }} Siswa
                             </span>
                         </div>
                         <div>
                             <h4 class="text-base font-black text-slate-900 group-hover:text-teal-700 transition-colors">
-                                {{ $classroom->name }}
+                                {{ $classroom->name }} <span class="text-xs font-semibold text-slate-500">· Tingkat {{ $classroom->grade_level ?? 'Umum' }}</span>
                             </h4>
-                            <p class="text-xs font-bold text-slate-500 mt-1">
-                                {{ $classroom->grade_level ?? 'Umum' }}
-                                {{ $classroom->section ? '• ' . $classroom->section : '' }} •
-                                {{ $classroom->assignments_count ?? 0 }} Tugas
-                            </p>
+                            <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold text-slate-500">
+                                @if ($schedule && $schedule->day_of_week)
+                                    <span class="flex items-center gap-1 text-teal-700 font-bold">
+                                        <svg class="h-3.5 w-3.5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        {{ $schedule->day_of_week }} · {{ $schedule->start_time }}-{{ $schedule->end_time }} WIB
+                                    </span>
+                                @endif
+                                @if ($classroom->section)
+                                    <span>{{ $classroom->section }}</span>
+                                @endif
+                                <span>{{ $classroom->assignments_count ?? 0 }} Tugas</span>
+                            </div>
                         </div>
                     </a>
                 @empty

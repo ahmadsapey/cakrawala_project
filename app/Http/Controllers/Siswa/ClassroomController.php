@@ -15,8 +15,8 @@ class ClassroomController extends Controller
         $student = Student::find(session('student_id'));
         $hasEnrolled = $student && $student->classrooms()->exists();
         $query = $hasEnrolled
-            ? $student->classrooms()->with('teacher.user')->withCount('students')
-            : Classroom::query()->with('teacher.user')->withCount('students');
+            ? $student->classrooms()->with(['teacher.user', 'schedules'])->withCount('students')
+            : Classroom::query()->with(['teacher.user', 'schedules'])->withCount('students');
 
         if ($request->filled('subject') && $request->string('subject')->toString() !== 'Semua') {
             $query->where('subject', $request->string('subject'));

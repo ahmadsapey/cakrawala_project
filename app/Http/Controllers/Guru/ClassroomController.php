@@ -24,7 +24,12 @@ class ClassroomController extends Controller
         $teacherId = Auth::user()?->teacher?->id;
 
         return view('modulGuru.classroomIndex', [
-            'classrooms' => Classroom::query()->where('teacher_id', $teacherId)->latest()->get(),
+            'classrooms' => Classroom::query()
+                ->where('teacher_id', $teacherId)
+                ->with(['teacher.user', 'schedules', 'materials', 'assignments'])
+                ->withCount(['students', 'materials', 'assignments'])
+                ->latest()
+                ->get(),
         ]);
     }
 

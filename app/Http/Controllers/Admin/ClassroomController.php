@@ -17,7 +17,7 @@ class ClassroomController extends Controller
     public function index(): View
     {
         return view('modulAdmin.manageKelas', [
-            'classrooms' => Classroom::with(['teacher.user', 'subjectRelation'])->withCount('students')->latest()->paginate(10),
+            'classrooms' => Classroom::with(['teacher.user', 'subjectRelation', 'schedules'])->withCount('students')->latest()->paginate(10),
         ]);
     }
 
@@ -38,9 +38,9 @@ class ClassroomController extends Controller
 
         if (! empty($data['subject_id'])) {
             $subject = Subject::find($data['subject_id']);
-            $data['subject'] = $subject?->name ?? $teacher->subject;
+            $data['subject'] = $subject?->name ?? (! empty($data['subject']) ? $data['subject'] : $teacher->subject);
         } else {
-            $data['subject'] = $teacher->subject;
+            $data['subject'] = ! empty($data['subject']) ? $data['subject'] : $teacher->subject;
         }
 
         $classroom = Classroom::create([
@@ -90,9 +90,9 @@ class ClassroomController extends Controller
 
         if (! empty($data['subject_id'])) {
             $subject = Subject::find($data['subject_id']);
-            $data['subject'] = $subject?->name ?? $teacher->subject;
+            $data['subject'] = $subject?->name ?? (! empty($data['subject']) ? $data['subject'] : $teacher->subject);
         } else {
-            $data['subject'] = $teacher->subject;
+            $data['subject'] = ! empty($data['subject']) ? $data['subject'] : $teacher->subject;
         }
 
         $classroom->update([
