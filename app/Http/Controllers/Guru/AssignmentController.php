@@ -71,8 +71,16 @@ class AssignmentController extends Controller
         $teacher = $user?->teacher ?? $this->resolveTeacher($classroom->id);
         $teacherId = $teacher?->id ?? $classroom->teacher_id ?? Teacher::first()?->id;
 
+        $attachmentPath = null;
+        if ($request->hasFile('attachment')) {
+            $attachmentPath = $request->file('attachment')->store('assignments', 'public');
+        }
+
+        unset($data['attachment']);
+
         Assignment::create([
             ...$data,
+            'attachment_path' => $attachmentPath,
             'teacher_id' => $teacherId,
             'classroom_id' => $classroom->id,
         ]);
