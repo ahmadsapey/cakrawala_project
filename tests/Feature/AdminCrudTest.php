@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\Classroom;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -211,5 +213,69 @@ class AdminCrudTest extends TestCase
             ->assertOk()
             ->assertSee('INV-002')
             ->assertDontSee('INV-001');
+    }
+
+    public function test_admin_can_create_and_update_student_with_email_and_password(): void
+    {
+        $admin = User::create([
+            'name' => 'Admin Student Form Test',
+            'email' => 'admin.studentform@cakrawala.test',
+            'password' => 'secret123',
+            'role' => 'admin',
+        ]);
+        $this->actingAs($admin);
+
+        $teacherUser = User::create([
+            'name' => 'Guru Wali',
+            'email' => 'guru.wali@cakrawala.test',
+            'password' => 'password123',
+            'role' => 'teacher',
+        ]);
+        $teacher = $teacherUser->teacher()->create([
+            'nip' => '19900101202609',
+            'subject' => 'Fisika',
+            'status' => 'active',
+        ]);
+        $classroom = Classroom::create([
+            'teacher_id' => $teacher->id,
+            'name' => 'Fisika XI IPA',
+            'subject' => 'Fisika',
+            'grade_level' => 'XI',
+        ]);
+
+        $response = $this->post(route('admin.siswa.store'), [
+            'name' => 'Siswa Baru Admin',
+            'nisn' => '1020304050',
+            'email' => 'siswa.baru@cakrawala.test',
+            'password' => 'password123',
+            'school_name' => 'SMA Cakrawala 1',
+            'address' => 'Jl. Pendidikan No. 12',
+            'classroom_id' => $classroom->id,
+            'guardian_name' => 'Bapak Siswa',
+            'phone' => '081234567890',
+            'status' => 'active',
+        ]);
+
+        $response->assertRedirect(route('admin.siswa.index'));
+        $this->assertDatabaseHas('users', ['name' => 'Siswa Baru Admin', 'email' => 'siswa.baru@cakrawala.test']);
+        $this->assertDatabaseHas('students', ['nisn' => '1020304050', 'school_name' => 'SMA Cakrawala 1']);
+
+        $student = Student::where('nisn', '1020304050')->firstOrFail();
+
+        $updateResponse = $this->put(route('admin.siswa.update', $student), [
+            'name' => 'Siswa Baru Updated',
+            'nisn' => '1020304050',
+            'email' => 'siswa.updated@cakrawala.test',
+            'password' => 'newpassword123',
+            'school_name' => 'SMA Cakrawala Updated',
+            'address' => 'Jl. Pendidikan No. 99',
+            'classroom_id' => $classroom->id,
+            'guardian_name' => 'Ibu Siswa',
+            'phone' => '081299990000',
+            'status' => 'active',
+        ]);
+
+        $updateResponse->assertRedirect(route('admin.siswa.index'));
+        $this->assertDatabaseHas('users', ['id' => $student->user_id, 'name' => 'Siswa Baru Updated', 'email' => 'siswa.updated@cakrawala.test']);
     }
 }

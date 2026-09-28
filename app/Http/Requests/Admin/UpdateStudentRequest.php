@@ -26,6 +26,8 @@ class UpdateStudentRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'nisn' => ['required', 'string', 'max:20', Rule::unique('students', 'nisn')->ignore($this->route('student'))],
+            'email' => ['nullable', 'email', 'max:255', Rule::unique('users', 'email')->ignore($this->route('student')?->user_id)],
+            'password' => ['nullable', 'string', 'min:6', 'max:255'],
             'school_name' => ['required', 'string', 'max:150'],
             'address' => ['required', 'string', 'max:1000'],
             'classroom_id' => ['required', 'integer', 'exists:classrooms,id'],

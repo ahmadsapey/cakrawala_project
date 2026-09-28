@@ -16,7 +16,7 @@ class LandingContentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => ['required', 'in:program,package,hero,stat,section,benefit,cta,footer,brand'],
+            'type' => ['required', 'in:program,package,hero,stat,section,benefit,cta,footer,brand,theme'],
             'badge' => ['nullable', 'string', 'max:80'],
             'title' => ['required', 'string', 'max:150'],
             'description' => ['nullable', 'string', 'max:500'],

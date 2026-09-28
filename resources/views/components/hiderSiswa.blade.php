@@ -38,6 +38,15 @@
 					</a>
 				</div>
 			</details>
+
+			<a href="https://cbt-man-ic.vercel.app/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-xl text-slate-500 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-indigo-50 hover:text-indigo-600 focus:bg-indigo-50 focus:text-indigo-600">
+				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+				</svg>
+				<span>CBT</span>
+				<svg class="h-3.5 w-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+			</a>
+
 			<a href="{{ route('siswa.profile') }}" class="inline-flex items-center gap-2 rounded-xl {{ request()->routeIs('siswa.profile*') ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500' }} px-4 py-2.5 text-sm font-medium transition-colors hover:bg-indigo-50 hover:text-indigo-600 focus:bg-indigo-50 focus:text-indigo-600">
 				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 					<circle cx="12" cy="7" r="3.5"/>

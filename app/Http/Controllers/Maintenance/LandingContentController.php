@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Maintenance\LandingContentRequest;
 use App\Models\LandingContent;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class LandingContentController extends Controller
@@ -20,6 +21,7 @@ class LandingContentController extends Controller
         'benefit' => 'Keunggulan',
         'cta' => 'CTA penutup',
         'brand' => 'Identitas global',
+        'theme' => 'Warna Landing Page',
     ];
 
     /** @var array<string, string> */
@@ -33,16 +35,46 @@ class LandingContentController extends Controller
 
     public function index(): View
     {
+        $themeContent = LandingContent::query()->firstOrCreate(
+            ['type' => 'theme'],
+            [
+                'title' => 'Pengaturan Warna Landing Page',
+                'description' => 'Warna background body, teks, card, CTA banner, dan footer.',
+                'badge' => '#F8FAFC',
+                'meta' => '#1E293B',
+                'price' => '#0B0F19',
+                'price_suffix' => '#FFFFFF',
+                'cta_label' => '#080B13',
+                'image_url' => '#94A3B8',
+                'features' => [
+                    'body_bg' => '#F8FAFC',
+                    'body_text' => '#1E293B',
+                    'header_bg' => '#FFFFFF',
+                    'header_text' => '#1E293B',
+                    'card_bg' => '#FFFFFF',
+                    'card_text' => '#0F172A',
+                    'cta_bg' => '#0B0F19',
+                    'cta_text' => '#FFFFFF',
+                    'footer_bg' => '#080B13',
+                    'footer_text' => '#94A3B8',
+                ],
+                'is_active' => true,
+                'sort_order' => 1,
+            ]
+        );
+
         if (request()->routeIs('admin.*')) {
             return view('modulAdmin.kelolaLanding', [
                 'programs' => LandingContent::query()->where('type', 'program')->orderBy('sort_order')->orderBy('id')->get(),
                 'packages' => LandingContent::query()->where('type', 'package')->orderBy('sort_order')->orderBy('id')->get(),
+                'themeContent' => $themeContent,
             ]);
         }
 
         return view('maintenance.dashbord', [
             'contents' => LandingContent::query()->orderBy('type')->orderBy('sort_order')->orderBy('id')->get(),
             'brandContent' => LandingContent::query()->where('type', 'brand')->first(),
+            'themeContent' => $themeContent,
         ]);
     }
 
@@ -127,6 +159,62 @@ class LandingContentController extends Controller
         LandingContent::create($this->payload($request));
 
         return to_route('admin.landing.index')->with('status', 'Konten landing page berhasil ditambahkan.');
+    }
+
+    public function updateTheme(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'body_bg' => ['required', 'string', 'regex:/^#([a-fA-F0-9]{3}|[a-fA-F0-9]{6})$/'],
+            'body_text' => ['required', 'string', 'regex:/^#([a-fA-F0-9]{3}|[a-fA-F0-9]{6})$/'],
+            'header_bg' => ['nullable', 'string', 'regex:/^#([a-fA-F0-9]{3}|[a-fA-F0-9]{6})$/'],
+            'header_text' => ['nullable', 'string', 'regex:/^#([a-fA-F0-9]{3}|[a-fA-F0-9]{6})$/'],
+            'card_bg' => ['nullable', 'string', 'regex:/^#([a-fA-F0-9]{3}|[a-fA-F0-9]{6})$/'],
+            'card_text' => ['nullable', 'string', 'regex:/^#([a-fA-F0-9]{3}|[a-fA-F0-9]{6})$/'],
+            'cta_bg' => ['required', 'string', 'regex:/^#([a-fA-F0-9]{3}|[a-fA-F0-9]{6})$/'],
+            'cta_text' => ['required', 'string', 'regex:/^#([a-fA-F0-9]{3}|[a-fA-F0-9]{6})$/'],
+            'footer_bg' => ['required', 'string', 'regex:/^#([a-fA-F0-9]{3}|[a-fA-F0-9]{6})$/'],
+            'footer_text' => ['required', 'string', 'regex:/^#([a-fA-F0-9]{3}|[a-fA-F0-9]{6})$/'],
+        ]);
+
+        $headerBg = $validated['header_bg'] ?? '#FFFFFF';
+        $headerText = $validated['header_text'] ?? '#1E293B';
+        $cardBg = $validated['card_bg'] ?? '#FFFFFF';
+        $cardText = $validated['card_text'] ?? '#0F172A';
+
+        $themeContent = LandingContent::query()->firstOrCreate(
+            ['type' => 'theme'],
+            [
+                'title' => 'Pengaturan Warna Landing Page',
+                'description' => 'Warna background body, teks, card, CTA banner, dan footer.',
+                'is_active' => true,
+                'sort_order' => 1,
+            ]
+        );
+
+        $themeContent->update([
+            'badge' => $validated['body_bg'],
+            'meta' => $validated['body_text'],
+            'price' => $validated['cta_bg'],
+            'price_suffix' => $validated['cta_text'],
+            'cta_label' => $validated['footer_bg'],
+            'image_url' => $validated['footer_text'],
+            'features' => [
+                'body_bg' => $validated['body_bg'],
+                'body_text' => $validated['body_text'],
+                'header_bg' => $headerBg,
+                'header_text' => $headerText,
+                'card_bg' => $cardBg,
+                'card_text' => $cardText,
+                'cta_bg' => $validated['cta_bg'],
+                'cta_text' => $validated['cta_text'],
+                'footer_bg' => $validated['footer_bg'],
+                'footer_text' => $validated['footer_text'],
+            ],
+        ]);
+
+        $redirectRoute = request()->routeIs('admin.*') ? 'admin.landing.index' : 'maintenance.landing.index';
+
+        return to_route($redirectRoute)->with('status', 'Warna landing page berhasil diperbarui.');
     }
 
     public function update(LandingContentRequest $request, LandingContent $landingContent): RedirectResponse

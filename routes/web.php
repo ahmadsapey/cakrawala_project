@@ -32,7 +32,7 @@ use Illuminate\Support\Facades\Schema;
 
 Route::get('/', function () {
     if (! Schema::hasTable('landing_contents')) {
-        return view('landingPage', ['contents' => collect(), 'programs' => collect(), 'packages' => collect()]);
+        return view('landingPage', ['contents' => collect(), 'programs' => collect(), 'packages' => collect(), 'footerContent' => null, 'themeContent' => null, 'brandContent' => null]);
     }
 
     $contents = LandingContent::query()->where('is_active', true)->orderBy('sort_order')->orderBy('id')->get()->groupBy('type');
@@ -42,6 +42,8 @@ Route::get('/', function () {
         'programs' => $contents->get('program', collect()),
         'packages' => $contents->get('package', collect()),
         'footerContent' => $contents->get('footer', collect())->first(),
+        'themeContent' => $contents->get('theme', collect())->first(),
+        'brandContent' => $contents->get('brand', collect())->first(),
     ]);
 })->name('landing.page');
 
@@ -124,6 +126,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/pembayaran', [AdminPaymentController::class, 'index'])->name('pembayaran');
         Route::patch('/pembayaran/{payment}/confirm', [AdminPaymentController::class, 'confirm'])->name('pembayaran.confirm');
         Route::patch('/pembayaran/{payment}/reject', [AdminPaymentController::class, 'reject'])->name('pembayaran.reject');
+        Route::put('/landing/theme', [LandingContentController::class, 'updateTheme'])->name('landing.theme.update');
         Route::resource('landing', LandingContentController::class)->names('landing')->parameters(['landing' => 'landingContent']);
     });
 });
@@ -133,6 +136,7 @@ Route::prefix('maintenance')->name('maintenance.')->group(function () {
     Route::post('/login', [MaintenanceLoginController::class, 'store'])->name('login.submit');
     Route::post('/logout', [MaintenanceLoginController::class, 'destroy'])->middleware('auth')->name('logout');
     Route::middleware(['auth', 'maintenance'])->group(function (): void {
+        Route::put('/landing/theme', [LandingContentController::class, 'updateTheme'])->name('landing.theme.update');
         Route::get('/landing/package/create', [LandingContentController::class, 'createPackage'])->name('landing.package.create');
         Route::post('/landing/package', [LandingContentController::class, 'storePackage'])->name('landing.package.store');
         Route::get('/landing/program/create', [LandingContentController::class, 'createProgram'])->name('landing.program.create');

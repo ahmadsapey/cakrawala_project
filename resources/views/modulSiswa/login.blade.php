@@ -44,29 +44,29 @@
                 <div class="rounded-xl border-2 border-rose-300 bg-rose-50 px-4 py-3 text-xs font-bold text-rose-700">{{ $errors->first() }}</div>
             @endif
             
-            <!-- Email atau Nomor Handphone -->
+            <!-- Nama Siswa -->
             <div class="space-y-1.5">
-                    <label for="name" class="block text-xs font-extrabold text-slate-700 uppercase tracking-wider">Nama Siswa</label>
+                <label for="name" class="block text-xs font-extrabold text-slate-700 uppercase tracking-wider">Nama Siswa</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                    </span>
+                    <input id="name" type="text" name="name" value="{{ old('name') }}" required autocomplete="name" placeholder="Contoh: Rayyan Pratama" class="w-full pl-11 pr-4 py-3 bg-white border-2 border-slate-300 rounded-xl text-xs sm:text-sm text-slate-900 placeholder-slate-400 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all">
+                </div>
+            </div>
+
+            <!-- NISN atau Email -->
+            <div class="space-y-1.5">
+                <label for="nisn" class="block text-xs font-extrabold text-slate-700 uppercase tracking-wider">NISN atau Email</label>
                 <div class="relative">
                     <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                         </svg>
                     </span>
-                        <input id="name" type="text" name="name" value="{{ old('name') }}" required autocomplete="name" placeholder="Contoh: Rayyan Pratama" class="w-full pl-11 pr-4 py-3 bg-white border-2 border-slate-300 rounded-xl text-xs sm:text-sm text-slate-900 placeholder-slate-400 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all">
-                </div>
-            </div>
-
-            <!-- Kata Sandi & Lupa Kata Sandi -->
-                <div class="space-y-1.5">
-                    <label for="nisn" class="block text-xs font-extrabold text-slate-700 uppercase tracking-wider">NISN</label>
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                        </svg>
-                    </span>
-                        <input id="nisn" type="text" name="nisn" value="{{ old('nisn') }}" required maxlength="20" inputmode="numeric" placeholder="Masukkan NISN" class="w-full pl-11 pr-4 py-3 bg-white border-2 border-slate-300 rounded-xl text-xs sm:text-sm text-slate-900 placeholder-slate-400 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all">
+                    <input id="nisn" type="text" name="nisn" value="{{ old('nisn', old('email')) }}" required placeholder="Masukkan NISN atau Email Siswa" class="w-full pl-11 pr-4 py-3 bg-white border-2 border-slate-300 rounded-xl text-xs sm:text-sm text-slate-900 placeholder-slate-400 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all">
                 </div>
             </div>
 
@@ -80,11 +80,9 @@
 
         </form>
 
-     
-
         <!-- Footer Card / Navigasi Daftar -->
-        <div class="mt-4 text-center text-xs font-medium text-slate-600">
-             <a href="{{ route('siswa.register') }}" class="text-indigo-600 font-extrabold hover:underline">Belum punya akun?</a>
+        <div class="mt-6 text-center text-xs font-medium text-slate-600">
+             Belum punya akun? <a href="{{ route('siswa.register') }}" class="text-indigo-600 font-extrabold hover:underline">Daftar Akun Siswa</a>
         </div>
 
     </div>

@@ -41,20 +41,44 @@
     </style>
     @include('components.fonts')
 </head>
-<body class="bg-[#F8FAFC] text-slate-800 font-sans antialiased selection:bg-indigo-500 selection:text-white">
+@php
+    $hero = $contents->get('hero', collect())->first();
+    $sections = $contents->get('section', collect());
+    $pricingSection = $sections->firstWhere('sort_order', 1);
+    $cta = $contents->get('cta', collect())->first();
+    $featureImages = $programs->filter(fn ($program) => filled($program->image_url))->values();
+    $themeContent = $themeContent ?? $contents->get('theme', collect())->first();
 
-    @include('components.header')
+    $theme = $themeContent?->features ?? [
+        'body_bg' => $themeContent?->badge ?? '#F8FAFC',
+        'body_text' => $themeContent?->meta ?? '#1E293B',
+        'header_bg' => '#FFFFFF',
+        'header_text' => '#1E293B',
+        'card_bg' => '#FFFFFF',
+        'card_text' => '#0F172A',
+        'cta_bg' => $themeContent?->price ?? '#0B0F19',
+        'cta_text' => $themeContent?->price_suffix ?? '#FFFFFF',
+        'footer_bg' => $themeContent?->cta_label ?? '#080B13',
+        'footer_text' => $themeContent?->image_url ?? '#94A3B8',
+    ];
+    $bodyBg = $theme['body_bg'] ?? '#F8FAFC';
+    $bodyText = $theme['body_text'] ?? '#1E293B';
+    $headerBg = $theme['header_bg'] ?? '#FFFFFF';
+    $headerText = $theme['header_text'] ?? '#1E293B';
+    $cardBg = $theme['card_bg'] ?? '#FFFFFF';
+    $cardText = $theme['card_text'] ?? '#0F172A';
+    $ctaBg = $theme['cta_bg'] ?? '#0B0F19';
+    $ctaText = $theme['cta_text'] ?? '#FFFFFF';
+    $footerBg = $theme['footer_bg'] ?? '#080B13';
+    $footerText = $theme['footer_text'] ?? '#94A3B8';
+@endphp
 
-    @php
-        $hero = $contents->get('hero', collect())->first();
-        $sections = $contents->get('section', collect());
-        $pricingSection = $sections->firstWhere('sort_order', 1);
-        $cta = $contents->get('cta', collect())->first();
-        $featureImages = $programs->filter(fn ($program) => filled($program->image_url))->values();
-    @endphp
+<body style="background-color: {{ $bodyBg }}; color: {{ $bodyText }}; min-height: 100vh;" class="font-sans antialiased selection:bg-indigo-500 selection:text-white transition-colors duration-300">
+
+    @include('components.header', ['headerBg' => $headerBg, 'headerText' => $headerText, 'brandContent' => $brandContent ?? null])
 
     <!-- Hero Section dengan Auto-Scroll Colosal Cards -->
-    <section class="relative pt-10 pb-16 lg:pt-20 lg:pb-28 overflow-hidden">
+    <section class="relative pt-10 pb-16 lg:pt-20 lg:pb-28 overflow-hidden transition-colors duration-300" style="background-color: {{ $bodyBg }}; color: {{ $bodyText }};">
         <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
                 
@@ -65,46 +89,39 @@
                         <span class="uppercase">{{ $hero?->badge ?? 'Pilihan Belajar Terbaik di Indonesia' }}</span>
                     </div>
 
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.15]">
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.15]" style="color: {{ $bodyText }};">
                         {{ $hero?->title ?? 'Belajar Lebih Mudah dengan Cakrawala Educentre' }}
                     </h1>
 
-                    <p class="text-slate-600 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                    <p class="text-base sm:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed opacity-85" style="color: {{ $bodyText }};">
                         {{ $hero?->description ?? 'Temukan cara belajar efektif, interaktif, dan fleksibel untuk menguasai berbagai materi pelajaran sesuai impianmu.' }}
                     </p>
 
-                    <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
-                       
-                        <a href="#about" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm px-7 py-3.5 rounded-xl shadow-lg shadow-indigo-200 transition-all transform hover:-translate-y-0.5">
-                            {{ $hero?->cta_label ?? 'DAFTAR SEKARANG' }}
-                        </a>
-                    </div>
-
+                    
                 </div>
 
                 <!-- Kolom Kanan: Colosal Cards Bergulir Otomatis setiap 3 Detik (Hero) -->
                 <div class="lg:col-span-6 relative w-full">
                     <div class="flex items-center justify-between mb-4 px-2">
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Program & Modul Pilihan</span>
-                        
+                        <span class="text-xs font-bold uppercase tracking-wider opacity-75" style="color: {{ $bodyText }};">Program & Modul Pilihan</span>
                     </div>
                     
                     <div id="autoScrollHero" class="flex space-x-5 overflow-x-auto no-scrollbar pb-6 pt-2 snap-x snap-mandatory px-2 scroll-smooth-container">
                         @foreach ($programs as $program)
-                            <article class="neon-card min-w-[300px] sm:min-w-[300px] bg-white p-5 rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/50 snap-start flex-shrink-0">
+                            <article class="neon-card min-w-[300px] sm:min-w-[300px] p-5 rounded-3xl border border-slate-200/80 shadow-xl snap-start flex-shrink-0 transition-colors duration-300" style="background-color: {{ $cardBg }}; color: {{ $cardText }};">
                                 @if ($program->image_url)
                                     <div class="h-36 bg-slate-100 rounded-2xl mb-4 overflow-hidden">
                                         <img src="{{ $program->image_url }}" alt="{{ $program->title }}" class="w-full h-full object-cover">
                                     </div>
                                 @endif
                                 <span class="text-[10px] uppercase font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md tracking-wider">{{ $program->badge }}</span>
-                                <h4 class="font-bold text-slate-900 text-base mt-2">{{ $program->title }}</h4>
-                                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">{{ $program->description }}</p>
-                                <div class="flex items-center space-x-2 text-xs text-slate-500 mt-2">
+                                <h4 class="font-bold text-base mt-2" style="color: {{ $cardText }};">{{ $program->title }}</h4>
+                                <p class="text-xs mt-1.5 leading-relaxed opacity-80" style="color: {{ $cardText }};">{{ $program->description }}</p>
+                                <div class="flex items-center space-x-2 text-xs mt-2 opacity-75" style="color: {{ $cardText }};">
                                     <span>{{ $program->meta }}</span>
                                 </div>
-                                <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                                    <span class="text-slate-400">{{ $program->price }}{{ $program->price_suffix }}</span>
+                                <div class="mt-4 pt-3 border-t border-slate-200/60 flex items-center justify-between text-xs">
+                                    <span class="opacity-75" style="color: {{ $cardText }};">{{ $program->price }}{{ $program->price_suffix }}</span>
                                     <span class="w-5 h-5 rounded-full bg-blue-50 text-indigo-600 flex items-center justify-center font-bold text-xs">✓</span>
                                 </div>
                             </article>
@@ -117,119 +134,50 @@
     </section>
 
     <!-- Pricing Section: Diubah Menjadi Colossal Grid yang Bergulir Otomatis Setiap 3 Detik -->
-    <section id="pricing" class="py-24 bg-white border-y border-slate-100">
+    <section id="pricing" class="py-24 border-y border-slate-200/60 transition-colors duration-300" style="background-color: {{ $bodyBg }}; color: {{ $bodyText }};">
         <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             
             <div class="text-center max-w-2xl mx-auto space-y-3 mb-12">
-            <span class="text-xs uppercase font-bold tracking-widest text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">{{ $pricingSection?->badge ?? 'ONLINE SCHEDULE' }}</span>
-            <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">{{ $pricingSection?->title ?? 'Cakrawala Educentre' }}</h2>
-            <h3 class="text-base font-bold text-slate-700 tracking-wide uppercase">{{ $pricingSection?->meta ?? 'PT. INDO PRESTASI UTAMA' }}</h3>
-            <p class="text-slate-500 text-sm leading-relaxed">{{ $pricingSection?->description ?? 'Pilihan tepat untuk mendampingi proses belajar dengan sistem terbaik dan kurikulum mutakhir dari Cakrawala Educentre.' }}</p>
+                <span class="text-xs uppercase font-bold tracking-widest text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">{{ $pricingSection?->badge ?? 'ONLINE SCHEDULE' }}</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold" style="color: {{ $bodyText }};">{{ $pricingSection?->title ?? 'Cakrawala Educentre' }}</h2>
+                <h3 class="text-base font-bold tracking-wide uppercase opacity-90" style="color: {{ $bodyText }};">{{ $pricingSection?->meta ?? 'PT. INDO PRESTASI UTAMA' }}</h3>
+                <p class="text-sm leading-relaxed opacity-80" style="color: {{ $bodyText }};">{{ $pricingSection?->description ?? 'Pilihan tepat untuk mendampingi proses belajar dengan sistem terbaik dan kurikulum mutakhir dari Cakrawala Educentre.' }}</p>
             </div>
 
             <!-- Header Kecil Penanda Auto-Scroll Pricing -->
             <div class="flex items-center justify-between mb-4 px-2 max-w-6xl mx-auto">
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Geser & Pilih Paket Layanan</span>
+                <span class="text-xs font-bold uppercase tracking-wider opacity-75" style="color: {{ $bodyText }};">Geser & Pilih Paket Layanan</span>
             </div>
 
             <!-- Pricing Colossal Container: Bergulir Otomatis (Auto-Scroll) & Rapi Tanpa Memanjang ke Bawah -->
             <div id="autoScrollPricing" class="flex space-x-6 overflow-x-auto no-scrollbar pb-8 pt-2 snap-x snap-mandatory px-2 scroll-smooth-container max-w-6xl mx-auto">
                 @foreach ($packages as $package)
-                    <article class="neon-card min-w-[280px] sm:min-w-[300px] lg:min-w-[270px] {{ $package->is_featured ? 'bg-indigo-600 text-white' : 'bg-white text-slate-900' }} rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 snap-start flex-shrink-0 flex flex-col justify-between">
+                    <article class="neon-card min-w-[280px] sm:min-w-[300px] lg:min-w-[270px] rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 snap-start flex-shrink-0 flex flex-col justify-between" style="background-color: {{ $package->is_featured ? '#4F46E5' : $cardBg }}; color: {{ $package->is_featured ? '#FFFFFF' : $cardText }};">
                         <div>
                             <span class="text-[10px] uppercase font-bold tracking-wider {{ $package->is_featured ? 'text-indigo-100 bg-white/10' : 'text-indigo-600 bg-indigo-50' }} px-2.5 py-1 rounded-md">{{ $package->badge }}</span>
-                            <h4 class="font-bold text-base mt-4">{{ $package->title }}</h4>
-                            <p class="{{ $package->is_featured ? 'text-indigo-100' : 'text-slate-500' }} text-xs leading-relaxed mt-2 mb-5">{{ $package->description }}</p>
+                            <h4 class="font-bold text-base mt-4" style="color: {{ $package->is_featured ? '#FFFFFF' : $cardText }};">{{ $package->title }}</h4>
+                            <p class="text-xs leading-relaxed mt-2 mb-5 opacity-85" style="color: {{ $package->is_featured ? '#E0E7FF' : $cardText }};">{{ $package->description }}</p>
                             <div class="mb-5">
-                                <span class="text-[10px] {{ $package->is_featured ? 'text-indigo-200' : 'text-slate-400' }} block mb-0.5">Mulai dari</span>
-                                <span class="text-xl font-black">{{ $package->price }}<span class="text-xs font-normal {{ $package->is_featured ? 'text-indigo-200' : 'text-slate-500' }}">{{ $package->price_suffix }}</span></span>
+                                <span class="text-[10px] opacity-75 block mb-0.5" style="color: {{ $package->is_featured ? '#E0E7FF' : $cardText }};">Mulai dari</span>
+                                <span class="text-xl font-black" style="color: {{ $package->is_featured ? '#FFFFFF' : $cardText }};">{{ $package->price }}<span class="text-xs font-normal opacity-80">{{ $package->price_suffix }}</span></span>
                             </div>
-                            <ul class="space-y-2.5 mb-6 text-xs {{ $package->is_featured ? 'text-indigo-100' : 'text-slate-600' }}">
+                            <ul class="space-y-2.5 mb-6 text-xs opacity-90">
                                 @foreach ($package->features ?? [] as $feature)
-                                    <li class="flex items-center space-x-2"><span class="{{ $package->is_featured ? 'text-white' : 'text-indigo-600' }} font-bold">✓</span><span>{{ $feature }}</span></li>
+                                    <li class="flex items-center space-x-2" style="color: {{ $package->is_featured ? '#FFFFFF' : $cardText }};"><span class="{{ $package->is_featured ? 'text-white' : 'text-indigo-600' }} font-bold">✓</span><span>{{ $feature }}</span></li>
                                 @endforeach
                             </ul>
                         </div>
-                        <a href="{{ route('siswa.home') }}" class="w-full py-3 rounded-xl {{ $package->is_featured ? 'bg-white text-indigo-600 hover:bg-slate-50 font-bold' : 'border border-slate-200 hover:border-indigo-600 text-slate-700 hover:text-indigo-600 font-medium' }} text-xs text-center transition-colors">
+                        <a href="{{ route('siswa.home') }}" class="w-full py-3 rounded-xl {{ $package->is_featured ? 'bg-white text-indigo-600 hover:bg-slate-50 font-bold' : 'border border-slate-200 hover:border-indigo-600 font-medium' }} text-xs text-center transition-colors" style="color: {{ $package->is_featured ? '#4F46E5' : $cardText }};">
                             {{ $package->cta_label }}
                         </a>
                     </article>
                 @endforeach
-
-                <!-- Pricing cards are managed from the admin landing page. -->
-                <!--
-                <div class="neon-card min-w-[280px] sm:min-w-[300px] lg:min-w-[270px] bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 snap-start flex-shrink-0 flex flex-col justify-between">
-                    <div>
-                        <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                        </div>
-                        <h4 class="font-bold text-slate-900 text-base mb-1.5">Rasionalisasi SNBP</h4>
-                        <p class="text-slate-500 text-xs leading-relaxed mb-5">Analisis strategi prodi akurat berdasarkan nilai rapor dan data.</p>
-                        <div class="mb-5">
-                            <span class="text-[10px] text-slate-400 block mb-0.5">Mulai dari</span>
-                            <span class="text-xl font-black text-indigo-600">Rp 15.000<span class="text-xs font-normal text-slate-500">/karya</span></span>
-                        </div>
-                        <ul class="space-y-2.5 mb-6 text-xs text-slate-600">
-                            <li class="flex items-center space-x-2"><span class="text-indigo-600 font-bold">✓</span><span>Rekomendasi prodi tepat</span></li>
-                            <li class="flex items-center space-x-2"><span class="text-indigo-600 font-bold">✓</span><span>Validasi data rapor online</span></li>
-                        </ul>
-                    </div>
-                    <button class="w-full py-3 rounded-xl border border-slate-200 hover:border-indigo-600 text-slate-700 hover:text-indigo-600 font-medium text-xs transition-colors">
-                        Analisis Rapor
-                    </button>
-                </div>
-
-                <!-- Pricing Card 4: Tryout Nasional -->
-                <div class="neon-card min-w-[280px] sm:min-w-[300px] lg:min-w-[270px] bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 snap-start flex-shrink-0 flex flex-col justify-between">
-                    <div>
-                        <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                        </div>
-                        <h4 class="font-bold text-slate-900 text-base mb-1.5">Tryout Nasional</h4>
-                        <p class="text-slate-500 text-xs leading-relaxed mb-5">Simulasi ujian berkala nasional dengan sistem penilaian IRT.</p>
-                        <div class="mb-5">
-                            <span class="text-[10px] text-slate-400 block mb-0.5">Mulai dari</span>
-                            <span class="text-xl font-black text-indigo-600">Rp 25.000<span class="text-xs font-normal text-slate-500">/sesi</span></span>
-                        </div>
-                        <ul class="space-y-2.5 mb-6 text-xs text-slate-600">
-                            <li class="flex items-center space-x-2"><span class="text-indigo-600 font-bold">✓</span><span>Sistem penilaian mirip UTBK</span></li>
-                            <li class="flex items-center space-x-2"><span class="text-indigo-600 font-bold">✓</span><span>Peringkat nasional & analisis</span></li>
-                        </ul>
-                    </div>
-                    <button class="w-full py-3 rounded-xl border border-slate-200 hover:border-indigo-600 text-slate-700 hover:text-indigo-600 font-medium text-xs transition-colors">
-                        Daftar Tryout
-                    </button>
-                </div>
-
-                <!-- Pricing Card 5: Konsultasi 1 on 1 (Tambahan Konten Baru) -->
-                <div class="neon-card min-w-[280px] sm:min-w-[300px] lg:min-w-[270px] bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 snap-start flex-shrink-0 flex flex-col justify-between">
-                    <div>
-                        <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-                        </div>
-                        <h4 class="font-bold text-slate-900 text-base mb-1.5">Konsultasi Privat</h4>
-                        <p class="text-slate-500 text-xs leading-relaxed mb-5">Sesi diskusi khusus personal dengan mentor ahli untuk bedah masalah.</p>
-                        <div class="mb-5">
-                            <span class="text-[10px] text-slate-400 block mb-0.5">Mulai dari</span>
-                            <span class="text-xl font-black text-indigo-600">Rp 99.000<span class="text-xs font-normal text-slate-500">/jam</span></span>
-                        </div>
-                        <ul class="space-y-2.5 mb-6 text-xs text-slate-600">
-                            <li class="flex items-center space-x-2"><span class="text-indigo-600 font-bold">✓</span><span>1 on 1 via video call</span></li>
-                            <li class="flex items-center space-x-2"><span class="text-indigo-600 font-bold">✓</span><span>Solusi bedah soal mendalam</span></li>
-                        </ul>
-                    </div>
-                    <button class="w-full py-3 rounded-xl border border-slate-200 hover:border-indigo-600 text-slate-700 hover:text-indigo-600 font-medium text-xs transition-colors">
-                        Book Jadwal
-                    </button>
-                </div>
-                -->
-
             </div>
         </div>
     </section>
 
     <!-- Visual Feature Section -->
-    <section id="about" class="bg-[#F8FAFC] py-16 sm:py-24">
+    <section id="about" class="py-16 sm:py-24 transition-colors duration-300" style="background-color: {{ $bodyBg }}; color: {{ $bodyText }};">
         <div class="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
             <div id="autoScrollVisual" class="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-3 no-scrollbar">
                 @forelse ($featureImages as $imageProgram)
@@ -255,17 +203,17 @@
         </div>
     </section>
 
-    <!-- Bottom Dark CTA Banner -->
-    <section class="py-16 bg-[#F8FAFC]">
+    <!-- Bottom CTA Banner -->
+    <section class="py-16 transition-colors duration-300" style="background-color: {{ $bodyBg }}; color: {{ $bodyText }};">
         <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div class="neon-card bg-[#0B0F19] rounded-3xl p-10 sm:p-14 text-center text-white relative overflow-hidden shadow-2xl">
+            <div class="neon-card rounded-3xl p-10 sm:p-14 text-center relative overflow-hidden shadow-2xl transition-colors duration-300" style="background-color: {{ $ctaBg }}; color: {{ $ctaText }};">
                 <div class="absolute -top-24 -left-24 w-80 h-80 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
                 <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
                 
-                <h3 class="text-2xl sm:text-3xl font-black tracking-tight mb-4">
+                <h3 class="text-2xl sm:text-3xl font-black tracking-tight mb-4" style="color: {{ $ctaText }};">
                     {{ $cta?->title ?? 'Siap Naikkan Prestasi Akademikmu di Cakrawala?' }}
                 </h3>
-                <p class="text-slate-400 text-sm sm:text-base max-w-xl mx-auto mb-8 leading-relaxed">
+                <p class="text-sm sm:text-base max-w-xl mx-auto mb-8 leading-relaxed opacity-90" style="color: {{ $ctaText }};">
                     {{ $cta?->description ?? 'Kombinasi bimbingan, sistem, dan tutor terbaik siap membantumu meraih cita-cita masuk kampus impian lewat Cakrawala Educentre.' }}
                 </p>
                 <div class="flex flex-wrap items-center justify-center gap-4">
@@ -279,10 +227,10 @@
             </div>
         </div>
     </section>
+
     <!-- JavaScript untuk Auto-Scroll Otomatis Hero & Pricing setiap 3 Detik -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // Fungsi umum untuk membuat elemen bisa auto-scroll horizontal
             function setupAutoScroll(containerId, scrollAmount = 300, intervalTime = 3000) {
                 const container = document.getElementById(containerId);
                 if (!container) return;
@@ -291,7 +239,6 @@
 
                 function startScrolling() {
                     scrollInterval = setInterval(() => {
-                        // Jika sudah mencapai ujung kanan, kembalikan ke awal (0)
                         if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 10) {
                             container.scrollTo({ left: 0, behavior: 'smooth' });
                         } else {
@@ -302,19 +249,17 @@
 
                 startScrolling();
 
-                // Berhenti otomatis saat kursor diarahkan ke container (agar user bisa baca/klik)
                 container.addEventListener("mouseenter", () => clearInterval(scrollInterval));
                 container.addEventListener("mouseleave", () => startScrolling());
             }
 
-            // Terapkan auto-scroll ke Hero cards dan Pricing cards
             setupAutoScroll("autoScrollHero", 320, 3000);
             setupAutoScroll("autoScrollPricing", 290, 3000);
             setupAutoScroll("autoScrollVisual", 0, 3000);
         });
     </script>
 
-    @include('components.footer')
+    @include('components.footer', ['footerContent' => $footerContent, 'themeContent' => $themeContent, 'brandContent' => $brandContent ?? null])
 
 </body>
 </html>

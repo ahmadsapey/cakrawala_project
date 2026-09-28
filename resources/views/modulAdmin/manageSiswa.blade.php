@@ -123,6 +123,7 @@
                                         </div>
                                         <div class="min-w-0">
                                             <p class="font-black text-slate-900 truncate">{{ $student->user?->name ?? 'Siswa' }}</p>
+                                            <p class="text-[11px] font-semibold text-slate-400 truncate">{{ $student->user?->email ?? '-' }}</p>
                                         </div>
                                     </div>
                                 </td>

@@ -63,15 +63,28 @@
             <div class="grid gap-5 sm:grid-cols-2">
                 <label class="space-y-2 text-xs sm:text-sm font-black text-slate-700 sm:col-span-2">Nama lengkap
                     <input name="name" value="{{ old('name', $student?->user?->name) }}" required 
+                        placeholder="Masukkan nama lengkap siswa"
                         class="w-full rounded-2xl border-2 border-indigo-100 bg-slate-50/50 px-4 py-3 font-semibold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all">
                 </label>
 
                 <label class="space-y-2 text-xs sm:text-sm font-black text-slate-700">NISN
                     <input name="nisn" value="{{ old('nisn', $student?->nisn) }}" required maxlength="20" 
+                        placeholder="Masukkan 10-digit NISN"
                         class="w-full rounded-2xl border-2 border-indigo-100 bg-slate-50/50 px-4 py-3 font-semibold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all">
                 </label>
 
-                <label class="space-y-2 text-xs sm:text-sm font-black text-slate-700">Kelas
+                <label class="space-y-2 text-xs sm:text-sm font-black text-slate-700">Email Siswa <span class="font-bold text-slate-400">(opsional)</span>
+                    <input type="email" name="email" value="{{ old('email', $student?->user?->email) }}" 
+                        placeholder="contoh: siswa@cakrawala.id"
+                        class="w-full rounded-2xl border-2 border-indigo-100 bg-slate-50/50 px-4 py-3 font-semibold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all">
+                </label>
+
+                <label class="space-y-2 text-xs sm:text-sm font-black text-slate-700">Kata Sandi <span class="font-bold text-slate-400">({{ $student ? 'opsional, isi jika ingin ubah' : 'opsional' }})</span>
+                    <input type="password" name="password" placeholder="{{ $student ? 'Kosongkan jika tidak diubah' : 'Minimal 6 karakter' }}"
+                        class="w-full rounded-2xl border-2 border-indigo-100 bg-slate-50/50 px-4 py-3 font-semibold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all">
+                </label>
+
+                <label class="space-y-2 text-xs sm:text-sm font-black text-slate-700 sm:col-span-2">Kelas
                     <select name="classroom_id" required class="w-full rounded-2xl border-2 border-indigo-100 bg-slate-50/50 px-4 py-3 font-semibold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all">
                         <option value="">Pilih kelas</option>
                         @foreach ($classrooms as $classroom)

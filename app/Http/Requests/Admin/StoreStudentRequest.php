@@ -25,6 +25,8 @@ class StoreStudentRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'nisn' => ['required', 'string', 'max:20', 'unique:students,nisn'],
+            'email' => ['nullable', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['nullable', 'string', 'min:6', 'max:255'],
             'school_name' => ['required', 'string', 'max:150'],
             'address' => ['required', 'string', 'max:1000'],
             'classroom_id' => ['required', 'integer', 'exists:classrooms,id'],

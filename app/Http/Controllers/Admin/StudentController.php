@@ -69,10 +69,13 @@ class StudentController extends Controller
         $student = DB::transaction(function () use ($request): Student {
             $data = $request->validated();
             $classroom = Classroom::findOrFail($data['classroom_id']);
+            $email = ! empty($data['email']) ? $data['email'] : 'student.'.$data['nisn'].'@internal.cakrawala.local';
+            $password = ! empty($data['password']) ? bcrypt($data['password']) : Str::random(40);
+
             $user = User::create([
                 'name' => $data['name'],
-                'email' => 'student.'.$data['nisn'].'@internal.cakrawala.local',
-                'password' => Str::random(40),
+                'email' => $email,
+                'password' => $password,
                 'role' => 'student',
             ]);
 
@@ -90,7 +93,7 @@ class StudentController extends Controller
             return $student;
         });
 
-        return redirect()->route('admin.siswa.index')->with('success', "Mahasiswa {$student->user->name} berhasil ditambahkan.");
+        return redirect()->route('admin.siswa.index')->with('success', "Siswa {$student->user->name} berhasil ditambahkan.");
     }
 
     /**
@@ -120,7 +123,16 @@ class StudentController extends Controller
         DB::transaction(function () use ($request, $student): void {
             $data = $request->validated();
             $classroom = Classroom::findOrFail($data['classroom_id']);
-            $student->user->update(['name' => $data['name']]);
+
+            $userData = ['name' => $data['name']];
+            if (! empty($data['email'])) {
+                $userData['email'] = $data['email'];
+            }
+            if (! empty($data['password'])) {
+                $userData['password'] = bcrypt($data['password']);
+            }
+            $student->user->update($userData);
+
             $student->update([
                 'nisn' => $data['nisn'],
                 'school_name' => $data['school_name'],
@@ -133,7 +145,7 @@ class StudentController extends Controller
             $student->classrooms()->sync([$classroom->id]);
         });
 
-        return redirect()->route('admin.siswa.index')->with('success', 'Data mahasiswa berhasil diperbarui.');
+        return redirect()->route('admin.siswa.index')->with('success', 'Data siswa berhasil diperbarui.');
     }
 
     /**

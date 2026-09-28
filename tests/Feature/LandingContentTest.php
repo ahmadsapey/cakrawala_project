@@ -64,4 +64,42 @@ class LandingContentTest extends TestCase
             ->assertOk()
             ->assertDontSee($content->title);
     }
+
+    public function test_maintenance_user_can_update_landing_page_theme_colors(): void
+    {
+        $maintenanceUser = User::create([
+            'name' => 'Maintenance User',
+            'email' => 'maint@cakrawala.test',
+            'password' => 'secret123',
+            'role' => 'maintenance',
+        ]);
+
+        $response = $this->actingAs($maintenanceUser)->put(route('maintenance.landing.theme.update'), [
+            'body_bg' => '#112233',
+            'body_text' => '#445566',
+            'cta_bg' => '#778899',
+            'cta_text' => '#AABBCC',
+            'footer_bg' => '#DDEEFF',
+            'footer_text' => '#001122',
+        ]);
+
+        $response->assertRedirect(route('maintenance.landing.index'));
+
+        $theme = LandingContent::where('type', 'theme')->firstOrFail();
+        $this->assertEquals('#112233', $theme->features['body_bg']);
+        $this->assertEquals('#445566', $theme->features['body_text']);
+        $this->assertEquals('#778899', $theme->features['cta_bg']);
+        $this->assertEquals('#AABBCC', $theme->features['cta_text']);
+        $this->assertEquals('#DDEEFF', $theme->features['footer_bg']);
+        $this->assertEquals('#001122', $theme->features['footer_text']);
+
+        $this->get(route('landing.page'))
+            ->assertOk()
+            ->assertSee('#112233')
+            ->assertSee('#445566')
+            ->assertSee('#778899')
+            ->assertSee('#AABBCC')
+            ->assertSee('#DDEEFF')
+            ->assertSee('#001122');
+    }
 }
