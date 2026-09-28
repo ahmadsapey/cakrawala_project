@@ -236,4 +236,48 @@ class TaskSubmissionAndGradingTest extends TestCase
             ->assertSee('Bintang Pratama')
             ->assertSee('0089128391');
     }
+
+    public function test_teacher_and_admin_can_access_and_store_assignment(): void
+    {
+        [$teacherUser, $teacher, $classroom] = $this->createTeacherAndClassroom();
+
+        // 1. Teacher access create page
+        $teacherResponse = $this->actingAs($teacherUser)->get(route('guru.tugas.tambah', ['classroom_id' => $classroom->id]));
+        $teacherResponse->assertOk()->assertSee('Tambah Tugas Baru');
+
+        // 2. Teacher store assignment
+        $storeResponse = $this->actingAs($teacherUser)->post(route('guru.tugas.store'), [
+            'classroom_id' => $classroom->id,
+            'title' => 'Latihan Soal Matriks 1',
+            'instructions' => 'Kerjakan halaman 42 buku cetak.',
+            'points' => 100,
+            'due_at' => now()->addDays(3)->format('Y-m-d H:i:s'),
+            'status' => 'published',
+        ]);
+        $storeResponse->assertRedirect(route('guru.tugas.tambah'));
+        $this->assertDatabaseHas('assignments', ['title' => 'Latihan Soal Matriks 1']);
+
+        // 3. Admin access create page
+        $admin = User::create([
+            'name' => 'Administrator',
+            'email' => 'admin@cakrawala.test',
+            'password' => 'password123',
+            'role' => 'admin',
+        ]);
+
+        $adminResponse = $this->actingAs($admin)->get(route('guru.tugas.tambah'));
+        $adminResponse->assertOk()->assertSee('Tambah Tugas Baru');
+
+        // 4. Admin store assignment
+        $adminStore = $this->actingAs($admin)->post(route('guru.tugas.store'), [
+            'classroom_id' => $classroom->id,
+            'title' => 'Latihan Soal Matriks Admin',
+            'instructions' => 'Tugas dari admin.',
+            'points' => 100,
+            'due_at' => now()->addDays(5)->format('Y-m-d H:i:s'),
+            'status' => 'published',
+        ]);
+        $adminStore->assertRedirect(route('guru.tugas.tambah'));
+        $this->assertDatabaseHas('assignments', ['title' => 'Latihan Soal Matriks Admin']);
+    }
 }

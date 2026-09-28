@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Guru;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Guru\StoreAssignmentRequest;
-use App\Models\Assignment;
+use App\Http\Requests\Guru\StoreQuizRequest;
 use App\Models\Classroom;
+use App\Models\Quiz;
 use App\Models\Teacher;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
-class AssignmentController extends Controller
+class QuizController extends Controller
 {
     /**
      * Resolve active teacher or fallback safely for admin/preview mode.
@@ -44,39 +44,41 @@ class AssignmentController extends Controller
     {
         $user = Auth::user();
         $isAdmin = $user?->role === 'admin';
-        $selectedClassroomId = request()->integer('classroom_id') ?: null;
+        $selectedClassroomId = request()->integer('classroom_id');
         $teacher = $this->resolveTeacher($selectedClassroomId);
 
-        if ($isAdmin || ! $teacher) {
-            $classrooms = Classroom::orderBy('name')->get();
-        } else {
-            $classrooms = Classroom::where('teacher_id', $teacher->id)->orderBy('name')->get();
-            if ($classrooms->isEmpty()) {
-                $classrooms = Classroom::orderBy('name')->get();
-            }
-        }
+        $classrooms = Classroom::query()
+            ->when(! $isAdmin && $teacher, fn ($q) => $q->where('teacher_id', $teacher->id))
+            ->orderBy('name')
+            ->get();
 
-        return view('modulGuru.assignmentForm', [
+        return view('modulGuru.quizForm', [
             'classrooms' => $classrooms,
             'selectedClassroomId' => $selectedClassroomId,
         ]);
     }
 
-    public function store(StoreAssignmentRequest $request): RedirectResponse
+    public function store(StoreQuizRequest $request): RedirectResponse
     {
         $data = $request->validated();
-        $classroom = Classroom::findOrFail($data['classroom_id']);
-
         $user = $request->user();
-        $teacher = $user?->teacher ?? $this->resolveTeacher($classroom->id);
+        $isAdmin = $user?->role === 'admin';
+        $teacher = $this->resolveTeacher($data['classroom_id']);
+
+        $classroomQuery = Classroom::query();
+        if (! $isAdmin && $teacher) {
+            $classroomQuery->where('teacher_id', $teacher->id);
+        }
+        $classroom = $classroomQuery->findOrFail($data['classroom_id']);
+
         $teacherId = $teacher?->id ?? $classroom->teacher_id ?? Teacher::first()?->id;
 
-        Assignment::create([
+        Quiz::create([
             ...$data,
             'teacher_id' => $teacherId,
             'classroom_id' => $classroom->id,
         ]);
 
-        return redirect()->route('guru.tugas.tambah')->with('success', 'Tugas berhasil disimpan.');
+        return redirect()->route('guru.kuis.tambah')->with('success', 'Kuis berhasil disimpan.');
     }
 }

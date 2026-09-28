@@ -5,7 +5,7 @@ namespace App\Http\Requests\Guru;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreClassroomRequest extends FormRequest
+class StoreQuizRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,10 +23,13 @@ class StoreClassroomRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:150'],
-            'grade_level' => ['required', 'string', 'max:50'],
-            'section' => ['nullable', 'string', 'max:50'],
-            'description' => ['nullable', 'string', 'max:1000'],
+            'classroom_id' => ['required', 'integer', 'exists:classrooms,id'],
+            'title' => ['required', 'string', 'max:255'],
+            'duration_minutes' => ['required', 'integer', 'min:1', 'max:240'],
+            'passing_score' => ['required', 'integer', 'min:0', 'max:100'],
+            'question_count' => ['required', 'integer', 'min:1', 'max:100'],
+            'due_at' => ['nullable', 'date'],
+            'status' => ['required', 'in:draft,published'],
         ];
     }
 }

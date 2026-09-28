@@ -12,10 +12,21 @@
     @include('components.headerGuru_mobile')
 
     <main class="mx-auto max-w-3xl space-y-6 px-4 py-8 sm:px-6 lg:px-12">
-        <div>
-            <p class="text-xs font-extrabold uppercase tracking-wider text-indigo-700">Ruang mengajar</p>
-            <h1 class="mt-1 text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">Kelola Bahan Ajar</h1>
-            <p class="mt-1.5 text-xs sm:text-sm font-semibold text-slate-600">Terbitkan materi yang akan tampil di home siswa.</p>
+        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+            <div>
+                <p class="text-xs font-extrabold uppercase tracking-wider text-indigo-700">Ruang mengajar</p>
+                <h1 class="mt-1 text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">Kelola Bahan Ajar</h1>
+                <p class="mt-1.5 text-xs sm:text-sm font-semibold text-slate-600">Terbitkan materi yang akan tampil di home siswa.</p>
+            </div>
+            @if ($selectedClassroomId)
+                <a href="{{ route('guru.kelas.learning', $selectedClassroomId) }}" class="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-center text-xs font-bold text-slate-700 hover:bg-slate-50 transition-all shrink-0">
+                    Kembali ke Kelas
+                </a>
+            @else
+                <a href="{{ route('guru.kelas') }}" class="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-center text-xs font-bold text-slate-700 hover:bg-slate-50 transition-all shrink-0">
+                    Kembali ke Daftar Kelas
+                </a>
+            @endif
         </div>
 
         @if (session('success'))
