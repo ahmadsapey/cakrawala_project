@@ -146,4 +146,99 @@ class ClassroomDisplayTest extends TestCase
             ->assertSee('Dr. Habibie')
             ->assertSee('Jumat, 08:00 - 09:30 WIB');
     }
+
+    public function test_admin_and_teacher_can_access_and_create_assignment(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $teacherUser = User::factory()->create(['role' => 'teacher']);
+        $teacher = Teacher::factory()->create(['user_id' => $teacherUser->id]);
+
+        $classroom = Classroom::create([
+            'teacher_id' => $teacher->id,
+            'name' => 'Bahasa Indonesia',
+            'subject' => 'Bahasa Indonesia',
+            'grade_level' => '10',
+        ]);
+
+        // Admin can open tambah tugas
+        $this->actingAs($admin)
+            ->get(route('guru.tugas.tambah'))
+            ->assertOk()
+            ->assertSee('Tambah Tugas Baru');
+
+        // Admin can open tambah tugas with classroom_id query
+        $this->actingAs($admin)
+            ->get(route('guru.tugas.create', ['classroom_id' => $classroom->id]))
+            ->assertOk()
+            ->assertSee('Tambah Tugas Baru');
+
+        // Admin can store assignment
+        $this->actingAs($admin)
+            ->post(route('guru.tugas.store'), [
+                'classroom_id' => $classroom->id,
+                'title' => 'Tugas Resensi Buku',
+                'instructions' => 'Tulis resensi novel minimal 500 kata.',
+                'points' => 100,
+                'status' => 'published',
+            ])
+            ->assertRedirect(route('guru.tugas.tambah'))
+            ->assertSessionHas('success');
+
+        // Teacher can open and store assignment
+        $this->actingAs($teacherUser)
+            ->withSession(['teacher_id' => $teacher->id])
+            ->get(route('guru.tugas.tambah'))
+            ->assertOk();
+
+        $this->actingAs($teacherUser)
+            ->withSession(['teacher_id' => $teacher->id])
+            ->post(route('guru.tugas.store'), [
+                'classroom_id' => $classroom->id,
+                'title' => 'Tugas Puisi',
+                'instructions' => 'Buat satu bait puisi modern.',
+                'points' => 100,
+                'status' => 'draft',
+            ])
+            ->assertRedirect(route('guru.tugas.tambah'))
+            ->assertSessionHas('success');
+    }
+
+    public function test_admin_and_teacher_can_access_and_create_quiz(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $teacherUser = User::factory()->create(['role' => 'teacher']);
+        $teacher = Teacher::factory()->create(['user_id' => $teacherUser->id]);
+
+        $classroom = Classroom::create([
+            'teacher_id' => $teacher->id,
+            'name' => 'Kimia Terapan',
+            'subject' => 'Kimia',
+            'grade_level' => '11',
+        ]);
+
+        // Admin can open tambah kuis
+        $this->actingAs($admin)
+            ->get(route('guru.kuis.tambah'))
+            ->assertOk()
+            ->assertSee('Buat Kuis Interaktif Baru');
+
+        // Admin can store quiz
+        $this->actingAs($admin)
+            ->post(route('guru.kuis.store'), [
+                'classroom_id' => $classroom->id,
+                'title' => 'Kuis Stoikiometri',
+                'duration_minutes' => 45,
+                'passing_score' => 75,
+                'question_count' => 10,
+                'status' => 'published',
+            ])
+            ->assertRedirect(route('guru.kuis.tambah'))
+            ->assertSessionHas('success');
+
+        // Teacher can open tambah kuis
+        $this->actingAs($teacherUser)
+            ->withSession(['teacher_id' => $teacher->id])
+            ->get(route('guru.kuis.tambah'))
+            ->assertOk();
+    }
 }

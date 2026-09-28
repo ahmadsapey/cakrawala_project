@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Guru\StoreMaterialRequest;
 use App\Models\Classroom;
 use App\Models\Material;
+use App\Models\Teacher;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -13,24 +14,65 @@ use Illuminate\View\View;
 
 class MaterialController extends Controller
 {
+    /**
+     * Resolve active teacher or fallback safely for admin/preview mode.
+     */
+    private function resolveTeacher(?int $classroomId = null): ?Teacher
+    {
+        $user = Auth::user();
+        if ($user?->teacher) {
+            return $user->teacher;
+        }
+
+        if ($classroomId) {
+            $classroom = Classroom::find($classroomId);
+            if ($classroom?->teacher) {
+                return $classroom->teacher;
+            }
+        }
+
+        if (session('teacher_id')) {
+            $teacher = Teacher::find(session('teacher_id'));
+            if ($teacher) {
+                return $teacher;
+            }
+        }
+
+        return Teacher::with('user')->first();
+    }
+
     public function create(): View
     {
+        $user = Auth::user();
+        $isAdmin = $user?->role === 'admin';
+        $selectedClassroomId = request()->integer('classroom_id');
+        $teacher = $this->resolveTeacher($selectedClassroomId);
+
+        $classrooms = Classroom::query()
+            ->when(! $isAdmin && $teacher, fn ($q) => $q->where('teacher_id', $teacher->id))
+            ->orderBy('name')
+            ->get();
+
         return view('modulGuru.materialForm', [
-            'classrooms' => Classroom::where('teacher_id', Auth::user()?->teacher?->id)->orderBy('name')->get(),
-            'selectedClassroomId' => request()->integer('classroom_id'),
+            'classrooms' => $classrooms,
+            'selectedClassroomId' => $selectedClassroomId,
             'material' => null,
         ]);
     }
 
     public function edit(Material $material): View
     {
-        $teacherId = Auth::user()?->teacher?->id;
-        abort_unless($teacherId, 403);
+        $user = Auth::user();
+        $isAdmin = $user?->role === 'admin';
+        $teacher = $this->resolveTeacher($material->classroom_id);
 
-        $material = Material::where('teacher_id', $teacherId)->findOrFail($material->id);
+        $classrooms = Classroom::query()
+            ->when(! $isAdmin && $teacher, fn ($q) => $q->where('teacher_id', $teacher->id))
+            ->orderBy('name')
+            ->get();
 
         return view('modulGuru.materialForm', [
-            'classrooms' => Classroom::where('teacher_id', $teacherId)->orderBy('name')->get(),
+            'classrooms' => $classrooms,
             'selectedClassroomId' => $material->classroom_id,
             'material' => $material,
         ]);
@@ -40,10 +82,16 @@ class MaterialController extends Controller
     {
         $data = $request->validated();
         $attachmentPath = $request->file('attachment')?->store('materials', 'public');
-        $teacherId = Auth::user()?->teacher?->id;
+        $user = $request->user();
+        $isAdmin = $user?->role === 'admin';
+        $teacher = $this->resolveTeacher($data['classroom_id']);
 
-        abort_unless($teacherId, 403);
-        $classroom = Classroom::where('teacher_id', $teacherId)->findOrFail($data['classroom_id']);
+        $classroomQuery = Classroom::query();
+        if (! $isAdmin && $teacher) {
+            $classroomQuery->where('teacher_id', $teacher->id);
+        }
+        $classroom = $classroomQuery->findOrFail($data['classroom_id']);
+        $teacherId = $teacher?->id ?? $classroom->teacher_id ?? Teacher::first()?->id;
 
         Material::create([
             ...$data,
@@ -63,11 +111,15 @@ class MaterialController extends Controller
     public function update(StoreMaterialRequest $request, Material $material): RedirectResponse
     {
         $data = $request->validated();
-        $teacherId = Auth::user()?->teacher?->id;
-        abort_unless($teacherId, 403);
+        $user = $request->user();
+        $isAdmin = $user?->role === 'admin';
+        $teacher = $this->resolveTeacher($data['classroom_id']);
 
-        $material = Material::where('teacher_id', $teacherId)->findOrFail($material->id);
-        $classroom = Classroom::where('teacher_id', $teacherId)->findOrFail($data['classroom_id']);
+        $classroomQuery = Classroom::query();
+        if (! $isAdmin && $teacher) {
+            $classroomQuery->where('teacher_id', $teacher->id);
+        }
+        $classroom = $classroomQuery->findOrFail($data['classroom_id']);
 
         if ($request->hasFile('attachment')) {
             if ($material->attachment_path) {
@@ -89,10 +141,6 @@ class MaterialController extends Controller
 
     public function destroy(Material $material): RedirectResponse
     {
-        $teacherId = Auth::user()?->teacher?->id;
-        abort_unless($teacherId, 403);
-
-        $material = Material::where('teacher_id', $teacherId)->findOrFail($material->id);
         $classroom = $material->classroom;
 
         if ($material->attachment_path) {

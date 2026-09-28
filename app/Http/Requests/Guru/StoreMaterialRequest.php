@@ -13,7 +13,7 @@ class StoreMaterialRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::user()?->role === 'teacher';
+        return in_array(Auth::user()?->role, ['admin', 'teacher'], true);
     }
 
     /**

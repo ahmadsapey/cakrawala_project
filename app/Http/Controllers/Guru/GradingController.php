@@ -16,19 +16,48 @@ use Illuminate\View\View;
 class GradingController extends Controller
 {
     /**
+     * Resolve active teacher or fallback safely for admin/preview mode.
+     */
+    private function resolveTeacher(?int $classroomId = null): ?Teacher
+    {
+        $user = Auth::user();
+        if ($user?->teacher) {
+            return $user->teacher;
+        }
+
+        if ($classroomId) {
+            $classroom = Classroom::find($classroomId);
+            if ($classroom?->teacher) {
+                return $classroom->teacher;
+            }
+        }
+
+        if (session('teacher_id')) {
+            $teacher = Teacher::find(session('teacher_id'));
+            if ($teacher) {
+                return $teacher;
+            }
+        }
+
+        return Teacher::with('user')->first();
+    }
+
+    /**
      * Show assignment correction dashboard.
      */
     public function taskCorrection(Request $request): View
     {
-        $teacher = Auth::user()?->teacher ?? Teacher::first();
+        $user = Auth::user();
+        $isAdmin = $user?->role === 'admin';
+        $teacher = $this->resolveTeacher();
 
         $assignmentsQuery = Assignment::with(['classroom', 'submissions.student.user'])
-            ->when($teacher, fn ($q) => $q->where('teacher_id', $teacher->id));
+            ->when(! $isAdmin && $teacher, fn ($q) => $q->where('teacher_id', $teacher->id));
 
         $assignments = $assignmentsQuery->latest()->get();
 
         $allSubmissions = AssignmentSubmission::query()
-            ->when($teacher, fn ($q) => $q->whereHas('assignment', fn ($aq) => $aq->where('teacher_id', $teacher->id)))
+            ->when(! $isAdmin && $teacher, fn ($q) => $q->whereHas('assignment', fn ($aq) => $aq->where('teacher_id', $teacher->id)))
             ->with(['assignment.classroom', 'student.user'])
             ->latest('submitted_at')
             ->get();
@@ -94,18 +123,20 @@ class GradingController extends Controller
      */
     public function quizAnalytics(Request $request, ?Quiz $quiz = null): View
     {
-        $teacher = Auth::user()?->teacher ?? Teacher::first();
+        $user = Auth::user();
+        $isAdmin = $user?->role === 'admin';
+        $teacher = $this->resolveTeacher();
 
         if (! $quiz || ! $quiz->exists) {
             $quizId = $request->query('quiz_id');
-            $quiz = $quizId ? Quiz::find($quizId) : Quiz::when($teacher, fn ($q) => $q->where('teacher_id', $teacher->id))->latest()->first();
+            $quiz = $quizId ? Quiz::find($quizId) : Quiz::when(! $isAdmin && $teacher, fn ($q) => $q->where('teacher_id', $teacher->id))->latest()->first();
         }
 
         if (! $quiz) {
             $quiz = Quiz::with('classroom')->first();
         }
 
-        $quizzes = Quiz::when($teacher, fn ($q) => $q->where('teacher_id', $teacher->id))->get();
+        $quizzes = Quiz::when(! $isAdmin && $teacher, fn ($q) => $q->where('teacher_id', $teacher->id))->get();
 
         $submissions = $quiz ? $quiz->submissions()->with('student.user')->get() : collect();
         $totalParticipants = $submissions->count();
@@ -165,11 +196,13 @@ class GradingController extends Controller
      */
     public function classStudents(Request $request, ?Classroom $classroom = null): View
     {
-        $teacher = Auth::user()?->teacher ?? Teacher::first();
+        $user = Auth::user();
+        $isAdmin = $user?->role === 'admin';
+        $teacher = $this->resolveTeacher();
 
         if (! $classroom || ! $classroom->exists) {
             $classroomId = $request->query('classroom_id');
-            $classroom = $classroomId ? Classroom::find($classroomId) : Classroom::when($teacher, fn ($q) => $q->where('teacher_id', $teacher->id))->first();
+            $classroom = $classroomId ? Classroom::find($classroomId) : Classroom::when(! $isAdmin && $teacher, fn ($q) => $q->where('teacher_id', $teacher->id))->first();
         }
 
         if (! $classroom) {
