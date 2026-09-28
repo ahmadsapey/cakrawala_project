@@ -13,7 +13,7 @@ class StoreAttendanceRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return in_array(Auth::user()?->role, ['admin', 'teacher'], true);
+        return Auth::user()?->role === 'teacher';
     }
 
     /**

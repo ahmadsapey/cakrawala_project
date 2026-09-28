@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Assignment;
 use App\Models\AssignmentSubmission;
 use App\Models\Classroom;
+use App\Models\Quiz;
 use App\Models\Teacher;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,48 +16,19 @@ use Illuminate\View\View;
 class GradingController extends Controller
 {
     /**
-     * Resolve active teacher or fallback safely for admin/preview mode.
-     */
-    private function resolveTeacher(?int $classroomId = null): ?Teacher
-    {
-        $user = Auth::user();
-        if ($user?->teacher) {
-            return $user->teacher;
-        }
-
-        if ($classroomId) {
-            $classroom = Classroom::find($classroomId);
-            if ($classroom?->teacher) {
-                return $classroom->teacher;
-            }
-        }
-
-        if (session('teacher_id')) {
-            $teacher = Teacher::find(session('teacher_id'));
-            if ($teacher) {
-                return $teacher;
-            }
-        }
-
-        return Teacher::with('user')->first();
-    }
-
-    /**
      * Show assignment correction dashboard.
      */
     public function taskCorrection(Request $request): View
     {
-        $user = Auth::user();
-        $isAdmin = $user?->role === 'admin';
-        $teacher = $this->resolveTeacher();
+        $teacher = Auth::user()?->teacher ?? Teacher::first();
 
         $assignmentsQuery = Assignment::with(['classroom', 'submissions.student.user'])
-            ->when(! $isAdmin && $teacher, fn ($q) => $q->where('teacher_id', $teacher->id));
+            ->when($teacher, fn ($q) => $q->where('teacher_id', $teacher->id));
 
         $assignments = $assignmentsQuery->latest()->get();
 
         $allSubmissions = AssignmentSubmission::query()
-            ->when(! $isAdmin && $teacher, fn ($q) => $q->whereHas('assignment', fn ($aq) => $aq->where('teacher_id', $teacher->id)))
+            ->when($teacher, fn ($q) => $q->whereHas('assignment', fn ($aq) => $aq->where('teacher_id', $teacher->id)))
             ->with(['assignment.classroom', 'student.user'])
             ->latest('submitted_at')
             ->get();
@@ -118,17 +90,86 @@ class GradingController extends Controller
     }
 
     /**
+     * Show quiz analytics dashboard.
+     */
+    public function quizAnalytics(Request $request, ?Quiz $quiz = null): View
+    {
+        $teacher = Auth::user()?->teacher ?? Teacher::first();
+
+        if (! $quiz || ! $quiz->exists) {
+            $quizId = $request->query('quiz_id');
+            $quiz = $quizId ? Quiz::find($quizId) : Quiz::when($teacher, fn ($q) => $q->where('teacher_id', $teacher->id))->latest()->first();
+        }
+
+        if (! $quiz) {
+            $quiz = Quiz::with('classroom')->first();
+        }
+
+        $quizzes = Quiz::when($teacher, fn ($q) => $q->where('teacher_id', $teacher->id))->get();
+
+        $submissions = $quiz ? $quiz->submissions()->with('student.user')->get() : collect();
+        $totalParticipants = $submissions->count();
+
+        $avgScore = $totalParticipants > 0 ? round($submissions->avg('score'), 1) : 0;
+        $passingScore = $quiz?->passing_score ?? 75;
+        $passedCount = $submissions->where('score', '>=', $passingScore)->count();
+        $passRate = $totalParticipants > 0 ? round(($passedCount / $totalParticipants) * 100) : 0;
+
+        // Score Distribution
+        $distExcellent = $submissions->where('score', '>=', 90)->count();
+        $distGood = $submissions->whereBetween('score', [75, 89.99])->count();
+        $distBelow = $submissions->where('score', '<', 75)->count();
+
+        // Hardest question calculation
+        $questions = $quiz ? $quiz->questions()->get() : collect();
+        $hardestQuestion = null;
+        $lowestAccuracy = 100;
+
+        if ($totalParticipants > 0 && $questions->isNotEmpty()) {
+            foreach ($questions as $q) {
+                $correct = 0;
+                foreach ($submissions as $sub) {
+                    $ans = $sub->answers[$q->id] ?? null;
+                    if ($ans && strtoupper((string) $ans) === strtoupper($q->correct_answer)) {
+                        $correct++;
+                    }
+                }
+                $accuracy = ($correct / $totalParticipants) * 100;
+                if ($accuracy <= $lowestAccuracy) {
+                    $lowestAccuracy = round($accuracy, 1);
+                    $hardestQuestion = [
+                        'question' => $q,
+                        'accuracy' => $lowestAccuracy,
+                        'correct_students' => $correct,
+                        'total_students' => $totalParticipants,
+                    ];
+                }
+            }
+        }
+
+        return view('modulGuru.koreksiKuis', [
+            'quiz' => $quiz,
+            'quizzes' => $quizzes,
+            'avgScore' => $avgScore,
+            'passRate' => $passRate,
+            'totalParticipants' => $totalParticipants,
+            'distExcellent' => $distExcellent,
+            'distGood' => $distGood,
+            'distBelow' => $distBelow,
+            'hardestQuestion' => $hardestQuestion,
+        ]);
+    }
+
+    /**
      * Show classroom students list with attendance & recent grades.
      */
     public function classStudents(Request $request, ?Classroom $classroom = null): View
     {
-        $user = Auth::user();
-        $isAdmin = $user?->role === 'admin';
-        $teacher = $this->resolveTeacher();
+        $teacher = Auth::user()?->teacher ?? Teacher::first();
 
         if (! $classroom || ! $classroom->exists) {
             $classroomId = $request->query('classroom_id');
-            $classroom = $classroomId ? Classroom::find($classroomId) : Classroom::when(! $isAdmin && $teacher, fn ($q) => $q->where('teacher_id', $teacher->id))->first();
+            $classroom = $classroomId ? Classroom::find($classroomId) : Classroom::when($teacher, fn ($q) => $q->where('teacher_id', $teacher->id))->first();
         }
 
         if (! $classroom) {
@@ -138,6 +179,7 @@ class GradingController extends Controller
         $students = $classroom ? $classroom->students()->with([
             'user',
             'assignmentSubmissions' => fn ($q) => $q->latest(),
+            'quizSubmissions' => fn ($q) => $q->latest(),
         ])->get() : collect();
 
         return view('modulGuru.viewSiswa', [

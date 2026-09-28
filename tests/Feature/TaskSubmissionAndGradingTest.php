@@ -5,6 +5,9 @@ namespace Tests\Feature;
 use App\Models\Assignment;
 use App\Models\AssignmentSubmission;
 use App\Models\Classroom;
+use App\Models\Question;
+use App\Models\Quiz;
+use App\Models\QuizSubmission;
 use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\User;
@@ -158,6 +161,68 @@ class TaskSubmissionAndGradingTest extends TestCase
             'status' => 'graded',
             'feedback' => 'Hasil pekerjaan sangat rapi dan perhitungan benar semua.',
         ]);
+    }
+
+    public function test_student_can_take_quiz_and_receive_automated_score(): void
+    {
+        [$teacherUser, $teacher, $classroom] = $this->createTeacherAndClassroom();
+        [$studentUser, $student] = $this->createStudent($classroom);
+
+        $quiz = Quiz::create([
+            'teacher_id' => $teacher->id,
+            'classroom_id' => $classroom->id,
+            'title' => 'Kuis Matriks Dasar',
+            'description' => 'Evaluasi konsep dasar matriks',
+            'duration_minutes' => 15,
+            'passing_score' => 70,
+            'status' => 'published',
+        ]);
+
+        $q1 = Question::create([
+            'quiz_id' => $quiz->id,
+            'question_text' => 'Nilai determinan matriks identitas 2x2 adalah...',
+            'options' => ['A' => '0', 'B' => '1', 'C' => '2', 'D' => '-1'],
+            'correct_answer' => 'B',
+            'sort_order' => 1,
+        ]);
+
+        $q2 = Question::create([
+            'quiz_id' => $quiz->id,
+            'question_text' => 'Jika A berordo 2x3 dan B berordo 3x2, ordo AB adalah...',
+            'options' => ['A' => '2x2', 'B' => '3x3', 'C' => '2x3', 'D' => '3x2'],
+            'correct_answer' => 'A',
+            'sort_order' => 2,
+        ]);
+
+        // Student opens quiz page
+        $quizPageResponse = $this->actingAs($studentUser)->get(route('siswa.pengerjaan', $quiz));
+        $quizPageResponse->assertOk()
+            ->assertSee('Kuis Matriks Dasar')
+            ->assertSee('Nilai determinan matriks identitas 2x2 adalah...');
+
+        // Student answers: Q1 correct (B), Q2 incorrect (C)
+        $submitQuizResponse = $this->actingAs($studentUser)->post(route('siswa.pengerjaan.submit', $quiz), [
+            'answers' => [
+                $q1->id => 'B',
+                $q2->id => 'C',
+            ],
+            'duration_seconds' => 320,
+        ]);
+
+        $submission = QuizSubmission::where('quiz_id', $quiz->id)->where('student_id', $student->id)->first();
+        $this->assertNotNull($submission);
+        $this->assertEquals(50.0, (float) $submission->score); // 1 out of 2 = 50%
+        $this->assertEquals(1, $submission->correct_count);
+        $this->assertEquals(1, $submission->incorrect_count);
+
+        $submitQuizResponse->assertRedirect(route('siswa.evaluasi', $submission));
+
+        // Evaluation page displays score and status
+        $evalResponse = $this->actingAs($studentUser)->get(route('siswa.evaluasi', $submission));
+        $evalResponse->assertOk()
+            ->assertSee('Hasil Evaluasi Pengerjaan')
+            ->assertSee('50')
+            ->assertSee('Belum Mencapai KKM'); // passing score is 70, score is 50
     }
 
     public function test_teacher_can_view_classroom_students_list(): void

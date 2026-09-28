@@ -7,6 +7,9 @@ use App\Models\AssignmentSubmission;
 use App\Models\Classroom;
 use App\Models\Material;
 use App\Models\Payment;
+use App\Models\Question;
+use App\Models\Quiz;
+use App\Models\QuizSubmission;
 use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\User;
@@ -59,6 +62,26 @@ class DemoFlowSeederTest extends TestCase
             'assignment_id' => $assignment->id,
             'status' => 'submitted',
             'score' => null,
+        ]);
+
+        // Verify Quiz, Questions, and Submissions
+        $quiz = Quiz::first();
+        $this->assertNotNull($quiz);
+        $this->assertEquals(3, Question::where('quiz_id', $quiz->id)->count());
+        $this->assertEquals(2, QuizSubmission::where('quiz_id', $quiz->id)->count());
+
+        $this->assertDatabaseHas('quiz_submissions', [
+            'quiz_id' => $quiz->id,
+            'correct_count' => 3,
+            'incorrect_count' => 0,
+            'score' => 100.00,
+        ]);
+
+        $this->assertDatabaseHas('quiz_submissions', [
+            'quiz_id' => $quiz->id,
+            'correct_count' => 2,
+            'incorrect_count' => 1,
+            'score' => 66.67,
         ]);
     }
 

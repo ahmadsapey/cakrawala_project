@@ -103,7 +103,7 @@
                     <tbody class="divide-y-2 divide-slate-200 bg-white">
                         @forelse ($students as $student)
                             @php
-                                $lastScore = $student->assignmentSubmissions->first()?->score;
+                                $lastScore = $student->assignmentSubmissions->first()?->score ?? $student->quizSubmissions->first()?->score;
                                 $submissionToGrade = $student->assignmentSubmissions->first();
                             @endphp
                             <tr class="transition-colors hover:bg-slate-50">
@@ -161,7 +161,7 @@
             <div class="space-y-3 p-4 md:hidden">
                 @forelse ($students as $student)
                     @php
-                        $lastScore = $student->assignmentSubmissions->first()?->score;
+                        $lastScore = $student->assignmentSubmissions->first()?->score ?? $student->quizSubmissions->first()?->score;
                         $submissionToGrade = $student->assignmentSubmissions->first();
                     @endphp
                     <article class="rounded-2xl border-2 border-slate-300 p-4 shadow-sm bg-white space-y-3">

@@ -161,6 +161,7 @@ class ClassroomController extends Controller
         $students = $classroom ? $classroom->students()->with('user')->get() : collect();
         $materials = $classroom ? $classroom->materials()->orderBy('created_at')->get() : collect();
         $assignments = $classroom ? $classroom->assignments()->latest()->get() : collect();
+        $quizzes = collect();
 
         $totalItems = $materials->count() + $assignments->count();
         $progressPercent = $totalItems > 0 ? min(100, round(($materials->where('status', 'published')->count() / $totalItems) * 100)) : 65;
@@ -170,6 +171,7 @@ class ClassroomController extends Controller
             'students' => $students,
             'materials' => $materials,
             'assignments' => $assignments,
+            'quizzes' => $quizzes,
             'progressPercent' => $progressPercent,
         ]);
     }

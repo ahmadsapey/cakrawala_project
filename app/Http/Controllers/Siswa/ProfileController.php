@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Siswa;
 use App\Http\Controllers\Controller;
 use App\Models\AssignmentSubmission;
 use App\Models\Material;
+use App\Models\QuizSubmission;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -24,10 +25,12 @@ class ProfileController extends Controller
         $user = Auth::user();
         $student = $user?->student ?? Student::with(['user', 'classrooms'])->first();
 
-        // Calculate average score across assignment submissions
+        // Calculate average score across assignment & quiz submissions
+        $quizScores = $student ? QuizSubmission::where('student_id', $student->id)->pluck('score') : collect();
         $assignmentScores = $student ? AssignmentSubmission::where('student_id', $student->id)->whereNotNull('score')->pluck('score') : collect();
+        $allScores = $quizScores->concat($assignmentScores);
 
-        $avgScore = $assignmentScores->isNotEmpty() ? round($assignmentScores->avg(), 1) : 85.0;
+        $avgScore = $allScores->isNotEmpty() ? round($allScores->avg(), 1) : 85.0;
 
         // Count materials completed / accessible
         $classroomIds = $student ? $student->classrooms->pluck('id') : collect();
@@ -44,11 +47,13 @@ class ProfileController extends Controller
 
         if ($student && $student->classrooms->isNotEmpty()) {
             $classroom = $student->classrooms->first();
-            $classmates = $classroom->students()->with(['assignmentSubmissions'])->get();
+            $classmates = $classroom->students()->with(['assignmentSubmissions', 'quizSubmissions'])->get();
             $totalStudentsInClass = max($classmates->count(), 1);
 
             $rankings = $classmates->map(function ($mate) {
-                $score = $mate->assignmentSubmissions->whereNotNull('score')->avg('score') ?? 0;
+                $qAvg = $mate->quizSubmissions->avg('score') ?? 0;
+                $aAvg = $mate->assignmentSubmissions->whereNotNull('score')->avg('score') ?? 0;
+                $score = ($qAvg > 0 && $aAvg > 0) ? ($qAvg + $aAvg) / 2 : max($qAvg, $aAvg);
 
                 return ['id' => $mate->id, 'score' => $score];
             })->sortByDesc('score')->values();

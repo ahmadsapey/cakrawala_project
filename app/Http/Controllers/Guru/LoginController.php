@@ -21,9 +21,7 @@ class LoginController extends Controller
         }
 
         $request->session()->regenerate();
-        if ($teacherId = Auth::user()?->teacher?->id) {
-            $request->session()->put('teacher_id', $teacherId);
-        }
+        $request->session()->put('teacher_id', Auth::user()->teacher->id);
 
         return redirect()->route('guru.home');
     }
