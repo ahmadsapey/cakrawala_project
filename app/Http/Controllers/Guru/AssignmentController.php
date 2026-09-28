@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Guru;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Guru\StoreAssignmentRequest;
 use App\Models\Assignment;
 use App\Models\Classroom;
 use App\Models\Teacher;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -62,9 +62,16 @@ class AssignmentController extends Controller
         ]);
     }
 
-    public function store(StoreAssignmentRequest $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
-        $data = $request->validated();
+        $data = $request->validate([
+            'classroom_id' => ['required', 'integer', 'exists:classrooms,id'],
+            'title' => ['required', 'string', 'max:255'],
+            'instructions' => ['required', 'string', 'max:5000'],
+            'points' => ['required', 'integer', 'min:1', 'max:1000'],
+            'due_at' => ['nullable', 'date'],
+            'status' => ['required', 'in:draft,published'],
+        ]);
         $classroom = Classroom::findOrFail($data['classroom_id']);
 
         $user = $request->user();

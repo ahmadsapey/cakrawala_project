@@ -55,16 +55,24 @@
                 <span class="inline-block rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 px-3.5 py-1.5 text-xs font-bold text-white shadow-sm">{{ $material->subject }}</span>
                 <h3 class="mt-3 text-xl font-black text-slate-900 group-hover:text-indigo-600 transition-colors">{{ $material->title }}</h3>
                 <p class="mt-2 text-sm leading-relaxed text-slate-600">{{ $material->summary ?: 'Tidak ada ringkasan materi.' }}</p>
-                <div class="mt-5 flex flex-wrap gap-3 border-t border-slate-100 pt-4 text-xs font-bold">
+                <div class="mt-5 flex flex-wrap items-center gap-3 border-t border-slate-100 pt-4 text-xs font-bold">
                     @if ($material->video_url)
                         <a href="{{ $material->video_url }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 rounded-xl bg-indigo-50 px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 hover:text-white">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             Tonton Video
                         </a>
                     @endif 
                     @if ($material->attachment_path)
                         <a href="{{ Storage::disk('public')->url($material->attachment_path) }}" target="_blank" class="inline-flex items-center gap-1.5 rounded-xl bg-rose-50 px-4 py-2 text-rose-600 transition-colors hover:bg-rose-600 hover:text-white">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                             Unduh Modul (PDF)
                         </a>
+                    @endif
+                    @if (!$material->video_url && !$material->attachment_path)
+                        <span class="inline-flex items-center gap-1.5 rounded-xl bg-slate-100 px-3.5 py-2 text-slate-500 font-semibold text-xs">
+                            <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            Catatan Ringkasan Pembelajaran (Guru belum mengunggah file lampiran/video)
+                        </span>
                     @endif
                 </div>
             </article>
@@ -88,11 +96,16 @@
                 <span class="inline-block rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-3.5 py-1.5 text-xs font-bold text-white shadow-sm">Tugas</span>
                 <h3 class="mt-3 text-xl font-black text-slate-900 group-hover:text-amber-600 transition-colors">{{ $assignment->title }}</h3>
                 <p class="mt-2 text-sm text-slate-600">{{ $assignment->instructions }}</p>
-                <div class="mt-4 flex flex-wrap items-center gap-3 text-xs font-semibold text-slate-500">
-                    <span class="rounded-lg bg-amber-50 px-2.5 py-1 text-amber-700 font-bold">Nilai maks: {{ $assignment->points }}</span>
-                    @if ($assignment->due_at)
-                        <span class="rounded-lg bg-slate-100 px-2.5 py-1">Tenggat: {{ $assignment->due_at->format('d M Y H:i') }}</span>
-                    @endif
+                <div class="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-3 text-xs font-semibold text-slate-500">
+                    <div class="flex items-center gap-2">
+                        <span class="rounded-lg bg-amber-50 px-2.5 py-1 text-amber-700 font-bold">Nilai maks: {{ $assignment->points }}</span>
+                        @if ($assignment->due_at)
+                            <span class="rounded-lg bg-slate-100 px-2.5 py-1">Tenggat: {{ $assignment->due_at->format('d M Y H:i') }}</span>
+                        @endif
+                    </div>
+                    <a href="{{ route('siswa.tugas') }}" class="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-4 py-2 text-white font-black hover:from-amber-600 hover:to-orange-600 transition-all shadow-xs">
+                        Kumpulkan Tugas &rarr;
+                    </a>
                 </div>
             </article>
         @empty
