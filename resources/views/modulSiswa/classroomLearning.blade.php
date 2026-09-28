@@ -94,6 +94,14 @@
                         <span class="rounded-lg bg-slate-100 px-2.5 py-1">Tenggat: {{ $assignment->due_at->format('d M Y H:i') }}</span>
                     @endif
                 </div>
+                @if ($assignment->attachment_path)
+                    <div class="mt-4 pt-3 border-t border-amber-100">
+                        <a href="{{ Storage::disk('public')->url($assignment->attachment_path) }}" target="_blank" download class="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-rose-200 px-3.5 py-2 text-xs font-bold text-rose-600 hover:bg-rose-100 transition-colors">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            Unduh Berkas Soal Tugas (PDF)
+                        </a>
+                    </div>
+                @endif
             </article>
         @empty
             <p class="text-sm text-slate-400">Belum ada tugas yang diterbitkan.</p>

@@ -60,7 +60,7 @@
         @endif
 
         <!-- Form Tambah Tugas -->
-        <form method="POST" action="{{ route('guru.tugas.store') }}" class="space-y-5 rounded-3xl border-2 border-teal-200 bg-white/90 backdrop-blur-md p-6 sm:p-10 shadow-md">
+        <form method="POST" action="{{ route('guru.tugas.store') }}" enctype="multipart/form-data" class="space-y-5 rounded-3xl border-2 border-teal-200 bg-white/90 backdrop-blur-md p-6 sm:p-10 shadow-md">
             @csrf
             
             <label class="block text-xs font-black uppercase tracking-wider text-slate-700">
@@ -81,6 +81,22 @@
             <label class="block text-xs font-black uppercase tracking-wider text-slate-700">
                 Instruksi & Pengerjaan
                 <textarea name="instructions" rows="6" required placeholder="Jelaskan detail instruksi dan petunjuk pengerjaan..." class="mt-2 w-full rounded-2xl border-2 border-teal-200 bg-white px-4 py-3.5 text-xs sm:text-sm font-bold text-slate-900 outline-none focus:border-teal-600 focus:ring-2 focus:ring-teal-500/20 transition-all shadow-2xs resize-none">{{ old('instructions') }}</textarea>
+            </label>
+
+            <label class="block text-xs font-black uppercase tracking-wider text-slate-700">
+                Lampiran Berkas Soal / Dokumen Tugas (PDF)
+                <div class="mt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl border-2 border-dashed border-teal-300 bg-teal-50/40 p-4 transition-all hover:bg-teal-50/70">
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-teal-600 text-white shadow-xs">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-slate-800">Unggah berkas soal atau panduan tugas (PDF)</p>
+                            <p class="text-[11px] font-semibold text-slate-500">Format: .pdf, .doc, .docx (Maksimal 20 MB). Siswa dapat mengunduh berkas ini.</p>
+                        </div>
+                    </div>
+                    <input type="file" name="attachment" accept=".pdf,.doc,.docx,application/pdf" class="text-xs font-bold text-slate-600 file:mr-3 file:rounded-xl file:border-0 file:bg-teal-600 file:px-4 file:py-2 file:text-xs file:font-black file:text-white file:cursor-pointer hover:file:bg-teal-700">
+                </div>
             </label>
 
             <div class="grid gap-4 sm:grid-cols-3">

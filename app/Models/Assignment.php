@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Assignment extends Model
 {
-    protected $fillable = ['teacher_id', 'classroom_id', 'title', 'instructions', 'points', 'due_at', 'status'];
+    protected $fillable = ['teacher_id', 'classroom_id', 'title', 'instructions', 'attachment_path', 'points', 'due_at', 'status'];
 
     protected function casts(): array
     {

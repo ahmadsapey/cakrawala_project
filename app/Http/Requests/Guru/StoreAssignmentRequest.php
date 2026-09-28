@@ -29,6 +29,7 @@ class StoreAssignmentRequest extends FormRequest
             'points' => ['required', 'integer', 'min:1', 'max:1000'],
             'due_at' => ['nullable', 'date'],
             'status' => ['required', 'in:draft,published'],
+            'attachment' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:20480'],
         ];
     }
 }

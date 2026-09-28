@@ -93,6 +93,14 @@
                         <span class="rounded-xl bg-amber-50 border border-amber-200 px-3 py-1.5 text-xs font-black text-amber-700 inline-block shadow-2xs">{{ $assignment->classroom->name }}</span>
                         <h2 class="text-base sm:text-lg font-black text-slate-900 tracking-tight">{{ $assignment->title }}</h2>
                         <p class="text-xs sm:text-sm leading-relaxed font-bold text-slate-600">{{ $assignment->instructions }}</p>
+                        @if ($assignment->attachment_path)
+                            <div class="pt-1">
+                                <a href="{{ Storage::disk('public')->url($assignment->attachment_path) }}" target="_blank" download class="inline-flex items-center gap-1.5 rounded-xl bg-rose-50 border border-rose-200 px-3 py-1.5 text-xs font-bold text-rose-600 hover:bg-rose-100 transition-colors">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                    Unduh Dokumen Tugas (PDF)
+                                </a>
+                            </div>
+                        @endif
                         <div class="border-t border-indigo-50 pt-3 flex items-center justify-between text-xs font-bold text-slate-500">
                             <span>Nilai maksimal: <strong class="text-indigo-600 font-black">{{ $assignment->points }}</strong></span>
                             @if ($assignment->due_at)

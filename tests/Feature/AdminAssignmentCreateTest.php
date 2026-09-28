@@ -2,10 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\Models\Assignment;
 use App\Models\Classroom;
+use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class AdminAssignmentCreateTest extends TestCase
@@ -54,47 +58,68 @@ class AdminAssignmentCreateTest extends TestCase
         // 4. Teacher visits /guru/tugas/tambah?classroom_id=...
         $responseTeacherTambah = $this->actingAs($teacherUser)->get("/guru/tugas/tambah?classroom_id={$classroom->id}");
         $responseTeacherTambah->assertOk()->assertSee('Tambah Tugas Baru');
+    }
 
-        // 5. Admin POST to /guru/tugas/tambah
-        $adminPost = $this->actingAs($admin)->post('/guru/tugas/tambah', [
-            'classroom_id' => $classroom->id,
-            'title' => 'Praktikum Admin',
-            'instructions' => 'Kerjakan sesuai urutan',
-            'points' => 100,
-            'due_at' => '2026-09-29T17:05',
-            'status' => 'published',
+    public function test_teacher_can_create_assignment_with_pdf_attachment_and_student_can_download_it(): void
+    {
+        Storage::fake('public');
+
+        $teacherUser = User::create([
+            'name' => 'Pak Guru Budi',
+            'email' => 'budi@cakrawala.test',
+            'password' => 'password123',
+            'role' => 'teacher',
         ]);
-        $adminPost->assertRedirect(route('guru.tugas.tambah'));
-        $this->assertDatabaseHas('assignments', ['title' => 'Praktikum Admin']);
-
-        // 6. Teacher POST to /guru/tugas/tambah
-        $teacherPost = $this->actingAs($teacherUser)->post('/guru/tugas/tambah', [
-            'classroom_id' => $classroom->id,
-            'title' => 'Praktikum Guru',
-            'instructions' => 'Kerjakan modul 1',
-            'points' => 100,
-            'due_at' => '2026-09-29T17:05',
-            'status' => 'published',
+        $teacher = Teacher::create([
+            'user_id' => $teacherUser->id,
+            'nip' => '99887766',
+            'subject' => 'Fisika',
+            'status' => 'active',
         ]);
-        $teacherPost->assertRedirect(route('guru.tugas.tambah'));
-        $this->assertDatabaseHas('assignments', ['title' => 'Praktikum Guru']);
+        $classroom = Classroom::create([
+            'teacher_id' => $teacher->id,
+            'name' => 'Fisika XII IPA',
+            'subject' => 'Fisika Modern',
+            'grade_level' => '12',
+        ]);
 
-        // 7. Student POST to /guru/tugas/tambah
+        $pdfFile = UploadedFile::fake()->create('soal_kuantum.pdf', 500, 'application/pdf');
+
+        $storeResponse = $this->actingAs($teacherUser)->post(route('guru.tugas.store'), [
+            'classroom_id' => $classroom->id,
+            'title' => 'Tugas Fisika Kuantum Soal PDF',
+            'instructions' => 'Pelajari soal dalam lampiran PDF dan kerjakan.',
+            'points' => 100,
+            'status' => 'published',
+            'attachment' => $pdfFile,
+        ]);
+
+        $storeResponse->assertRedirect(route('guru.tugas.tambah'));
+        $storeResponse->assertSessionHas('success');
+
+        $assignment = Assignment::where('title', 'Tugas Fisika Kuantum Soal PDF')->first();
+        $this->assertNotNull($assignment);
+        $this->assertNotNull($assignment->attachment_path);
+        Storage::disk('public')->assertExists($assignment->attachment_path);
+
+        // Student visits tugas page and sees download link
         $studentUser = User::create([
-            'name' => 'Ahmad Shafey Student',
-            'email' => 'shafey@cakrawala.test',
+            'name' => 'Ahmad Siswa',
+            'email' => 'ahmad@cakrawala.test',
             'password' => 'password123',
             'role' => 'student',
         ]);
-        $studentPost = $this->actingAs($studentUser)->post('/guru/tugas/tambah', [
-            'classroom_id' => $classroom->id,
-            'title' => 'Praktikum Siswa',
-            'instructions' => 'Pengerjaan siswa',
-            'points' => 100,
-            'due_at' => '2026-09-29T17:05',
-            'status' => 'published',
+        $student = Student::create([
+            'user_id' => $studentUser->id,
+            'nisn' => '1234567890',
+            'class_name' => '12',
+            'status' => 'active',
         ]);
-        $studentPost->assertRedirect(route('guru.tugas.tambah'));
-        $this->assertDatabaseHas('assignments', ['title' => 'Praktikum Siswa']);
+        $classroom->students()->attach($student->id);
+
+        $studentResponse = $this->actingAs($studentUser)->get(route('siswa.tugas'));
+        $studentResponse->assertOk()
+            ->assertSee('Tugas Fisika Kuantum Soal PDF')
+            ->assertSee('Unduh Berkas Soal Tugas (PDF)');
     }
 }
