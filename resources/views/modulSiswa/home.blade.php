@@ -75,6 +75,56 @@
 
         </div>
 
+        <!-- SECTION: Kelas Pembelajaran -->
+        <div class="space-y-4 pt-2">
+            <div class="flex items-center justify-between px-1">
+                <div>
+                    <h3 class="text-xs font-black text-slate-700 uppercase tracking-wider">Kelas Pembelajaran</h3>
+                    <p class="text-[11px] font-bold text-slate-400">Kelas dan jadwal bimbingan belajar Anda</p>
+                </div>
+                <span class="text-xs font-bold text-indigo-600">{{ $classrooms->count() }} Kelas Aktif</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                @forelse ($classrooms as $classroom)
+                    <div class="bg-white/85 backdrop-blur-sm p-5 rounded-3xl border border-indigo-100 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all flex flex-col justify-between space-y-3">
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="rounded-xl bg-indigo-50 border border-indigo-100 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-indigo-700">
+                                    {{ $classroom->subject }}
+                                </span>
+                                <span class="text-xs font-bold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-lg">
+                                    {{ $classroom->grade_level }}
+                                </span>
+                            </div>
+                            <h4 class="text-sm font-black text-slate-900 line-clamp-1">{{ $classroom->name }}</h4>
+                            <div class="flex items-center gap-2 text-xs font-bold text-slate-600">
+                                <span class="w-6 h-6 rounded-lg bg-indigo-50 text-indigo-600 text-[10px] font-black flex items-center justify-center shrink-0">
+                                    {{ strtoupper(substr($classroom->teacher?->user?->name ?? 'G', 0, 1)) }}
+                                </span>
+                                <span class="truncate">Tutor: {{ $classroom->teacher?->user?->name ?? 'Belum ditentukan' }}</span>
+                            </div>
+                            @if ($classroom->schedules->isNotEmpty())
+                                @php $sch = $classroom->schedules->first(); @endphp
+                                <div class="flex items-center gap-1.5 text-xs font-bold text-indigo-700 bg-indigo-50/80 border border-indigo-100 rounded-xl px-2.5 py-1 w-fit">
+                                    <svg class="w-3.5 h-3.5 text-indigo-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    <span>{{ $sch->day_of_week }}, {{ substr($sch->start_time, 0, 5) }} - {{ substr($sch->end_time, 0, 5) }} WIB</span>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="pt-3 border-t border-indigo-50 flex items-center justify-between">
+                            <span class="text-[11px] font-bold text-slate-400">{{ $classroom->students_count ?? 0 }} Siswa Terdaftar</span>
+                            <a href="{{ route('siswa.materi', ['subject' => $classroom->subject]) }}" class="text-xs font-black text-indigo-600 hover:text-indigo-800 hover:underline">Lihat Materi &rarr;</a>
+                        </div>
+                    </div>
+                @empty
+                    <div class="col-span-full rounded-3xl border border-dashed border-indigo-200 bg-white/70 p-6 text-center text-xs font-bold text-slate-400">
+                        Belum ada kelas pembelajaran aktif.
+                    </div>
+                @endforelse
+            </div>
+        </div>
+
         <!-- SECTION: Mata Pelajaran (Slider Horizontal Utama) -->
         <div class="space-y-4 pt-2">
             <div class="flex items-center justify-between px-1">

@@ -9,45 +9,38 @@
     @if (session('success'))<div class="rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm font-bold text-emerald-800">{{ session('success') }}</div>@endif
     <div class="grid gap-4 md:grid-cols-2">
         @forelse ($classrooms as $classroom)
-            @php
-                $schedule = $classroom->schedules->first();
-            @endphp
-            <article class="flex flex-col justify-between rounded-3xl border border-indigo-100 bg-white p-6 shadow-sm hover:shadow-md transition-all">
+            <article class="flex flex-col justify-between rounded-3xl border border-indigo-100 bg-white p-6 shadow-sm hover:border-indigo-300 transition-all">
                 <div class="space-y-3">
                     <div class="flex items-start justify-between gap-3">
                         <div>
-                            <span class="rounded-lg bg-indigo-50 border border-indigo-100 px-2.5 py-1 text-[11px] font-black uppercase tracking-wider text-indigo-700">
-                                {{ $classroom->subject }}
-                            </span>
-                            <h2 class="mt-2 text-lg font-black text-slate-900">{{ $classroom->name }}</h2>
+                            <span class="rounded-xl bg-indigo-50 border border-indigo-100 px-3 py-1 text-xs font-black uppercase tracking-wider text-indigo-700">{{ $classroom->subject }}</span>
+                            <h2 class="mt-2.5 text-lg font-black text-slate-900 leading-snug">{{ $classroom->name }}</h2>
                         </div>
-                        <span class="rounded-xl bg-slate-100 border border-slate-200 px-2.5 py-1 text-xs font-bold text-slate-600">
-                            Tingkat {{ $classroom->grade_level }}
-                        </span>
+                        <span class="rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-600">{{ $classroom->grade_level }}</span>
                     </div>
 
-                    <div class="space-y-1.5 text-xs text-slate-600">
-                        <p class="font-semibold text-slate-700">
-                            <span class="text-slate-400 font-normal">Wali Kelas:</span> {{ $classroom->teacher?->user?->name ?? '-' }} · <span class="font-bold text-indigo-600">{{ $classroom->students_count }} siswa</span>
-                        </p>
-                        @if ($schedule && $schedule->day_of_week)
-                            <p class="flex items-center gap-1.5 font-bold text-indigo-700">
-                                <svg class="h-3.5 w-3.5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                <span>{{ $schedule->day_of_week }} · {{ $schedule->start_time }} - {{ $schedule->end_time }} WIB</span>
-                            </p>
+                    <div class="space-y-1.5 pt-1 border-t border-slate-100 text-xs font-bold text-slate-600">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-teal-500"></span>
+                            <span>Wali / Guru: {{ $classroom->teacher?->user?->name ?? 'Belum ditentukan' }}</span>
+                        </div>
+                        @if ($classroom->schedules->isNotEmpty())
+                            @php $sch = $classroom->schedules->first(); @endphp
+                            <div class="flex items-center gap-1.5 text-teal-700 bg-teal-50/80 border border-teal-200/60 rounded-lg px-2.5 py-1 w-fit">
+                                <svg class="w-3.5 h-3.5 text-teal-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <span>{{ $sch->day_of_week }}, {{ substr($sch->start_time, 0, 5) }} - {{ substr($sch->end_time, 0, 5) }} WIB</span>
+                            </div>
                         @endif
-                        @if ($classroom->section)
-                            <p class="text-slate-500 font-semibold"><span class="text-slate-400 font-normal">Ruang:</span> {{ $classroom->section }}</p>
-                        @endif
+                        <p class="text-slate-400 font-semibold">{{ $classroom->students_count }} Siswa terdaftar @if ($classroom->section) · Rombel: {{ $classroom->section }} @endif</p>
                     </div>
                 </div>
 
                 <div class="mt-5 flex gap-2 border-t border-slate-100 pt-4">
-                    <a href="{{ route('admin.kelas.show', $classroom) }}" class="flex-1 rounded-xl border border-indigo-200 px-3 py-2.5 text-center text-xs font-black text-indigo-700 hover:bg-indigo-50 transition">Detail</a>
-                    <a href="{{ route('admin.kelas.edit', $classroom) }}" class="flex-1 rounded-xl bg-indigo-50 px-3 py-2.5 text-center text-xs font-black text-indigo-700 hover:bg-indigo-100 transition">Edit</a>
+                    <a href="{{ route('admin.kelas.show', $classroom) }}" class="flex-1 rounded-xl border border-indigo-200 px-3 py-2.5 text-center text-xs font-black text-indigo-700 hover:bg-indigo-50 transition-colors">Detail</a>
+                    <a href="{{ route('admin.kelas.edit', $classroom) }}" class="flex-1 rounded-xl bg-indigo-50 px-3 py-2.5 text-center text-xs font-black text-indigo-700 hover:bg-indigo-100 transition-colors">Edit</a>
                     <form class="flex-1" method="POST" action="{{ route('admin.kelas.destroy', $classroom) }}" onsubmit="return confirm('Hapus kelas ini?')">
                         @csrf @method('DELETE')
-                        <button class="w-full rounded-xl bg-rose-50 px-3 py-2.5 text-xs font-black text-rose-700 hover:bg-rose-100 transition">Hapus</button>
+                        <button class="w-full rounded-xl bg-rose-50 px-3 py-2.5 text-xs font-black text-rose-700 hover:bg-rose-100 transition-colors">Hapus</button>
                     </form>
                 </div>
             </article>

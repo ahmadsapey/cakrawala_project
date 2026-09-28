@@ -36,8 +36,8 @@
                 <span class="text-xs font-bold text-slate-500">Ringkasan Sistem Akademik</span>
             </div>
 
-            <!-- Grid 4 Kartu Statistik -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Grid 5 Kartu Statistik -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
 
                 <!-- Kartu 1: siswa -->
                 <a href="{{ route('admin.siswa.index') }}"
@@ -71,7 +71,23 @@
                     </div>
                 </a>
 
-                <!-- Kartu 3: Pembayaran -->
+                <!-- Kartu 3: Total Kelas -->
+                <a href="{{ route('admin.kelas.index') }}"
+                    class="bg-white/90 backdrop-blur-md rounded-3xl border-2 border-indigo-100 shadow-sm p-6 space-y-3 hover:border-indigo-300 transition-all">
+                    <div class="w-10 h-10 rounded-2xl bg-teal-50 text-teal-600 border border-teal-200 flex items-center justify-center font-bold">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="text-[11px] font-black text-slate-400 uppercase tracking-wider">Total Kelas</span>
+                        <div class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
+                            {{ number_format($totalClassrooms ?? 0) }}</div>
+                    </div>
+                </a>
+
+                <!-- Kartu 4: Pembayaran -->
                 <a href="{{ route('admin.pembayaran') }}"
                     class="bg-white/90 backdrop-blur-md rounded-3xl border-2 border-indigo-100 shadow-sm p-6 space-y-3 hover:border-indigo-300 transition-all">
                     <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center font-bold">
@@ -87,7 +103,7 @@
                     </div>
                 </a>
 
-                <!-- Kartu 4: Tunggakan -->
+                <!-- Kartu 5: Menunggu / Pending -->
                 <a href="{{ route('admin.pembayaran', ['status' => 'pending']) }}"
                     class="bg-white/90 backdrop-blur-md rounded-3xl border-2 border-indigo-100 shadow-sm p-6 space-y-3 hover:border-indigo-300 transition-all">
                     <div class="w-10 h-10 rounded-2xl bg-rose-50 text-rose-600 border border-rose-200 flex items-center justify-center font-bold">
@@ -103,6 +119,49 @@
                     </div>
                 </a>
 
+            </div>
+        </div>
+
+        <!-- Section: Kelas Aktif & Pembelajaran -->
+        <div class="space-y-3">
+            <div class="px-1 flex items-center justify-between">
+                <div>
+                    <h2 class="text-xs font-black uppercase tracking-wider text-slate-700">Kelas Aktif</h2>
+                    <p class="text-xs text-slate-400 font-bold">Daftar kelas pembelajaran yang terdaftar di sistem</p>
+                </div>
+                <a href="{{ route('admin.kelas.index') }}" class="text-xs font-black text-indigo-600 hover:text-indigo-800 hover:underline">Kelola Semua Kelas &rarr;</a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                @forelse ($recentClassrooms ?? [] as $classroom)
+                    <div class="bg-white/90 backdrop-blur-md rounded-3xl border-2 border-indigo-100 shadow-sm p-5 space-y-3 flex flex-col justify-between hover:border-indigo-300 transition-all">
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-black px-2.5 py-1 bg-teal-50 text-teal-800 border border-teal-200 rounded-xl uppercase tracking-wider">{{ $classroom->subject }}</span>
+                                <span class="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-lg">{{ $classroom->grade_level }}</span>
+                            </div>
+                            <h3 class="text-sm font-black text-slate-900 line-clamp-1">{{ $classroom->name }}</h3>
+                            <div class="text-xs font-bold text-slate-600 flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-teal-500"></span>
+                                <span class="truncate">Guru: {{ $classroom->teacher?->user?->name ?? 'Belum ditentukan' }}</span>
+                            </div>
+                            @if ($classroom->schedules->isNotEmpty())
+                                @php $sch = $classroom->schedules->first(); @endphp
+                                <p class="text-[11px] font-bold text-teal-700 bg-teal-50/70 border border-teal-200/60 rounded-lg px-2 py-0.5 w-fit">
+                                    {{ $sch->day_of_week }}, {{ substr($sch->start_time, 0, 5) }} - {{ substr($sch->end_time, 0, 5) }} WIB
+                                </p>
+                            @endif
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-500">
+                            <span>{{ $classroom->students_count ?? 0 }} Siswa</span>
+                            <a href="{{ route('admin.kelas.show', $classroom) }}" class="text-indigo-600 hover:underline">Detail</a>
+                        </div>
+                    </div>
+                @empty
+                    <div class="col-span-full bg-white/80 rounded-3xl border-2 border-dashed border-slate-200 p-8 text-center text-xs font-bold text-slate-400">
+                        Belum ada kelas yang dibuat. <a href="{{ route('admin.kelas.create') }}" class="text-indigo-600 underline">Tambah Kelas Baru</a>
+                    </div>
+                @endforelse
             </div>
         </div>
 
@@ -129,6 +188,13 @@
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                            @elseif ($activity['type'] === 'classroom')
+                                <div class="w-11 h-11 rounded-2xl bg-teal-50 text-teal-600 border border-teal-200 flex items-center justify-center flex-shrink-0 font-bold">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
                                     </svg>
                                 </div>
                             @else

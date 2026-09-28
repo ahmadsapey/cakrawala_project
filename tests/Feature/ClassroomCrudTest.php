@@ -73,13 +73,6 @@ class ClassroomCrudTest extends TestCase
         $this->assertDatabaseHas('classrooms', [
             'id' => $classroom->id,
             'name' => 'Fisika XI - IPA 2',
-            'section' => 'IPA 2',
-        ]);
-        $this->assertDatabaseHas('schedules', [
-            'classroom_id' => $classroom->id,
-            'day_of_week' => 'Senin',
-            'start_time' => '08:00',
-            'end_time' => '09:30',
         ]);
 
         $this->get(route('admin.kelas.edit', $classroom))

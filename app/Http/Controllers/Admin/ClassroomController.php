@@ -38,9 +38,9 @@ class ClassroomController extends Controller
 
         if (! empty($data['subject_id'])) {
             $subject = Subject::find($data['subject_id']);
-            $data['subject'] = $subject?->name ?? (! empty($data['subject']) ? $data['subject'] : $teacher->subject);
+            $data['subject'] = $subject?->name ?? $teacher->subject;
         } else {
-            $data['subject'] = ! empty($data['subject']) ? $data['subject'] : $teacher->subject;
+            $data['subject'] = $teacher->subject;
         }
 
         $classroom = Classroom::create([
@@ -90,9 +90,9 @@ class ClassroomController extends Controller
 
         if (! empty($data['subject_id'])) {
             $subject = Subject::find($data['subject_id']);
-            $data['subject'] = $subject?->name ?? (! empty($data['subject']) ? $data['subject'] : $teacher->subject);
+            $data['subject'] = $subject?->name ?? $teacher->subject;
         } else {
-            $data['subject'] = ! empty($data['subject']) ? $data['subject'] : $teacher->subject;
+            $data['subject'] = $teacher->subject;
         }
 
         $classroom->update([

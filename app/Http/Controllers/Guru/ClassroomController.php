@@ -17,19 +17,44 @@ use Illuminate\View\View;
 class ClassroomController extends Controller
 {
     /**
+     * Resolve the active teacher based on authentication, session, or database fallback.
+     */
+    private function resolveTeacher(): ?Teacher
+    {
+        $user = Auth::user();
+        if ($user?->teacher) {
+            return $user->teacher;
+        }
+
+        if (session('teacher_id')) {
+            $teacher = Teacher::find(session('teacher_id'));
+            if ($teacher) {
+                return $teacher;
+            }
+        }
+
+        return Teacher::with('user')->first();
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index(): View
     {
-        $teacherId = Auth::user()?->teacher?->id;
+        $user = Auth::user();
+        $isAdmin = $user?->role === 'admin';
+        $teacher = $this->resolveTeacher();
+
+        $classrooms = Classroom::query()
+            ->when(! $isAdmin && $teacher, fn ($q) => $q->where('teacher_id', $teacher->id))
+            ->with(['teacher.user', 'schedules', 'materials', 'assignments'])
+            ->withCount(['students', 'materials', 'assignments'])
+            ->latest()
+            ->get();
 
         return view('modulGuru.classroomIndex', [
-            'classrooms' => Classroom::query()
-                ->where('teacher_id', $teacherId)
-                ->with(['teacher.user', 'schedules', 'materials', 'assignments'])
-                ->withCount(['students', 'materials', 'assignments'])
-                ->latest()
-                ->get(),
+            'classrooms' => $classrooms,
+            'teacher' => $teacher,
         ]);
     }
 
@@ -43,11 +68,16 @@ class ClassroomController extends Controller
 
     public function learning(Classroom $classroom): View
     {
-        abort_unless($classroom->teacher_id === Auth::user()?->teacher?->id, 404);
+        $user = Auth::user();
+        $teacher = $this->resolveTeacher();
 
-        if ($teacher = Auth::user()?->teacher) {
+        if ($user?->role !== 'admin') {
+            abort_unless($classroom->teacher_id === $teacher?->id, 404);
+        }
+
+        if ($teacher || $classroom->teacher) {
             TeacherAttendance::firstOrCreate([
-                'teacher_id' => $teacher->id,
+                'teacher_id' => $classroom->teacher_id ?: $teacher?->id,
                 'classroom_id' => $classroom->id,
                 'attendance_date' => now()->toDateString(),
             ], [
@@ -57,7 +87,7 @@ class ClassroomController extends Controller
         }
 
         return view('modulGuru.kelasGuru_pembelajaran', [
-            'classroom' => $classroom,
+            'classroom' => $classroom->load(['teacher.user', 'schedules']),
             'materials' => $classroom->materials()->latest('published_at')->get(),
             'assignments' => $classroom->assignments()->latest()->get(),
         ]);
@@ -76,9 +106,16 @@ class ClassroomController extends Controller
      */
     public function show(Classroom $classroom): View
     {
-        abort_unless($classroom->teacher_id === Auth::user()?->teacher?->id, 404);
+        $user = Auth::user();
+        $teacher = $this->resolveTeacher();
 
-        return view('modulGuru.classroomShow', compact('classroom'));
+        if ($user?->role !== 'admin') {
+            abort_unless($classroom->teacher_id === $teacher?->id, 404);
+        }
+
+        return view('modulGuru.classroomShow', [
+            'classroom' => $classroom->load(['teacher.user', 'schedules', 'students.user']),
+        ]);
     }
 
     /**
@@ -144,7 +181,12 @@ class ClassroomController extends Controller
      */
     public function saveAttendance(Request $request, Classroom $classroom): RedirectResponse
     {
-        abort_unless($classroom->teacher_id === Auth::user()?->teacher?->id, 404);
+        $user = Auth::user();
+        $teacher = $this->resolveTeacher();
+
+        if ($user?->role !== 'admin') {
+            abort_unless($classroom->teacher_id === $teacher?->id, 404);
+        }
 
         $date = $request->input('date', now()->toDateString());
         $attendance = $request->input('attendance', $request->input('attendances', []));
@@ -191,7 +233,12 @@ class ClassroomController extends Controller
 
     public function attendance(Classroom $classroom): View
     {
-        abort_unless($classroom->teacher_id === Auth::user()?->teacher?->id, 404);
+        $user = Auth::user();
+        $teacher = $this->resolveTeacher();
+
+        if ($user?->role !== 'admin') {
+            abort_unless($classroom->teacher_id === $teacher?->id, 404);
+        }
 
         $date = request()->query('date', now()->toDateString());
         $students = $classroom->students()->with('user')->orderBy('class_name')->get();

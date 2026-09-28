@@ -26,12 +26,13 @@ class HomeController extends Controller
             $teacher = Teacher::with('user')->first();
         }
 
-        $teacherName = $teacher?->user?->name ?? 'Bapak/Ibu Guru';
+        $isAdmin = $user?->role === 'admin';
+        $teacherName = $teacher?->user?->name ?? ($isAdmin ? ($user?->name ?? 'Administrator') : 'Bapak/Ibu Guru');
         $teacherSubject = $teacher?->subject ?? 'Sains & Teknologi';
 
         // Get teacher's classrooms
-        $classroomsQuery = Classroom::withCount(['students', 'assignments', 'quizzes']);
-        if ($teacher) {
+        $classroomsQuery = Classroom::with(['teacher.user', 'schedules'])->withCount(['students', 'assignments', 'quizzes', 'materials']);
+        if (! $isAdmin && $teacher) {
             $classroomsQuery->where('teacher_id', $teacher->id);
         }
         $classrooms = $classroomsQuery->latest()->get();

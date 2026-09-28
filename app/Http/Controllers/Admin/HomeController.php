@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Classroom;
 use App\Models\Payment;
 use App\Models\Student;
 use App\Models\Teacher;
@@ -15,6 +16,7 @@ class HomeController extends Controller
     {
         $totalStudents = Student::count();
         $totalTeachers = Teacher::count();
+        $totalClassrooms = Classroom::count();
 
         $monthConfirmed = Payment::where('status', 'confirmed')
             ->whereMonth('created_at', now()->month)
@@ -25,6 +27,12 @@ class HomeController extends Controller
         $paidAmount = $monthConfirmed > 0 ? $monthConfirmed : $totalConfirmed;
 
         $totalPending = Payment::where('status', 'pending')->sum('amount');
+
+        $recentClassrooms = Classroom::with(['teacher.user', 'schedules'])
+            ->withCount('students')
+            ->latest()
+            ->take(4)
+            ->get();
 
         $recentStudents = Student::with('user')->latest()->take(3)->get()->map(function (Student $student): array {
             return [
@@ -56,11 +64,22 @@ class HomeController extends Controller
             ];
         });
 
+        $recentClassroomActivities = Classroom::with('teacher.user')->latest()->take(3)->get()->map(function (Classroom $classroom): array {
+            return [
+                'type' => 'classroom',
+                'title' => 'Kelas baru dibuat: '.$classroom->name,
+                'subtitle' => ($classroom->subject).' • Guru: '.($classroom->teacher?->user?->name ?? 'Belum ditentukan'),
+                'time' => $classroom->created_at?->diffForHumans() ?? 'Baru saja',
+                'raw_time' => $classroom->created_at,
+            ];
+        });
+
         /** @var Collection<int, array{type: string, title: string, subtitle: string, time: string, raw_time: mixed}> $recentActivities */
         $recentActivities = collect()
             ->concat($recentStudents)
             ->concat($recentPayments)
             ->concat($recentTeachers)
+            ->concat($recentClassroomActivities)
             ->sortByDesc('raw_time')
             ->take(5)
             ->values();
@@ -68,6 +87,8 @@ class HomeController extends Controller
         return view('modulAdmin.home', [
             'totalStudents' => $totalStudents,
             'totalTeachers' => $totalTeachers,
+            'totalClassrooms' => $totalClassrooms,
+            'recentClassrooms' => $recentClassrooms,
             'paidAmount' => $paidAmount,
             'totalPending' => $totalPending,
             'currentMonthName' => now()->locale('id')->isoFormat('MMMM'),

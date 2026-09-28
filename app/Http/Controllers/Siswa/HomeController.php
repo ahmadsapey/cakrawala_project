@@ -17,8 +17,8 @@ class HomeController extends Controller
         $hasEnrolledClassrooms = $student && $student->classrooms()->exists();
 
         $classrooms = $hasEnrolledClassrooms
-            ? $student->classrooms()->with('teacher.user')->withCount('students')->latest()->limit(4)->get()
-            : Classroom::with('teacher.user')->latest()->limit(4)->get();
+            ? $student->classrooms()->with(['teacher.user', 'schedules'])->withCount('students')->latest()->limit(4)->get()
+            : Classroom::with(['teacher.user', 'schedules'])->withCount('students')->latest()->limit(4)->get();
 
         $publishedMaterials = Material::query()
             ->where('status', 'published')
