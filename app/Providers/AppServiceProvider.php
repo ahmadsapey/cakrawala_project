@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\LandingContent;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View;
 
@@ -22,6 +23,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Paksa skema HTTPS saat di production (Railway)
+        if ($this->app->environment('production') || str_contains(request()->url(), 'railway.app')) {
+            URL::forceScheme('https');
+        }
+
+        // Shared view composer untuk brand content
         view()->composer([
             'components.header',
             'components.headerAdmin',
@@ -37,9 +44,14 @@ class AppServiceProvider extends ServiceProvider
             'modulAdmin.login',
             'maintenance.login',
         ], function (View $view): void {
-            $brandContent = Schema::hasTable('landing_contents')
-                ? LandingContent::query()->where('type', 'brand')->where('is_active', true)->first()
-                : null;
+            $brandContent = null;
+
+            if (Schema::hasTable('landing_contents')) {
+                $brandContent = LandingContent::query()
+                    ->where('type', 'brand')
+                    ->where('is_active', true)
+                    ->first();
+            }
 
             $view->with('brandContent', $brandContent);
         });
