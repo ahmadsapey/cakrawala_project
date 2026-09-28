@@ -23,8 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Paksa skema HTTPS saat di production (Railway)
-        if ($this->app->environment('production') || str_contains(request()->url(), 'railway.app')) {
+        // Paksa semua URL, route, asset, dan form action selalu menggunakan HTTPS di Railway
+        if (config('app.env') === 'production' || env('RAILWAY_ENVIRONMENT')) {
             URL::forceScheme('https');
         }
 
