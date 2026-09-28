@@ -13,7 +13,6 @@ use App\Http\Controllers\Guru\HomeController as GuruHomeController;
 use App\Http\Controllers\Guru\LearningRecommendationController;
 use App\Http\Controllers\Guru\LoginController as GuruLoginController;
 use App\Http\Controllers\Guru\MaterialController as GuruMaterialController;
-use App\Http\Controllers\Guru\QuizController;
 use App\Http\Controllers\Maintenance\LandingContentController;
 use App\Http\Controllers\Maintenance\LoginController as MaintenanceLoginController;
 use App\Http\Controllers\Siswa\AssignmentSubmissionController;
@@ -23,7 +22,6 @@ use App\Http\Controllers\Siswa\LoginController as SiswaLoginController;
 use App\Http\Controllers\Siswa\MaterialController as SiswaMaterialController;
 use App\Http\Controllers\Siswa\PaymentController as SiswaPaymentController;
 use App\Http\Controllers\Siswa\ProfileController;
-use App\Http\Controllers\Siswa\QuizTakingController;
 use App\Http\Controllers\Siswa\RegistrationController;
 use App\Http\Controllers\Siswa\TaskController as SiswaTaskController;
 use App\Models\LandingContent;
@@ -69,9 +67,6 @@ Route::prefix('siswa')->name('siswa.')->group(function () {
         Route::post('/logout', [SiswaLoginController::class, 'destroy'])->name('logout');
         Route::get('/tugas', [SiswaTaskController::class, 'index'])->name('tugas');
         Route::post('/tugas/{assignment}/submit', [AssignmentSubmissionController::class, 'store'])->name('tugas.submit');
-        Route::get('/pengerjaan/{quiz?}', [QuizTakingController::class, 'show'])->name('pengerjaan');
-        Route::post('/pengerjaan/{quiz}', [QuizTakingController::class, 'submit'])->name('pengerjaan.submit');
-        Route::get('/evaluasi/{submission?}', [QuizTakingController::class, 'evaluation'])->name('evaluasi');
     });
 });
 
@@ -102,14 +97,11 @@ Route::prefix('guru')->name('guru.')->group(function () {
     Route::get('/bahan-ajar/{material}/edit', [GuruMaterialController::class, 'edit'])->middleware('auth')->name('material.edit');
     Route::put('/bahan-ajar/{material}', [GuruMaterialController::class, 'update'])->middleware('auth')->name('material.update');
     Route::delete('/bahan-ajar/{material}', [GuruMaterialController::class, 'destroy'])->middleware('auth')->name('material.destroy');
-    Route::get('/koreksi/kuis/{quiz?}', [GradingController::class, 'quizAnalytics'])->name('koreksi.kuis');
     Route::get('/koreksi/tugas', [GradingController::class, 'taskCorrection'])->name('koreksi.tugas');
-    Route::get('/kuis/tambah', [QuizController::class, 'create'])->middleware('auth')->name('kuis.tambah');
-    Route::get('/kuis/create', [QuizController::class, 'create'])->middleware('auth')->name('kuis.create');
-    Route::post('/kuis/tambah', [QuizController::class, 'store'])->middleware('auth')->name('kuis.store');
     Route::get('/tugas/tambah', [AssignmentController::class, 'create'])->middleware('auth')->name('tugas.tambah');
     Route::get('/tugas/create', [AssignmentController::class, 'create'])->middleware('auth')->name('tugas.create');
     Route::post('/tugas/tambah', [AssignmentController::class, 'store'])->middleware('auth')->name('tugas.store');
+    Route::post('/tugas/create', [AssignmentController::class, 'store'])->middleware('auth')->name('tugas.create.store');
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {

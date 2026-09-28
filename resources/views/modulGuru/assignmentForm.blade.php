@@ -26,10 +26,21 @@
 
     <main class="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6 lg:px-12">
         <!-- Header Halaman -->
-        <div>
-            <span class="text-xs font-black uppercase tracking-[0.18em] text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1.5 rounded-xl inline-block shadow-2xs">Evaluasi Kelas</span>
-            <h1 class="mt-2 text-2xl sm:text-3xl font-black tracking-tight text-slate-900">Tambah Tugas Baru</h1>
-            <p class="mt-1 text-xs sm:text-sm font-bold text-slate-500">Tugas yang diterbitkan akan tampil secara instan pada portal siswa.</p>
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <span class="text-xs font-black uppercase tracking-[0.18em] text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1.5 rounded-xl inline-block shadow-2xs">Evaluasi Kelas</span>
+                <h1 class="mt-2 text-2xl sm:text-3xl font-black tracking-tight text-slate-900">Tambah Tugas Baru</h1>
+                <p class="mt-1 text-xs sm:text-sm font-bold text-slate-500">Tugas yang diterbitkan akan tampil secara instan pada portal siswa.</p>
+            </div>
+            @if ($selectedClassroomId)
+                <a href="{{ route('guru.kelas.learning', $selectedClassroomId) }}" class="inline-flex items-center gap-2 rounded-2xl border-2 border-teal-200 bg-white px-4 py-2.5 text-xs font-black text-teal-800 hover:bg-teal-50 shadow-2xs transition-all w-fit">
+                    &larr; Kembali ke Kelas
+                </a>
+            @else
+                <a href="{{ route('guru.kelas') }}" class="inline-flex items-center gap-2 rounded-2xl border-2 border-teal-200 bg-white px-4 py-2.5 text-xs font-black text-teal-800 hover:bg-teal-50 shadow-2xs transition-all w-fit">
+                    &larr; Kembali ke Daftar Kelas
+                </a>
+            @endif
         </div>
 
         <!-- Notifikasi Sukses -->

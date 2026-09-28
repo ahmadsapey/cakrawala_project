@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Assignment;
 use App\Models\AssignmentSubmission;
 use App\Models\Classroom;
-use App\Models\Quiz;
 use App\Models\Teacher;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -119,79 +118,6 @@ class GradingController extends Controller
     }
 
     /**
-     * Show quiz analytics dashboard.
-     */
-    public function quizAnalytics(Request $request, ?Quiz $quiz = null): View
-    {
-        $user = Auth::user();
-        $isAdmin = $user?->role === 'admin';
-        $teacher = $this->resolveTeacher();
-
-        if (! $quiz || ! $quiz->exists) {
-            $quizId = $request->query('quiz_id');
-            $quiz = $quizId ? Quiz::find($quizId) : Quiz::when(! $isAdmin && $teacher, fn ($q) => $q->where('teacher_id', $teacher->id))->latest()->first();
-        }
-
-        if (! $quiz) {
-            $quiz = Quiz::with('classroom')->first();
-        }
-
-        $quizzes = Quiz::when(! $isAdmin && $teacher, fn ($q) => $q->where('teacher_id', $teacher->id))->get();
-
-        $submissions = $quiz ? $quiz->submissions()->with('student.user')->get() : collect();
-        $totalParticipants = $submissions->count();
-
-        $avgScore = $totalParticipants > 0 ? round($submissions->avg('score'), 1) : 0;
-        $passingScore = $quiz?->passing_score ?? 75;
-        $passedCount = $submissions->where('score', '>=', $passingScore)->count();
-        $passRate = $totalParticipants > 0 ? round(($passedCount / $totalParticipants) * 100) : 0;
-
-        // Score Distribution
-        $distExcellent = $submissions->where('score', '>=', 90)->count();
-        $distGood = $submissions->whereBetween('score', [75, 89.99])->count();
-        $distBelow = $submissions->where('score', '<', 75)->count();
-
-        // Hardest question calculation
-        $questions = $quiz ? $quiz->questions()->get() : collect();
-        $hardestQuestion = null;
-        $lowestAccuracy = 100;
-
-        if ($totalParticipants > 0 && $questions->isNotEmpty()) {
-            foreach ($questions as $q) {
-                $correct = 0;
-                foreach ($submissions as $sub) {
-                    $ans = $sub->answers[$q->id] ?? null;
-                    if ($ans && strtoupper((string) $ans) === strtoupper($q->correct_answer)) {
-                        $correct++;
-                    }
-                }
-                $accuracy = ($correct / $totalParticipants) * 100;
-                if ($accuracy <= $lowestAccuracy) {
-                    $lowestAccuracy = round($accuracy, 1);
-                    $hardestQuestion = [
-                        'question' => $q,
-                        'accuracy' => $lowestAccuracy,
-                        'correct_students' => $correct,
-                        'total_students' => $totalParticipants,
-                    ];
-                }
-            }
-        }
-
-        return view('modulGuru.koreksiKuis', [
-            'quiz' => $quiz,
-            'quizzes' => $quizzes,
-            'avgScore' => $avgScore,
-            'passRate' => $passRate,
-            'totalParticipants' => $totalParticipants,
-            'distExcellent' => $distExcellent,
-            'distGood' => $distGood,
-            'distBelow' => $distBelow,
-            'hardestQuestion' => $hardestQuestion,
-        ]);
-    }
-
-    /**
      * Show classroom students list with attendance & recent grades.
      */
     public function classStudents(Request $request, ?Classroom $classroom = null): View
@@ -212,7 +138,6 @@ class GradingController extends Controller
         $students = $classroom ? $classroom->students()->with([
             'user',
             'assignmentSubmissions' => fn ($q) => $q->latest(),
-            'quizSubmissions' => fn ($q) => $q->latest(),
         ])->get() : collect();
 
         return view('modulGuru.viewSiswa', [

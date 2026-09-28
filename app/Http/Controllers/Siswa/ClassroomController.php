@@ -56,7 +56,6 @@ class ClassroomController extends Controller
             'classroom' => $classroom->load('teacher.user'),
             'materials' => $classroom->materials()->where('status', 'published')->latest('published_at')->get(),
             'assignments' => $classroom->assignments()->where('status', 'published')->latest()->get(),
-            'quizzes' => $classroom->quizzes()->where('status', 'published')->latest()->get(),
         ]);
     }
 }

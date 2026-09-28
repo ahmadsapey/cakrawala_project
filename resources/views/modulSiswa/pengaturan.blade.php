@@ -110,7 +110,7 @@
                     </label>
                 </div>
 
-                <!-- Toggle 2: Notifikasi Tugas & Kuis -->
+                <!-- Toggle 2: Notifikasi Tugas & Materi -->
                 <div class="flex items-center justify-between p-4.5 sm:p-5">
                     <div class="flex items-center space-x-3.5">
                         <div class="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-200 flex items-center justify-center shrink-0 shadow-2xs">

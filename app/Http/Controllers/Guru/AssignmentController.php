@@ -44,13 +44,17 @@ class AssignmentController extends Controller
     {
         $user = Auth::user();
         $isAdmin = $user?->role === 'admin';
-        $selectedClassroomId = request()->integer('classroom_id');
+        $selectedClassroomId = request()->integer('classroom_id') ?: null;
         $teacher = $this->resolveTeacher($selectedClassroomId);
 
-        $classrooms = Classroom::query()
-            ->when(! $isAdmin && $teacher, fn ($q) => $q->where('teacher_id', $teacher->id))
-            ->orderBy('name')
-            ->get();
+        if ($isAdmin || ! $teacher) {
+            $classrooms = Classroom::orderBy('name')->get();
+        } else {
+            $classrooms = Classroom::where('teacher_id', $teacher->id)->orderBy('name')->get();
+            if ($classrooms->isEmpty()) {
+                $classrooms = Classroom::orderBy('name')->get();
+            }
+        }
 
         return view('modulGuru.assignmentForm', [
             'classrooms' => $classrooms,
@@ -61,16 +65,10 @@ class AssignmentController extends Controller
     public function store(StoreAssignmentRequest $request): RedirectResponse
     {
         $data = $request->validated();
+        $classroom = Classroom::findOrFail($data['classroom_id']);
+
         $user = $request->user();
-        $isAdmin = $user?->role === 'admin';
-        $teacher = $this->resolveTeacher($data['classroom_id']);
-
-        $classroomQuery = Classroom::query();
-        if (! $isAdmin && $teacher) {
-            $classroomQuery->where('teacher_id', $teacher->id);
-        }
-        $classroom = $classroomQuery->findOrFail($data['classroom_id']);
-
+        $teacher = $user?->teacher ?? $this->resolveTeacher($classroom->id);
         $teacherId = $teacher?->id ?? $classroom->teacher_id ?? Teacher::first()?->id;
 
         Assignment::create([

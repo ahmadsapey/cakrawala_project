@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Guru;
 use App\Http\Controllers\Controller;
 use App\Models\Assignment;
 use App\Models\Classroom;
-use App\Models\Quiz;
 use App\Models\Student;
 use App\Models\Teacher;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +30,7 @@ class HomeController extends Controller
         $teacherSubject = $teacher?->subject ?? 'Sains & Teknologi';
 
         // Get teacher's classrooms
-        $classroomsQuery = Classroom::with(['teacher.user', 'schedules'])->withCount(['students', 'assignments', 'quizzes', 'materials']);
+        $classroomsQuery = Classroom::with(['teacher.user', 'schedules'])->withCount(['students', 'assignments', 'materials']);
         if (! $isAdmin && $teacher) {
             $classroomsQuery->where('teacher_id', $teacher->id);
         }
@@ -47,20 +46,14 @@ class HomeController extends Controller
             $studentCount = Student::where('status', 'active')->count();
         }
 
-        // Active assignments & quizzes
+        // Active assignments
         $assignments = Assignment::with('classroom')
-            ->when($teacher, fn ($q) => $q->where('teacher_id', $teacher->id))
+            ->when(! $isAdmin && $teacher, fn ($q) => $q->where('teacher_id', $teacher->id))
             ->latest()
-            ->take(3)
+            ->take(5)
             ->get();
 
-        $quizzes = Quiz::with('classroom')
-            ->when($teacher, fn ($q) => $q->where('teacher_id', $teacher->id))
-            ->latest()
-            ->take(3)
-            ->get();
-
-        $pendingTasksCount = $assignments->count() + $quizzes->count();
+        $pendingTasksCount = $assignments->count();
 
         return view('modulGuru.home', [
             'teacher' => $teacher,
@@ -70,7 +63,6 @@ class HomeController extends Controller
             'pendingTasksCount' => $pendingTasksCount,
             'classrooms' => $classrooms,
             'assignments' => $assignments,
-            'quizzes' => $quizzes,
         ]);
     }
 }

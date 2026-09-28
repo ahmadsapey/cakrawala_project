@@ -160,7 +160,7 @@ class ClassroomDisplayTest extends TestCase
             'grade_level' => '10',
         ]);
 
-        // Admin can open tambah tugas
+        // Admin can open tambah tugas directly
         $this->actingAs($admin)
             ->get(route('guru.tugas.tambah'))
             ->assertOk()
@@ -172,7 +172,7 @@ class ClassroomDisplayTest extends TestCase
             ->assertOk()
             ->assertSee('Tambah Tugas Baru');
 
-        // Admin can store assignment
+        // Admin can store assignment and gets redirected to tambah tugas with success
         $this->actingAs($admin)
             ->post(route('guru.tugas.store'), [
                 'classroom_id' => $classroom->id,
@@ -201,44 +201,5 @@ class ClassroomDisplayTest extends TestCase
             ])
             ->assertRedirect(route('guru.tugas.tambah'))
             ->assertSessionHas('success');
-    }
-
-    public function test_admin_and_teacher_can_access_and_create_quiz(): void
-    {
-        $admin = User::factory()->create(['role' => 'admin']);
-        $teacherUser = User::factory()->create(['role' => 'teacher']);
-        $teacher = Teacher::factory()->create(['user_id' => $teacherUser->id]);
-
-        $classroom = Classroom::create([
-            'teacher_id' => $teacher->id,
-            'name' => 'Kimia Terapan',
-            'subject' => 'Kimia',
-            'grade_level' => '11',
-        ]);
-
-        // Admin can open tambah kuis
-        $this->actingAs($admin)
-            ->get(route('guru.kuis.tambah'))
-            ->assertOk()
-            ->assertSee('Buat Kuis Interaktif Baru');
-
-        // Admin can store quiz
-        $this->actingAs($admin)
-            ->post(route('guru.kuis.store'), [
-                'classroom_id' => $classroom->id,
-                'title' => 'Kuis Stoikiometri',
-                'duration_minutes' => 45,
-                'passing_score' => 75,
-                'question_count' => 10,
-                'status' => 'published',
-            ])
-            ->assertRedirect(route('guru.kuis.tambah'))
-            ->assertSessionHas('success');
-
-        // Teacher can open tambah kuis
-        $this->actingAs($teacherUser)
-            ->withSession(['teacher_id' => $teacher->id])
-            ->get(route('guru.kuis.tambah'))
-            ->assertOk();
     }
 }

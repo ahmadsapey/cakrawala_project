@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Assignment;
 use App\Models\Classroom;
-use App\Models\Quiz;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -125,7 +124,7 @@ class DashboardAndSearchTest extends TestCase
             ->assertDontSee('Kalkulus Lanjut');
     }
 
-    public function test_siswa_tugas_page_renders_assignments_and_quizzes(): void
+    public function test_siswa_tugas_page_renders_assignments(): void
     {
         $teacherUser = User::create([
             'name' => 'Tutor Kimia',
@@ -155,16 +154,6 @@ class DashboardAndSearchTest extends TestCase
             'status' => 'published',
         ]);
 
-        Quiz::create([
-            'teacher_id' => $teacher->id,
-            'classroom_id' => $classroom->id,
-            'title' => 'Kuis Reaksi Redoks',
-            'duration_minutes' => 20,
-            'passing_score' => 70,
-            'question_count' => 15,
-            'status' => 'published',
-        ]);
-
         $studentUser = User::create([
             'name' => 'Siswa Tugas',
             'email' => 'siswa.tugas@example.test',
@@ -182,7 +171,6 @@ class DashboardAndSearchTest extends TestCase
             ->get(route('siswa.tugas'))
             ->assertOk()
             ->assertSee('Struktur Hidrokarbon')
-            ->assertDontSee('Kuis Reaksi Redoks')
             ->assertSee('Kimia Karbon X');
     }
 }
