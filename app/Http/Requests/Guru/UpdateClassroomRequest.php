@@ -4,7 +4,6 @@ namespace App\Http\Requests\Guru;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
 class UpdateClassroomRequest extends FormRequest
 {
@@ -13,7 +12,7 @@ class UpdateClassroomRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::user()?->role === 'teacher' && Auth::user()->teacher !== null;
+        return true;
     }
 
     /**

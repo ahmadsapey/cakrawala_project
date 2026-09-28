@@ -54,5 +54,47 @@ class AdminAssignmentCreateTest extends TestCase
         // 4. Teacher visits /guru/tugas/tambah?classroom_id=...
         $responseTeacherTambah = $this->actingAs($teacherUser)->get("/guru/tugas/tambah?classroom_id={$classroom->id}");
         $responseTeacherTambah->assertOk()->assertSee('Tambah Tugas Baru');
+
+        // 5. Admin POST to /guru/tugas/tambah
+        $adminPost = $this->actingAs($admin)->post('/guru/tugas/tambah', [
+            'classroom_id' => $classroom->id,
+            'title' => 'Praktikum Admin',
+            'instructions' => 'Kerjakan sesuai urutan',
+            'points' => 100,
+            'due_at' => '2026-09-29T17:05',
+            'status' => 'published',
+        ]);
+        $adminPost->assertRedirect(route('guru.tugas.tambah'));
+        $this->assertDatabaseHas('assignments', ['title' => 'Praktikum Admin']);
+
+        // 6. Teacher POST to /guru/tugas/tambah
+        $teacherPost = $this->actingAs($teacherUser)->post('/guru/tugas/tambah', [
+            'classroom_id' => $classroom->id,
+            'title' => 'Praktikum Guru',
+            'instructions' => 'Kerjakan modul 1',
+            'points' => 100,
+            'due_at' => '2026-09-29T17:05',
+            'status' => 'published',
+        ]);
+        $teacherPost->assertRedirect(route('guru.tugas.tambah'));
+        $this->assertDatabaseHas('assignments', ['title' => 'Praktikum Guru']);
+
+        // 7. Student POST to /guru/tugas/tambah
+        $studentUser = User::create([
+            'name' => 'Ahmad Shafey Student',
+            'email' => 'shafey@cakrawala.test',
+            'password' => 'password123',
+            'role' => 'student',
+        ]);
+        $studentPost = $this->actingAs($studentUser)->post('/guru/tugas/tambah', [
+            'classroom_id' => $classroom->id,
+            'title' => 'Praktikum Siswa',
+            'instructions' => 'Pengerjaan siswa',
+            'points' => 100,
+            'due_at' => '2026-09-29T17:05',
+            'status' => 'published',
+        ]);
+        $studentPost->assertRedirect(route('guru.tugas.tambah'));
+        $this->assertDatabaseHas('assignments', ['title' => 'Praktikum Siswa']);
     }
 }

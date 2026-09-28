@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Guru;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Guru\StoreMaterialRequest;
 use App\Models\Classroom;
 use App\Models\Material;
 use App\Models\Teacher;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
@@ -86,17 +86,9 @@ class MaterialController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreMaterialRequest $request): RedirectResponse
     {
-        $data = $request->validate([
-            'classroom_id' => ['required', 'integer', 'exists:classrooms,id'],
-            'subject' => ['required', 'string', 'max:255'],
-            'title' => ['required', 'string', 'max:255'],
-            'summary' => ['nullable', 'string', 'max:1000'],
-            'video_url' => ['nullable', 'url', 'max:255'],
-            'attachment' => ['nullable', 'file', 'mimes:pdf,doc,docx,ppt,pptx,zip', 'max:10240'],
-            'status' => ['required', 'in:draft,published'],
-        ]);
+        $data = $request->validated();
         $attachmentPath = $request->file('attachment')?->store('materials', 'public');
         $classroom = Classroom::findOrFail($data['classroom_id']);
 
@@ -119,17 +111,9 @@ class MaterialController extends Controller
         return redirect()->route('guru.material.create')->with('success', 'Materi berhasil disimpan sebagai draf.');
     }
 
-    public function update(Request $request, Material $material): RedirectResponse
+    public function update(StoreMaterialRequest $request, Material $material): RedirectResponse
     {
-        $data = $request->validate([
-            'classroom_id' => ['required', 'integer', 'exists:classrooms,id'],
-            'subject' => ['required', 'string', 'max:255'],
-            'title' => ['required', 'string', 'max:255'],
-            'summary' => ['nullable', 'string', 'max:1000'],
-            'video_url' => ['nullable', 'url', 'max:255'],
-            'attachment' => ['nullable', 'file', 'mimes:pdf,doc,docx,ppt,pptx,zip', 'max:10240'],
-            'status' => ['required', 'in:draft,published'],
-        ]);
+        $data = $request->validated();
         $classroom = Classroom::findOrFail($data['classroom_id']);
 
         if ($request->hasFile('attachment')) {

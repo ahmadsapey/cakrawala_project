@@ -4,7 +4,6 @@ namespace App\Http\Requests\Guru;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
 class StoreLearningRecommendationRequest extends FormRequest
 {
@@ -13,7 +12,7 @@ class StoreLearningRecommendationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return in_array(Auth::user()?->role, ['admin', 'teacher'], true);
+        return true;
     }
 
     /**
