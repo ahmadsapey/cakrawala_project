@@ -79,17 +79,17 @@
             <div class="grid gap-4 md:grid-cols-2">
                 @forelse ($classrooms as $classroom)
                     <a href="{{ route('guru.kelas.learning', $classroom) }}" class="bg-white/85 backdrop-blur-md rounded-2xl border border-teal-100 p-5 shadow-xs space-y-3 hover:border-teal-600 hover:shadow-md transition-all block group">
-                        <div class="flex items-center justify-between">
-                            <span class="rounded-xl bg-teal-50 border border-teal-200 px-3 py-1 text-xs font-black uppercase tracking-wider text-teal-800">
-                                {{ $classroom->subject ?? $teacherSubject }}
+                        <div class="flex items-start justify-between gap-2">
+                            <span class="rounded-xl bg-teal-50 border border-teal-200 px-3 py-1 text-xs font-bold text-teal-800 line-clamp-1 max-w-[70%]" title="{{ $classroom->subject ?? $teacherSubject }}">
+                                {{ Str::title($classroom->subject ?? $teacherSubject) }}
                             </span>
-                            <span class="text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-xl">
+                            <span class="shrink-0 text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-xl">
                                 {{ $classroom->students_count ?? 0 }} Siswa
                             </span>
                         </div>
                         <div>
                             <h4 class="text-base font-black text-slate-900 group-hover:text-teal-700 transition-colors">
-                                {{ $classroom->name }}
+                                {{ Str::title($classroom->name) }}
                             </h4>
                             <p class="text-xs font-bold text-slate-500 mt-1">
                                 {{ $classroom->grade_level ?? 'Umum' }}
@@ -97,7 +97,7 @@
                                 {{ $classroom->assignments_count ?? 0 }} Tugas
                             </p>
                             <div class="mt-2.5 flex items-center justify-between gap-2 text-xs font-bold text-slate-600">
-                                <span class="truncate">Guru: {{ $classroom->teacher?->user?->name ?? $teacherName }}</span>
+                                <span class="truncate">Guru: {{ $classroom->teacher?->user?->name ? Str::title($classroom->teacher->user->name) : $teacherName }}</span>
                                 @if ($classroom->schedules->isNotEmpty())
                                     @php $sch = $classroom->schedules->first(); @endphp
                                     <span class="shrink-0 text-teal-700 bg-teal-50 px-2.5 py-0.5 rounded-lg border border-teal-200/60 text-[11px]">

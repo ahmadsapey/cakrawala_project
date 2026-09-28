@@ -33,10 +33,10 @@
             <div>
                 <span class="text-xs font-black uppercase tracking-[0.18em] text-teal-700 bg-teal-50 border border-teal-100 px-3 py-1.5 rounded-xl inline-block shadow-2xs">Kelas Pembelajaran</span>
                 <h1 class="mt-2 text-2xl sm:text-3xl font-black tracking-tight text-slate-900">
-                    {{ $classroom->name }}
+                    {{ Str::title($classroom->name) }}
                 </h1>
                 <p class="mt-1.5 text-xs sm:text-sm font-bold text-slate-500">
-                    {{ $classroom->subject }} · {{ $classroom->grade_level }}{{ $classroom->section ? ' · ' . $classroom->section : '' }}
+                    {{ Str::title($classroom->subject) }} · {{ $classroom->grade_level }}{{ $classroom->section ? ' · ' . $classroom->section : '' }}
                 </p>
             </div>
             <a href="{{ route('guru.kelas') }}" class="rounded-2xl border border-teal-200 bg-white px-4 py-3 text-center text-xs font-black text-teal-800 hover:bg-teal-50 transition-all shadow-2xs shrink-0">

@@ -122,7 +122,7 @@
                                             {{ strtoupper(substr($student->user?->name ?? 'S', 0, 2)) }}
                                         </div>
                                         <div class="min-w-0">
-                                            <p class="font-black text-slate-900 truncate">{{ $student->user?->name ?? 'Siswa' }}</p>
+                                            <p class="font-black text-slate-900 truncate">{{ Str::title($student->user?->name ?? 'Siswa') }}</p>
                                             <p class="text-[11px] font-semibold text-slate-400 truncate">{{ $student->user?->email ?? '-' }}</p>
                                         </div>
                                     </div>
@@ -131,7 +131,7 @@
                                     {{ $student->nisn ?? '-' }}
                                 </td>
                                 <td class="px-5 py-4 text-slate-600 font-semibold">
-                                    {{ $student->class_name ?? '-' }}
+                                    {{ Str::title($student->class_name ?? '-') }}
                                 </td>
                                 <td class="px-5 py-4">
                                     <span class="px-2.5 py-1 {{ $student->status === 'active' ? 'bg-emerald-50 border-emerald-300 text-emerald-800' : 'bg-rose-50 border-rose-300 text-rose-800' }} border text-[10px] font-black rounded-lg inline-block">

@@ -107,7 +107,7 @@
                             <div class="space-y-1 truncate">
                                 <div class="flex items-center space-x-2 truncate">
                                     <h3 class="text-sm sm:text-base font-black text-slate-900 truncate">
-                                        {{ $payment->student?->user?->name ?? 'Siswa' }}</h3>
+                                        {{ Str::title($payment->student?->user?->name ?? 'Siswa') }}</h3>
                                 </div>
                                 <p class="text-xs text-indigo-700 font-extrabold">Rp {{ number_format($payment->amount, 0, ',', '.') }}</p>
                                 <p class="text-xs text-slate-500 font-bold truncate">{{ $payment->invoice_number }} • {{ $payment->description ?? 'Pembayaran' }} ({{ $payment->created_at?->format('d M Y') }})</p>

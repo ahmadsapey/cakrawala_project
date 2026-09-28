@@ -50,8 +50,8 @@
                     <div class="space-y-3">
                         <div class="flex items-start justify-between gap-3">
                             <div>
-                                <span class="rounded-xl bg-teal-50 border border-teal-200 px-3 py-1 text-xs font-black uppercase tracking-wider text-teal-800 shadow-2xs">{{ $classroom->subject }}</span>
-                                <h2 class="mt-2.5 text-base sm:text-lg font-black text-slate-900 leading-snug">{{ $classroom->name }}</h2>
+                                <span class="rounded-xl bg-teal-50 border border-teal-200 px-3 py-1 text-xs font-extrabold text-teal-800 shadow-2xs">{{ Str::title($classroom->subject) }}</span>
+                                <h2 class="mt-2.5 text-base sm:text-lg font-black text-slate-900 leading-snug">{{ Str::title($classroom->name) }}</h2>
                             </div>
                             <span class="shrink-0 text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-xl shadow-2xs">{{ $classroom->grade_level }}</span>
                         </div>
@@ -62,7 +62,7 @@
                                 <span class="inline-flex h-5 w-5 items-center justify-center rounded-lg bg-teal-100 text-teal-800 text-[10px] font-black shrink-0">
                                     {{ strtoupper(substr($classroom->teacher?->user?->name ?? 'G', 0, 1)) }}
                                 </span>
-                                <span class="truncate">Guru: {{ $classroom->teacher?->user?->name ?? 'Belum ditentukan' }}</span>
+                                <span class="truncate">Guru: {{ $classroom->teacher?->user?->name ? Str::title($classroom->teacher->user->name) : 'Belum ditentukan' }}</span>
                             </div>
 
                             @if ($classroom->schedules->isNotEmpty())

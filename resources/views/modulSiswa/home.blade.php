@@ -89,20 +89,20 @@
                 @forelse ($classrooms as $classroom)
                     <div class="bg-white/85 backdrop-blur-sm p-5 rounded-3xl border border-indigo-100 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all flex flex-col justify-between space-y-3">
                         <div class="space-y-2">
-                            <div class="flex items-center justify-between">
-                                <span class="rounded-xl bg-indigo-50 border border-indigo-100 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-indigo-700">
-                                    {{ $classroom->subject }}
+                            <div class="flex items-start justify-between gap-2">
+                                <span class="rounded-xl bg-indigo-50 border border-indigo-100 px-3 py-1 text-[11px] font-extrabold text-indigo-700 line-clamp-1 max-w-[70%]" title="{{ $classroom->subject }}">
+                                    {{ Str::title($classroom->subject) }}
                                 </span>
-                                <span class="text-xs font-bold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-lg">
+                                <span class="shrink-0 text-xs font-bold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-lg">
                                     {{ $classroom->grade_level }}
                                 </span>
                             </div>
-                            <h4 class="text-sm font-black text-slate-900 line-clamp-1">{{ $classroom->name }}</h4>
+                            <h4 class="text-sm font-black text-slate-900 line-clamp-1">{{ Str::title($classroom->name) }}</h4>
                             <div class="flex items-center gap-2 text-xs font-bold text-slate-600">
                                 <span class="w-6 h-6 rounded-lg bg-indigo-50 text-indigo-600 text-[10px] font-black flex items-center justify-center shrink-0">
                                     {{ strtoupper(substr($classroom->teacher?->user?->name ?? 'G', 0, 1)) }}
                                 </span>
-                                <span class="truncate">Tutor: {{ $classroom->teacher?->user?->name ?? 'Belum ditentukan' }}</span>
+                                <span class="truncate">Tutor: {{ $classroom->teacher?->user?->name ? Str::title($classroom->teacher->user->name) : 'Belum ditentukan' }}</span>
                             </div>
                             @if ($classroom->schedules->isNotEmpty())
                                 @php $sch = $classroom->schedules->first(); @endphp

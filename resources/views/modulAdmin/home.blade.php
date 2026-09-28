@@ -134,27 +134,41 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 @forelse ($recentClassrooms ?? [] as $classroom)
-                    <div class="bg-white/90 backdrop-blur-md rounded-3xl border-2 border-indigo-100 shadow-sm p-5 space-y-3 flex flex-col justify-between hover:border-indigo-300 transition-all">
-                        <div class="space-y-2">
-                            <div class="flex items-center justify-between">
-                                <span class="text-xs font-black px-2.5 py-1 bg-teal-50 text-teal-800 border border-teal-200 rounded-xl uppercase tracking-wider">{{ $classroom->subject }}</span>
-                                <span class="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-lg">{{ $classroom->grade_level }}</span>
+                    <div class="bg-white/90 backdrop-blur-md rounded-3xl border-2 border-indigo-100 shadow-sm p-5 flex flex-col justify-between hover:border-indigo-300 transition-all space-y-4">
+                        <div class="space-y-2.5">
+                            <div class="flex items-start justify-between gap-2">
+                                <span class="inline-block text-[11px] font-extrabold px-3 py-1 bg-teal-50 text-teal-800 border border-teal-200/80 rounded-xl leading-tight line-clamp-1 max-w-[70%]" title="{{ $classroom->subject }}">
+                                    {{ Str::title($classroom->subject) }}
+                                </span>
+                                <span class="shrink-0 text-xs font-extrabold text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-lg">
+                                    {{ $classroom->grade_level }}
+                                </span>
                             </div>
-                            <h3 class="text-sm font-black text-slate-900 line-clamp-1">{{ $classroom->name }}</h3>
-                            <div class="text-xs font-bold text-slate-600 flex items-center gap-1.5">
-                                <span class="w-1.5 h-1.5 rounded-full bg-teal-500"></span>
-                                <span class="truncate">Guru: {{ $classroom->teacher?->user?->name ?? 'Belum ditentukan' }}</span>
+                            <div>
+                                <h3 class="text-sm sm:text-base font-black text-slate-900 line-clamp-1 leading-snug">{{ Str::title($classroom->name) }}</h3>
+                                <div class="mt-1 text-xs font-bold text-slate-600 flex items-center gap-1.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-teal-500 shrink-0"></span>
+                                    <span class="truncate">Guru: {{ $classroom->teacher?->user?->name ? Str::title($classroom->teacher->user->name) : 'Belum ditentukan' }}</span>
+                                </div>
                             </div>
                             @if ($classroom->schedules->isNotEmpty())
                                 @php $sch = $classroom->schedules->first(); @endphp
-                                <p class="text-[11px] font-bold text-teal-700 bg-teal-50/70 border border-teal-200/60 rounded-lg px-2 py-0.5 w-fit">
-                                    {{ $sch->day_of_week }}, {{ substr($sch->start_time, 0, 5) }} - {{ substr($sch->end_time, 0, 5) }} WIB
-                                </p>
+                                <div class="pt-0.5">
+                                    <span class="inline-flex items-center gap-1.5 text-[11px] font-bold text-teal-700 bg-teal-50/80 border border-teal-200/70 rounded-xl px-2.5 py-1">
+                                        <svg class="w-3.5 h-3.5 text-teal-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        {{ $sch->day_of_week }}, {{ substr($sch->start_time, 0, 5) }} - {{ substr($sch->end_time, 0, 5) }} WIB
+                                    </span>
+                                </div>
                             @endif
                         </div>
                         <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-500">
-                            <span>{{ $classroom->students_count ?? 0 }} Siswa</span>
-                            <a href="{{ route('admin.kelas.show', $classroom) }}" class="text-indigo-600 hover:underline">Detail</a>
+                            <span class="flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                                {{ $classroom->students_count ?? 0 }} Siswa
+                            </span>
+                            <a href="{{ route('admin.kelas.show', $classroom) }}" class="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-800 font-black hover:underline">
+                                Detail &rarr;
+                            </a>
                         </div>
                     </div>
                 @empty
@@ -172,52 +186,54 @@
                 <span class="text-xs font-bold text-slate-500">Log sistem real-time</span>
             </div>
 
-            <div class="bg-white/90 backdrop-blur-md rounded-3xl border-2 border-indigo-100 shadow-sm p-6 sm:p-8 space-y-4">
-                @forelse ($recentActivities ?? [] as $activity)
-                    <div class="flex items-center justify-between pb-4 border-b-2 border-slate-100 last:border-0 last:pb-0">
-                        <div class="flex items-center space-x-4 overflow-hidden">
-                            @if ($activity['type'] === 'student')
-                                <div class="w-11 h-11 rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-200 flex items-center justify-center flex-shrink-0 font-bold">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                    </svg>
+            <div class="bg-white/90 backdrop-blur-md rounded-3xl border-2 border-indigo-100 shadow-sm p-6 sm:p-7">
+                <div class="divide-y divide-slate-100">
+                    @forelse ($recentActivities ?? [] as $activity)
+                        <div class="flex items-center justify-between py-3.5 first:pt-0 last:pb-0 gap-3">
+                            <div class="flex items-center space-x-3.5 overflow-hidden min-w-0">
+                                @if ($activity['type'] === 'student')
+                                    <div class="w-11 h-11 rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-200 flex items-center justify-center flex-shrink-0 font-bold shadow-2xs">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                        </svg>
+                                    </div>
+                                @elseif ($activity['type'] === 'payment')
+                                    <div class="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center flex-shrink-0 font-bold shadow-2xs">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                @elseif ($activity['type'] === 'classroom')
+                                    <div class="w-11 h-11 rounded-2xl bg-teal-50 text-teal-600 border border-teal-200 flex items-center justify-center flex-shrink-0 font-bold shadow-2xs">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+                                        </svg>
+                                    </div>
+                                @else
+                                    <div class="w-11 h-11 rounded-2xl bg-amber-50 text-amber-600 border border-amber-200 flex items-center justify-center flex-shrink-0 font-bold shadow-2xs">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                        </svg>
+                                    </div>
+                                @endif
+                                <div class="min-w-0 pr-2">
+                                    <h4 class="text-xs sm:text-sm font-black text-slate-900 truncate leading-snug">{{ $activity['title'] }}</h4>
+                                    <p class="text-xs text-slate-500 font-semibold truncate leading-relaxed mt-0.5">{{ $activity['subtitle'] }}</p>
                                 </div>
-                            @elseif ($activity['type'] === 'payment')
-                                <div class="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center flex-shrink-0 font-bold">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                </div>
-                            @elseif ($activity['type'] === 'classroom')
-                                <div class="w-11 h-11 rounded-2xl bg-teal-50 text-teal-600 border border-teal-200 flex items-center justify-center flex-shrink-0 font-bold">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
-                                    </svg>
-                                </div>
-                            @else
-                                <div class="w-11 h-11 rounded-2xl bg-amber-50 text-amber-600 border border-amber-200 flex items-center justify-center flex-shrink-0 font-bold">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                                    </svg>
-                                </div>
-                            @endif
-                            <div class="space-y-1 overflow-hidden">
-                                <h4 class="text-xs sm:text-sm font-black text-slate-900 truncate">{{ $activity['title'] }}</h4>
-                                <p class="text-xs text-slate-500 font-bold truncate">{{ $activity['subtitle'] }}</p>
                             </div>
+                            <span class="text-xs text-slate-400 font-bold shrink-0 pl-3 whitespace-nowrap">{{ $activity['time'] }}</span>
                         </div>
-                        <span class="text-xs text-slate-400 font-bold flex-shrink-0 pl-3">{{ $activity['time'] }}</span>
-                    </div>
-                @empty
-                    <div class="text-center py-12 text-slate-400 space-y-1">
-                        <p class="text-sm font-black text-slate-800">Belum ada aktivitas baru terdeteksi.</p>
-                        <p class="text-xs font-bold text-slate-500">Aktivitas siswa, guru, dan pembayaran akan muncul di sini.</p>
-                    </div>
-                @endforelse
+                    @empty
+                        <div class="text-center py-12 text-slate-400 space-y-1">
+                            <p class="text-sm font-black text-slate-800">Belum ada aktivitas baru terdeteksi.</p>
+                            <p class="text-xs font-bold text-slate-500">Aktivitas siswa, guru, dan pembayaran akan muncul di sini.</p>
+                        </div>
+                    @endforelse
+                </div>
             </div>
         </div>
 

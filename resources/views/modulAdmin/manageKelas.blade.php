@@ -13,8 +13,8 @@
                 <div class="space-y-3">
                     <div class="flex items-start justify-between gap-3">
                         <div>
-                            <span class="rounded-xl bg-indigo-50 border border-indigo-100 px-3 py-1 text-xs font-black uppercase tracking-wider text-indigo-700">{{ $classroom->subject }}</span>
-                            <h2 class="mt-2.5 text-lg font-black text-slate-900 leading-snug">{{ $classroom->name }}</h2>
+                            <span class="rounded-xl bg-indigo-50 border border-indigo-100 px-3 py-1 text-xs font-extrabold text-indigo-700">{{ Str::title($classroom->subject) }}</span>
+                            <h2 class="mt-2.5 text-lg font-black text-slate-900 leading-snug">{{ Str::title($classroom->name) }}</h2>
                         </div>
                         <span class="rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-600">{{ $classroom->grade_level }}</span>
                     </div>
@@ -22,7 +22,7 @@
                     <div class="space-y-1.5 pt-1 border-t border-slate-100 text-xs font-bold text-slate-600">
                         <div class="flex items-center gap-1.5">
                             <span class="w-2 h-2 rounded-full bg-teal-500"></span>
-                            <span>Wali / Guru: {{ $classroom->teacher?->user?->name ?? 'Belum ditentukan' }}</span>
+                            <span>Wali / Guru: {{ $classroom->teacher?->user?->name ? Str::title($classroom->teacher->user->name) : 'Belum ditentukan' }}</span>
                         </div>
                         @if ($classroom->schedules->isNotEmpty())
                             @php $sch = $classroom->schedules->first(); @endphp

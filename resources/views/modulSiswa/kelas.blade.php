@@ -133,9 +133,9 @@
                                 </div>
                                 <div class="space-y-1.5">
                                     <h4 class="text-base font-black text-slate-900 group-hover:text-indigo-600 transition-colors leading-snug">
-                                        {{ $classroom->name }}
+                                        {{ Str::title($classroom->name) }}
                                     </h4>
-                                    <p class="text-xs font-semibold text-slate-500">{{ $classroom->subject }} · <span class="text-slate-700 font-bold">{{ $classroom->teacher?->user?->name ?? 'Guru Pengampu' }}</span></p>
+                                    <p class="text-xs font-semibold text-slate-500">{{ Str::title($classroom->subject) }} · <span class="text-slate-700 font-bold">{{ $classroom->teacher?->user?->name ? Str::title($classroom->teacher->user->name) : 'Guru Pengampu' }}</span></p>
                                 </div>
                             </div>
                             <span class="text-[11px] font-extrabold {{ $theme['badge'] }} border px-3 py-1.5 rounded-xl shrink-0 shadow-xs">

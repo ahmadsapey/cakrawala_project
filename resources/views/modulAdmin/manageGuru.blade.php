@@ -103,9 +103,9 @@
                             </div>
                             <div class="space-y-1 truncate">
                                 <h3 class="text-sm sm:text-base font-black text-slate-900 truncate">
-                                    {{ $teacher->user?->name ?? 'Guru' }}</h3>
+                                    {{ Str::title($teacher->user?->name ?? 'Guru') }}</h3>
                                 <p class="text-xs text-slate-500 font-bold truncate">NIP: {{ $teacher->nip ?? '-' }} •
-                                    {{ $teacher->subject ?? 'Umum' }}</p>
+                                    {{ Str::title($teacher->subject ?? 'Umum') }}</p>
                             </div>
                         </div>
                         <span

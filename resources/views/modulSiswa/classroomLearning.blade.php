@@ -16,13 +16,13 @@
         <div class="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/15 blur-2xl"></div>
         <div class="relative z-10">
             <span class="inline-block rounded-full bg-white/20 px-3.5 py-1 text-xs font-bold uppercase tracking-widest backdrop-blur-md">Ruang Kelas</span>
-            <h1 class="mt-3 text-3xl font-black tracking-tight sm:text-4xl">{{ $classroom->name }}</h1>
+            <h1 class="mt-3 text-3xl font-black tracking-tight sm:text-4xl">{{ Str::title($classroom->name) }}</h1>
             <p class="mt-2 text-sm font-medium text-indigo-100 flex flex-wrap items-center gap-2">
-                <span class="bg-indigo-700/50 px-2.5 py-1 rounded-lg">{{ $classroom->subject }}</span>
+                <span class="bg-indigo-700/50 px-2.5 py-1 rounded-lg">{{ Str::title($classroom->subject) }}</span>
                 <span>·</span>
                 <span class="bg-purple-700/50 px-2.5 py-1 rounded-lg">{{ $classroom->grade_level }}</span>
                 <span>·</span>
-                <span class="text-pink-100">Guru: {{ $classroom->teacher?->user?->name ?? 'Guru' }}</span>
+                <span class="text-pink-100">Guru: {{ $classroom->teacher?->user?->name ? Str::title($classroom->teacher->user->name) : 'Guru' }}</span>
             </p>
         </div>
     </div>
